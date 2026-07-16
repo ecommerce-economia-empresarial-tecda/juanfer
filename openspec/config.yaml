@@ -1,0 +1,41 @@
+# openspec/config.yaml
+schema: spec-driven
+
+context: |
+  Tech stack: React 19 (^19.2.7), Vite 8 (^8.1.1), npm, JavaScript (ES6+, JSX)
+  Architecture: Client-side single-page app (SPA) with entrypoint src/main.jsx and main component src/App.jsx.
+  Testing: None. No test runner is currently installed.
+  Style: ESLint 10 (^10.6.0) using standard configuration (eslint.config.js).
+
+testing:
+  test_runner: null
+  test_layers: []
+  coverage: null
+  linter: "eslint"
+  type_checker: null
+  formatter: null
+  strict_tdd: false
+
+rules:
+  proposal:
+    - Include rollback plan for risky changes
+  specs:
+    - Use Given/When/Then for scenarios
+    - Use RFC 2119 keywords (MUST, SHALL, SHOULD, MAY)
+  design:
+    - Include sequence diagrams for complex flows
+    - Document architecture decisions with rationale
+  tasks:
+    - Group by phase, use hierarchical numbering
+    - Keep tasks completable in one session
+  apply:
+    guidelines:
+      - Follow existing code patterns
+    tdd: false
+    test_command: ""
+  verify:
+    test_command: ""
+    build_command: "npm run build"
+    coverage_threshold: 0
+  archive:
+    - Warn before merging destructive deltas
