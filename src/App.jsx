@@ -11,6 +11,7 @@ import CheckoutForm from './components/CheckoutForm';
 import LoginForm from './components/LoginForm';
 import AdminDashboard from './components/AdminDashboard';
 import Home from './components/Home';
+import ProductDetailsModal from './components/ProductDetailsModal';
 import './App.css';
 
 function MainApp() {
@@ -18,6 +19,7 @@ function MainApp() {
   const { user, currentView, setView, logout } = useAuth();
   const { notifications } = useNotification();
   const [isCartOpen, setIsCartOpen] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState(null);
   // Track whether the user was redirected to login from a checkout attempt (ref avoids setState-in-effect)
   const pendingCheckout = useRef(false);
 
@@ -39,6 +41,26 @@ function MainApp() {
       setView('login');
     } else {
       setView('checkout');
+    }
+  };
+
+  const handleSelectProduct = (product) => {
+    if (document.startViewTransition) {
+      document.startViewTransition(() => {
+        setSelectedProduct(product);
+      });
+    } else {
+      setSelectedProduct(product);
+    }
+  };
+
+  const handleCloseModal = () => {
+    if (document.startViewTransition) {
+      document.startViewTransition(() => {
+        setSelectedProduct(null);
+      });
+    } else {
+      setSelectedProduct(null);
     }
   };
 
@@ -123,7 +145,7 @@ function MainApp() {
 
       <main className="main-content">
         {currentView === 'home' && (
-          <Home />
+          <Home onProductClick={handleSelectProduct} />
         )}
 
         {currentView === 'catalog' && (
@@ -132,7 +154,7 @@ function MainApp() {
               <h2>Explore Our Collection</h2>
               <p>Premium, high-performance gear built for the next frontier.</p>
             </div>
-            <ProductCatalog />
+            <ProductCatalog onProductClick={handleSelectProduct} />
           </div>
         )}
 
@@ -168,6 +190,13 @@ function MainApp() {
         onClose={() => setIsCartOpen(false)}
         onCheckout={handleCheckout}
       />
+
+      {selectedProduct && (
+        <ProductDetailsModal
+          product={selectedProduct}
+          onClose={handleCloseModal}
+        />
+      )}
 
       <div className="toast-container">
         {notifications.map((n) => (

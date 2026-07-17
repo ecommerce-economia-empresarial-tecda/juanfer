@@ -3,16 +3,29 @@ import { useProducts } from '../context/ProductsContext';
 import { useAuth } from '../context/AuthContext';
 import ProductCard from './ProductCard';
 
-export default function Home() {
+export default function Home({ onProductClick }) {
   const { products } = useProducts();
   const { setView } = useAuth();
   const offersRef = useRef(null);
+  const carouselRef = useRef(null);
 
   const offerProducts = products.filter((p) => p.onSale === true);
   const newArrivals = products.filter((p) => p.isNew === true);
 
   const scrollToOffers = () => {
     offersRef.current?.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  const scrollLeft = () => {
+    if (carouselRef.current) {
+      carouselRef.current.scrollBy({ left: -320, behavior: 'smooth' });
+    }
+  };
+
+  const scrollRight = () => {
+    if (carouselRef.current) {
+      carouselRef.current.scrollBy({ left: 320, behavior: 'smooth' });
+    }
   };
 
   return (
@@ -52,10 +65,28 @@ export default function Home() {
         {offerProducts.length === 0 ? (
           <p className="no-products-message">No offers available right now.</p>
         ) : (
-          <div className="products-grid">
-            {offerProducts.map((product) => (
-              <ProductCard key={product.id} product={product} />
-            ))}
+          <div className="carousel-wrapper">
+            <button
+              className="carousel-btn prev-btn"
+              onClick={scrollLeft}
+              aria-label="Previous Offer"
+            >
+              &larr;
+            </button>
+            <div className="carousel-track" ref={carouselRef}>
+              {offerProducts.map((product) => (
+                <div className="carousel-item" key={product.id}>
+                  <ProductCard product={product} onCardClick={onProductClick} />
+                </div>
+              ))}
+            </div>
+            <button
+              className="carousel-btn next-btn"
+              onClick={scrollRight}
+              aria-label="Next Offer"
+            >
+              &rarr;
+            </button>
           </div>
         )}
       </section>
@@ -71,7 +102,7 @@ export default function Home() {
         ) : (
           <div className="products-grid">
             {newArrivals.map((product) => (
-              <ProductCard key={product.id} product={product} />
+              <ProductCard key={product.id} product={product} onCardClick={onProductClick} />
             ))}
           </div>
         )}

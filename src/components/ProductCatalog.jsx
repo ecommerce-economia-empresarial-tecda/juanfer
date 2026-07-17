@@ -2,7 +2,7 @@ import { useState, useMemo } from 'react';
 import ProductCard from './ProductCard';
 import { useProducts } from '../context/ProductsContext';
 
-export default function ProductCatalog() {
+export default function ProductCatalog({ onProductClick }) {
   const { products } = useProducts();
   const [selectedCategory, setSelectedCategory] = useState('All');
 
@@ -41,7 +41,7 @@ export default function ProductCatalog() {
 
       <div className="product-grid">
         {filteredProducts.map((product) => (
-          <ProductCard key={product.id} product={product} />
+          <ProductCard key={product.id} product={product} onCardClick={onProductClick} />
         ))}
       </div>
     </div>

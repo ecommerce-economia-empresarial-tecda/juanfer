@@ -2,7 +2,7 @@ import { useContext } from 'react';
 import { useCart } from '../context/CartContext';
 import { NotificationContext } from '../context/NotificationContext';
 
-export default function ProductCard({ product }) {
+export default function ProductCard({ product, onCardClick }) {
   const { cart, addToCart } = useCart();
   const notificationCtx = useContext(NotificationContext);
   const showNotification = notificationCtx ? notificationCtx.showNotification : () => {};
@@ -17,7 +17,8 @@ export default function ProductCard({ product }) {
     ? Number((product.price * (1 - (product.discountPercent || 0) / 100)).toFixed(2))
     : product.price;
 
-  const handleAddToCart = () => {
+  const handleAddToCart = (e) => {
+    e.stopPropagation();
     if (!isAddDisabled) {
       addToCart({ ...product, price: finalPrice });
       showNotification(`Added ${product.title} to cart!`, 'success');
@@ -25,9 +26,19 @@ export default function ProductCard({ product }) {
   };
 
   return (
-    <div className="product-card" data-testid={`product-card-${product.id}`}>
+    <div
+      className="product-card"
+      data-testid={`product-card-${product.id}`}
+      onClick={() => onCardClick && onCardClick(product)}
+      style={{ cursor: 'pointer' }}
+    >
       <div className="product-image-container" style={{ position: 'relative' }}>
-        <img src={product.image} alt={product.title} className="product-image" />
+        <img
+          src={product.image}
+          alt={product.title}
+          className="product-image"
+          style={{ viewTransitionName: `product-img-${product.id}` }}
+        />
         <div className="product-badges">
           {product.onSale && <span className="badge badge-sale">SALE</span>}
           {product.isNew && <span className="badge badge-new">NEW</span>}
