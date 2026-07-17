@@ -33,7 +33,8 @@ export const products = [
     price: 119.99,
     category: "Clothing",
     image: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=500&auto=format&fit=crop&q=60",
-    stock: 0
+    stock: 0,
+    isNew: true
   },
   {
     id: 5,
@@ -42,7 +43,9 @@ export const products = [
     price: 49.99,
     category: "Electronics",
     image: "https://images.unsplash.com/photo-1575311373937-040b8e1fd5b6?w=500&auto=format&fit=crop&q=60",
-    stock: 10
+    stock: 10,
+    onSale: true,
+    discountPercent: 15
   },
   {
     id: 6,
@@ -51,6 +54,10 @@ export const products = [
     price: 24.99,
     category: "Clothing",
     image: "https://images.unsplash.com/photo-1521572267360-ee0c2909d518?w=500&auto=format&fit=crop&q=60",
-    stock: 15
+    stock: 15,
+    isNew: true,
+    onSale: true,
+    discountPercent: 10
   }
 ];
+

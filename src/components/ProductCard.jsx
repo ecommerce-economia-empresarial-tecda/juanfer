@@ -13,22 +13,45 @@ export default function ProductCard({ product }) {
   const isStockExhausted = cartQuantity >= product.stock;
   const isAddDisabled = isSoldOut || isStockExhausted;
 
+  const finalPrice = product.onSale
+    ? Number((product.price * (1 - (product.discountPercent || 0) / 100)).toFixed(2))
+    : product.price;
+
   const handleAddToCart = () => {
     if (!isAddDisabled) {
-      addToCart(product);
+      addToCart({ ...product, price: finalPrice });
       showNotification(`Added ${product.title} to cart!`, 'success');
     }
   };
 
   return (
     <div className="product-card" data-testid={`product-card-${product.id}`}>
-      <img src={product.image} alt={product.title} className="product-image" />
+      <div className="product-image-container" style={{ position: 'relative' }}>
+        <img src={product.image} alt={product.title} className="product-image" />
+        <div className="product-badges">
+          {product.onSale && <span className="badge badge-sale">SALE</span>}
+          {product.isNew && <span className="badge badge-new">NEW</span>}
+        </div>
+      </div>
       <div className="product-info">
         <span className="product-category">{product.category}</span>
         <h3 className="product-title">{product.title}</h3>
         <p className="product-description">{product.description}</p>
         <div className="product-price-stock">
-          <span className="product-price">${product.price.toFixed(2)}</span>
+          <div className="product-price-container">
+            {product.onSale ? (
+              <>
+                <span className="product-price-original" style={{ textDecoration: 'line-through', marginRight: '8px', color: '#888' }}>
+                  ${product.price.toFixed(2)}
+                </span>
+                <span className="product-price-discount" style={{ color: '#e53e3e', fontWeight: 'bold' }}>
+                  ${finalPrice.toFixed(2)}
+                </span>
+              </>
+            ) : (
+              <span className="product-price">${product.price.toFixed(2)}</span>
+            )}
+          </div>
           <span className="product-stock">Stock: {product.stock - cartQuantity}</span>
         </div>
         

@@ -5,6 +5,13 @@ import App from './App';
 describe('App Integration and Views', () => {
   beforeEach(() => {
     window.localStorage.clear();
+    window.localStorage.setItem('auth_current_view', 'catalog');
+  });
+
+  it('renders the homepage by default when no saved view exists', () => {
+    window.localStorage.clear();
+    render(<App />);
+    expect(screen.getByText(/Welcome to Antigravity Shop/i)).toBeInTheDocument();
   });
 
   // ─── Existing Tests ──────────────────────────────────────────────────────────

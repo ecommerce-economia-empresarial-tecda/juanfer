@@ -5,6 +5,7 @@ import App from './App';
 describe('App Complete Integration Checkout Flow', () => {
   beforeEach(() => {
     window.localStorage.clear();
+    window.localStorage.setItem('auth_current_view', 'catalog');
   });
 
   it('verifies the complete checkout flow from catalog to order confirmation', async () => {

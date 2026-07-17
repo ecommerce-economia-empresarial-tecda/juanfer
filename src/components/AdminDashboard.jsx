@@ -25,6 +25,9 @@ export default function AdminDashboard() {
   const [stock, setStock] = useState('');
   const [description, setDescription] = useState('');
   const [image, setImage] = useState('');
+  const [onSale, setOnSale] = useState(false);
+  const [discountPercent, setDiscountPercent] = useState('');
+  const [isNew, setIsNew] = useState(false);
 
   // Edit Mode State
   const [editingProduct, setEditingProduct] = useState(null);
@@ -73,6 +76,9 @@ export default function AdminDashboard() {
     setStock('');
     setDescription('');
     setImage('');
+    setOnSale(false);
+    setDiscountPercent('');
+    setIsNew(false);
     setEditingProduct(null);
     setErrors({});
   };
@@ -85,6 +91,9 @@ export default function AdminDashboard() {
     setStock(product.stock !== undefined ? String(product.stock) : '');
     setDescription(product.description || '');
     setImage(product.image || '');
+    setOnSale(product.onSale || false);
+    setDiscountPercent(product.discountPercent !== undefined ? String(product.discountPercent) : '');
+    setIsNew(product.isNew || false);
     setErrors({});
   };
 
@@ -112,6 +121,13 @@ export default function AdminDashboard() {
       newErrors.stock = 'Stock cannot be negative';
     }
 
+    if (onSale) {
+      const parsedDiscount = parseFloat(discountPercent);
+      if (isNaN(parsedDiscount) || parsedDiscount < 0 || parsedDiscount > 100) {
+        newErrors.discountPercent = 'Discount % must be between 0 and 100';
+      }
+    }
+
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
       return;
@@ -124,6 +140,9 @@ export default function AdminDashboard() {
       stock: parsedStock,
       description: description.trim(),
       image: image,
+      onSale: onSale,
+      discountPercent: onSale ? (parseFloat(discountPercent) || 0) : 0,
+      isNew: isNew,
     };
 
     if (editingProduct) {
@@ -319,6 +338,8 @@ export default function AdminDashboard() {
                     <th>Category</th>
                     <th>Price</th>
                     <th>Stock</th>
+                    <th>On Sale</th>
+                    <th>New</th>
                     <th>Actions</th>
                   </tr>
                 </thead>
@@ -332,6 +353,8 @@ export default function AdminDashboard() {
                         {product.stock}
                         {product.stock === 0 && <span className="out-of-stock-badge" style={{ marginLeft: '8px', padding: '2px 6px', fontSize: '11px', backgroundColor: '#e53e3e', color: '#fff', borderRadius: '4px', fontWeight: 'bold' }}>Out of Stock</span>}
                       </td>
+                      <td>{product.onSale ? `Yes (${product.discountPercent}%)` : 'No'}</td>
+                      <td>{product.isNew ? 'Yes' : 'No'}</td>
                       <td>
                         <button
                           onClick={() => {
@@ -437,15 +460,61 @@ export default function AdminDashboard() {
                 </div>
 
                 <div className="form-group">
-                  <label htmlFor="product-description">Description</label>
-                  <textarea
-                    id="product-description"
-                    value={description}
-                    onChange={(e) => setDescription(e.target.value)}
-                  />
-                </div>
+                   <label htmlFor="product-description">Description</label>
+                   <textarea
+                     id="product-description"
+                     value={description}
+                     onChange={(e) => setDescription(e.target.value)}
+                   />
+                 </div>
 
-                <div className="form-actions">
+                 <div className="form-group checkbox-group" style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '15px' }}>
+                   <input
+                     type="checkbox"
+                     id="product-on-sale"
+                     checked={onSale}
+                     onChange={(e) => setOnSale(e.target.checked)}
+                     style={{ width: '16px', height: '16px', cursor: 'pointer' }}
+                   />
+                   <label htmlFor="product-on-sale" style={{ cursor: 'pointer', userSelect: 'none' }}>On Sale</label>
+                 </div>
+
+                 {onSale && (
+                   <div className="form-group">
+                     <label htmlFor="product-discount-percent">Discount %</label>
+                     <input
+                       id="product-discount-percent"
+                       type="number"
+                       min="0"
+                       max="100"
+                       value={discountPercent}
+                       onChange={(e) => {
+                         setDiscountPercent(e.target.value);
+                         if (errors.discountPercent) {
+                           setErrors((prev) => ({ ...prev, discountPercent: '' }));
+                         }
+                       }}
+                       className={errors.discountPercent ? 'input-error' : ''}
+                       style={{ width: '100%', padding: '8px', borderRadius: '4px', border: '1px solid #ccc' }}
+                     />
+                     {errors.discountPercent && (
+                       <span className="error-message" style={{ color: '#e53e3e', fontSize: '12px' }}>{errors.discountPercent}</span>
+                     )}
+                   </div>
+                 )}
+
+                 <div className="form-group checkbox-group" style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '15px' }}>
+                   <input
+                     type="checkbox"
+                     id="product-is-new"
+                     checked={isNew}
+                     onChange={(e) => setIsNew(e.target.checked)}
+                     style={{ width: '16px', height: '16px', cursor: 'pointer' }}
+                   />
+                   <label htmlFor="product-is-new" style={{ cursor: 'pointer', userSelect: 'none' }}>New Arrival</label>
+                 </div>
+
+                 <div className="form-actions">
                   <button type="submit" className="submit-btn">
                     {editingProduct ? 'Update Product' : 'Add Product'}
                   </button>

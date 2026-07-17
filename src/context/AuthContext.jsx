@@ -20,7 +20,7 @@ export const AuthProvider = ({ children }) => {
 
   const [currentView, setCurrentView] = useState(() => {
     const savedView = window.localStorage.getItem('auth_current_view');
-    return savedView || 'catalog';
+    return savedView || 'home';
   });
 
   const isTestEnv = typeof process !== 'undefined' && process.env.NODE_ENV === 'test';
@@ -134,7 +134,7 @@ export const AuthProvider = ({ children }) => {
 
   const logout = () => {
     setUser(null);
-    setCurrentView('catalog');
+    setCurrentView('home');
     window.localStorage.removeItem('auth_user');
     window.localStorage.removeItem('auth_current_view');
   };

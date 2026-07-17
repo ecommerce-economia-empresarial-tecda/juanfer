@@ -12,7 +12,7 @@ describe('AuthContext', () => {
     const { result } = renderHook(() => useAuth(), { wrapper });
 
     expect(result.current.user).toBeNull();
-    expect(result.current.currentView).toBe('catalog');
+    expect(result.current.currentView).toBe('home');
   });
 
   it('should restore auth session from localStorage if present', () => {
@@ -146,7 +146,7 @@ describe('AuthContext', () => {
     });
 
     expect(result.current.user).toBeNull();
-    expect(result.current.currentView).toBe('catalog');
+    expect(result.current.currentView).toBe('home');
 
     // Verify localStorage cleared
     expect(window.localStorage.getItem('auth_user')).toBeNull();

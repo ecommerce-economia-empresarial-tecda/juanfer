@@ -10,6 +10,7 @@ import CartDrawer from './components/CartDrawer';
 import CheckoutForm from './components/CheckoutForm';
 import LoginForm from './components/LoginForm';
 import AdminDashboard from './components/AdminDashboard';
+import Home from './components/Home';
 import './App.css';
 
 function MainApp() {
@@ -63,19 +64,25 @@ function MainApp() {
       <header className="navbar">
         <div
           className="navbar-brand"
-          onClick={() => setView('catalog')}
+          onClick={() => setView('home')}
           style={{ cursor: 'pointer' }}
           role="button"
           tabIndex={0}
           onKeyDown={(e) => {
             if (e.key === 'Enter' || e.key === ' ') {
-              setView('catalog');
+              setView('home');
             }
           }}
         >
           <h1>Antigravity Shop</h1>
         </div>
         <nav className="navbar-links">
+          <button
+            onClick={() => setView('home')}
+            className={`nav-link-btn ${currentView === 'home' ? 'active' : ''}`}
+          >
+            Home
+          </button>
           <button
             onClick={() => setView('catalog')}
             className={`nav-link-btn ${currentView === 'catalog' ? 'active' : ''}`}
@@ -115,6 +122,10 @@ function MainApp() {
       </header>
 
       <main className="main-content">
+        {currentView === 'home' && (
+          <Home />
+        )}
+
         {currentView === 'catalog' && (
           <div className="catalog-view">
             <div className="view-header">

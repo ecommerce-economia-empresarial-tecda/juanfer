@@ -100,6 +100,9 @@ describe('AdminDashboard Component', () => {
       stock: 15,
       description: 'Comfortable running shoes',
       image: '',
+      onSale: false,
+      discountPercent: 0,
+      isNew: false,
     });
 
     // Inputs should be reset
@@ -192,6 +195,9 @@ describe('AdminDashboard Component', () => {
       stock: 12,
       description: 'Noise-canceling headphones',
       image: 'headphones.jpg',
+      onSale: false,
+      discountPercent: 0,
+      isNew: false,
     });
 
     // Heading should reset back to Add
@@ -237,6 +243,9 @@ describe('AdminDashboard Component', () => {
       stock: 8,
       description: '',
       image: '',
+      onSale: false,
+      discountPercent: 0,
+      isNew: false,
     });
   });
 
