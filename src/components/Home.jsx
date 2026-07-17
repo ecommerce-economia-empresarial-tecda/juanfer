@@ -11,6 +11,59 @@ export default function Home({ onProductClick }) {
 
   const offerProducts = products.filter((p) => p.onSale === true);
   const newArrivals = products.filter((p) => p.isNew === true);
+  const isLoading = products.length === 0;
+
+  if (isLoading) {
+    return (
+      <div className="home-container loading-skeleton">
+        {/* Offers Skeleton */}
+        <section className="home-section offers-section">
+          <div className="section-header">
+            <div className="skeleton-title"></div>
+            <div className="skeleton-text"></div>
+          </div>
+          <div className="carousel-wrapper">
+            <div className="carousel-track">
+              {[1, 2, 3].map((n) => (
+                <div className="carousel-item" key={n}>
+                  <div className="skeleton-card">
+                    <div className="skeleton-image"></div>
+                    <div className="skeleton-info">
+                      <div className="skeleton-line category"></div>
+                      <div className="skeleton-line title"></div>
+                      <div className="skeleton-line price"></div>
+                      <div className="skeleton-button"></div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* New Arrivals Skeleton */}
+        <section className="home-section new-arrivals-section">
+          <div className="section-header">
+            <div className="skeleton-title"></div>
+            <div className="skeleton-text"></div>
+          </div>
+          <div className="products-grid">
+            {[1, 2, 3, 4].map((n) => (
+              <div className="skeleton-card" key={n}>
+                <div className="skeleton-image"></div>
+                <div className="skeleton-info">
+                  <div className="skeleton-line category"></div>
+                  <div className="skeleton-line title"></div>
+                  <div className="skeleton-line price"></div>
+                  <div className="skeleton-button"></div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+      </div>
+    );
+  }
 
   useEffect(() => {
     if (offerProducts.length <= 1) return;
