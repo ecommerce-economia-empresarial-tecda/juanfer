@@ -68,7 +68,7 @@ describe('ProductsContext', () => {
     const wrapper = ({ children }) => <ProductsProvider>{children}</ProductsProvider>;
     const { result } = renderHook(() => useProducts(), { wrapper });
 
-    // Initial mockProducts length is 6, max id is 6.
+    // Initial mockProducts length is 15, max id is 15.
     const productA = { title: 'A', description: 'Desc A', price: 10, category: 'Cat', image: 'imgA.jpg', stock: 1 };
     const productB = { title: 'B', description: 'Desc B', price: 20, category: 'Cat', image: 'imgB.jpg', stock: 2 };
 
@@ -76,13 +76,13 @@ describe('ProductsContext', () => {
       result.current.addProduct(productA);
     });
     const addedA = result.current.products.find(p => p.title === 'A');
-    expect(addedA.id).toBe(7);
+    expect(addedA.id).toBe(16);
 
     act(() => {
       result.current.addProduct(productB);
     });
     const addedB = result.current.products.find(p => p.title === 'B');
-    expect(addedB.id).toBe(8);
+    expect(addedB.id).toBe(17);
   });
 
   it('should update product details', () => {
