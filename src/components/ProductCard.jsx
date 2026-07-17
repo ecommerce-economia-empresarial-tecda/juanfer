@@ -32,13 +32,36 @@ export default function ProductCard({ product, onCardClick }) {
       onClick={() => onCardClick && onCardClick(product)}
       style={{ cursor: 'pointer' }}
     >
-      <div className="product-image-container" style={{ position: 'relative' }}>
-        <img
-          src={product.image}
-          alt={product.title}
-          className="product-image"
-          style={{ viewTransitionName: `product-img-${product.id}` }}
-        />
+      <div className="product-image-container" style={{ position: 'relative', height: '220px', background: 'rgba(0, 0, 0, 0.05)', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
+        {product.image ? (
+          <img
+            src={product.image}
+            alt={product.title}
+            className="product-image"
+            style={{ viewTransitionName: `product-img-${product.id}`, height: '100%', width: '100%', objectFit: 'cover' }}
+            onError={(e) => {
+              e.target.style.display = 'none';
+              const placeholder = e.target.parentElement.querySelector('.product-image-placeholder');
+              if (placeholder) placeholder.style.display = 'flex';
+            }}
+          />
+        ) : null}
+        <div 
+          className="product-image-placeholder" 
+          style={{ 
+            display: product.image ? 'none' : 'flex', 
+            alignItems: 'center', 
+            justifyContent: 'center', 
+            height: '100%', 
+            width: '100%', 
+            color: '#888', 
+            fontSize: '14px',
+            fontStyle: 'italic',
+            background: 'rgba(0, 0, 0, 0.05)'
+          }}
+        >
+          Sin imagen
+        </div>
         <div className="product-badges">
           {product.onSale && <span className="badge badge-sale">OFERTA</span>}
           {product.isNew && <span className="badge badge-new">NUEVO</span>}

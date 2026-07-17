@@ -19,7 +19,7 @@ describe('App Integration and Views', () => {
 
     // Catalog view check (should find categories filter dropdown and grid)
     expect(screen.getByRole('combobox', { name: /filtrar por categoría/i })).toBeInTheDocument();
-    expect(screen.getByText(/Antigravity Shop/i)).toBeInTheDocument();
+    expect(screen.getByText(/Juanfer Shop/i)).toBeInTheDocument();
 
     // Drawer should not be visible initially
     expect(screen.queryByTestId('cart-drawer')).not.toBeInTheDocument();
@@ -60,7 +60,7 @@ describe('App Integration and Views', () => {
 
     // The catalog filter and shop brand should be visible without authentication
     expect(screen.getByRole('combobox', { name: /filtrar por categoría/i })).toBeInTheDocument();
-    expect(screen.getByText(/Antigravity Shop/i)).toBeInTheDocument();
+    expect(screen.getByText(/Juanfer Shop/i)).toBeInTheDocument();
     // Login form should NOT be visible for guests on the default catalog view
     expect(screen.queryByRole('heading', { name: /iniciar sesión/i })).not.toBeInTheDocument();
   });

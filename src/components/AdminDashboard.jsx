@@ -469,12 +469,23 @@ export default function AdminDashboard() {
                   )}
                 </div>
 
-                <div className="form-group">
+                 <div className="form-group">
                    <label htmlFor="product-description">Descripción</label>
                    <textarea
                      id="product-description"
                      value={description}
                      onChange={(e) => setDescription(e.target.value)}
+                   />
+                 </div>
+
+                 <div className="form-group">
+                   <label htmlFor="product-image-url">URL de la imagen</label>
+                   <input
+                     id="product-image-url"
+                     type="text"
+                     value={image}
+                     onChange={(e) => setImage(e.target.value)}
+                     placeholder="https://ejemplo.com/imagen.jpg"
                    />
                  </div>
 

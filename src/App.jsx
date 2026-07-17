@@ -96,7 +96,7 @@ function MainApp() {
             }
           }}
         >
-          <h1>Antigravity Shop</h1>
+          <h1>Juanfer Shop</h1>
         </div>
         <nav className="navbar-links">
           <button

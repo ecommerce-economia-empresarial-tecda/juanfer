@@ -12,7 +12,7 @@ describe('App Complete Integration Checkout Flow', () => {
     render(<App />);
 
     // 1. Verify Catalog is rendered
-    expect(screen.getByText(/Antigravity Shop/i)).toBeInTheDocument();
+    expect(screen.getByText(/Juanfer Shop/i)).toBeInTheDocument();
     expect(screen.getByRole('combobox', { name: /filtrar por categoría/i })).toBeInTheDocument();
 
     // 2. Add multiple products to the cart
