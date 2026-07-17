@@ -7,13 +7,11 @@ describe('App Integration and Views', () => {
     window.localStorage.clear();
     window.localStorage.setItem('auth_current_view', 'catalog');
   });
-
   it('renders the homepage by default when no saved view exists', () => {
     window.localStorage.clear();
     render(<App />);
-    expect(screen.getByText(/Welcome to Antigravity Shop/i)).toBeInTheDocument();
+    expect(screen.getByText(/Offers & Promociones/i)).toBeInTheDocument();
   });
-
   // ─── Existing Tests ──────────────────────────────────────────────────────────
 
   it('renders the product catalog by default and allows drawer toggling', () => {

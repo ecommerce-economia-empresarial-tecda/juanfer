@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useRef, useEffect } from 'react';
 import { useProducts } from '../context/ProductsContext';
 import { useAuth } from '../context/AuthContext';
 import ProductCard from './ProductCard';
@@ -11,6 +11,23 @@ export default function Home({ onProductClick }) {
 
   const offerProducts = products.filter((p) => p.onSale === true);
   const newArrivals = products.filter((p) => p.isNew === true);
+
+  useEffect(() => {
+    if (offerProducts.length <= 1) return;
+
+    const interval = setInterval(() => {
+      if (carouselRef.current) {
+        const { scrollLeft, scrollWidth, clientWidth } = carouselRef.current;
+        if (scrollLeft + clientWidth >= scrollWidth - 15) {
+          carouselRef.current.scrollTo({ left: 0, behavior: 'smooth' });
+        } else {
+          carouselRef.current.scrollBy({ left: 320, behavior: 'smooth' });
+        }
+      }
+    }, 3500);
+
+    return () => clearInterval(interval);
+  }, [offerProducts]);
 
   const scrollToOffers = () => {
     offersRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -30,25 +47,6 @@ export default function Home({ onProductClick }) {
 
   return (
     <div className="home-container">
-      {/* Hero Section */}
-      <section className="hero-section">
-        <div className="hero-overlay">
-          <div className="hero-content-glass">
-            <h1 className="hero-title">Welcome to Antigravity Shop</h1>
-            <p className="hero-tagline">
-              Premium, high-performance gear built for the next frontier. Experience gravity-defying quality.
-            </p>
-            <div className="hero-actions">
-              <button
-                onClick={() => setView('catalog')}
-                className="hero-btn shop-now-btn"
-              >
-                Shop Now
-              </button>
-            </div>
-          </div>
-        </div>
-      </section>
 
       {/* Offers / Promociones Section */}
       <section ref={offersRef} className="home-section offers-section" id="offers-section">
