@@ -1,7 +1,12 @@
+import { useContext } from 'react';
 import { useCart } from '../context/CartContext';
+import { NotificationContext } from '../context/NotificationContext';
 
 export default function ProductCard({ product }) {
   const { cart, addToCart } = useCart();
+  const notificationCtx = useContext(NotificationContext);
+  const showNotification = notificationCtx ? notificationCtx.showNotification : () => {};
+
   const cartItem = cart.find((item) => item.id === product.id);
   const cartQuantity = cartItem ? cartItem.quantity : 0;
   const isSoldOut = product.stock === 0;
@@ -11,6 +16,7 @@ export default function ProductCard({ product }) {
   const handleAddToCart = () => {
     if (!isAddDisabled) {
       addToCart(product);
+      showNotification(`Added ${product.title} to cart!`, 'success');
     }
   };
 

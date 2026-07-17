@@ -40,3 +40,17 @@ Object.defineProperty(window, 'localStorage', {
 
 // Also define it on global node context just in case
 globalThis.localStorage = mockLocalStorage;
+
+import { webcrypto } from 'node:crypto';
+if (!globalThis.crypto) {
+  globalThis.crypto = webcrypto;
+} else if (!globalThis.crypto.subtle) {
+  Object.defineProperty(globalThis.crypto, 'subtle', {
+    value: webcrypto.subtle,
+    writable: true,
+  });
+}
+if (typeof window !== 'undefined' && !window.crypto) {
+  window.crypto = webcrypto;
+}
+

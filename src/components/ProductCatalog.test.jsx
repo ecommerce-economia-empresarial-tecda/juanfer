@@ -1,5 +1,6 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import { CartProvider } from '../context/CartContext';
+import { ProductsProvider, useProducts } from '../context/ProductsContext';
 import ProductCatalog from './ProductCatalog';
 import { describe, it, expect, beforeEach } from 'vitest';
 
@@ -34,12 +35,16 @@ const testProducts = [
 ];
 
 const renderCatalog = (products = testProducts) => {
+  window.localStorage.setItem('products_inventory', JSON.stringify(products));
   return render(
-    <CartProvider>
-      <ProductCatalog products={products} />
-    </CartProvider>
+    <ProductsProvider>
+      <CartProvider>
+        <ProductCatalog />
+      </CartProvider>
+    </ProductsProvider>
   );
 };
+
 
 describe('ProductCatalog Component', () => {
   beforeEach(() => {
@@ -186,5 +191,53 @@ describe('ProductCatalog Component', () => {
     fireEvent.change(select, { target: { value: 'Toys' } });
     expect(screen.queryByText('Book A')).not.toBeInTheDocument();
     expect(screen.getByText('Toy B')).toBeInTheDocument();
+  });
+
+  it('updates "Add to Cart" button dynamically to "Sold Out" and disables it when stock becomes 0', () => {
+    const products = [
+      {
+        id: 1,
+        title: 'Product A',
+        description: 'Test Product A Description',
+        price: 10.00,
+        category: 'Category 1',
+        image: 'imageA.jpg',
+        stock: 5,
+      }
+    ];
+    window.localStorage.setItem('products_inventory', JSON.stringify(products));
+
+    const TestWrapper = () => {
+      const { updateProduct } = useProducts();
+      return (
+        <div>
+          <ProductCatalog />
+          <button onClick={() => updateProduct(1, { stock: 0 })}>
+            Set Product A Stock to 0
+          </button>
+        </div>
+      );
+    };
+
+    render(
+      <ProductsProvider>
+        <CartProvider>
+          <TestWrapper />
+        </CartProvider>
+      </ProductsProvider>
+    );
+
+    // Verify it is not disabled initially
+    const button = screen.getByRole('button', { name: /add to cart product a/i });
+    expect(button).not.toBeDisabled();
+    expect(button).toHaveTextContent(/add to cart/i);
+
+    // Click helper button to update stock to 0
+    fireEvent.click(screen.getByRole('button', { name: /set product a stock to 0/i }));
+
+    // Now it should be sold out
+    expect(button).toBeDisabled();
+    expect(button).toHaveTextContent(/sold out/i);
+    expect(screen.getByText('Sold Out', { selector: '.sold-out-badge' })).toBeInTheDocument();
   });
 });

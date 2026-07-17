@@ -38,8 +38,16 @@ describe('App Complete Integration Checkout Flow', () => {
     const checkoutBtn = screen.getByRole('button', { name: /proceed to checkout/i });
     fireEvent.click(checkoutBtn);
 
+    // Guest is redirected to Login form
+    expect(screen.getByRole('heading', { name: /log in/i })).toBeInTheDocument();
+    
+    // Fill in customer credentials to log in
+    fireEvent.change(screen.getByLabelText(/email address/i), { target: { value: 'customer@juanfershop.com' } });
+    fireEvent.change(screen.getByLabelText(/password/i), { target: { value: 'customerJFS2026!' } });
+    fireEvent.click(screen.getByRole('button', { name: /log in/i }));
+
     // Verify we navigated to checkout view
-    expect(screen.getByRole('heading', { name: /checkout details/i })).toBeInTheDocument();
+    expect(await screen.findByRole('heading', { name: /checkout details/i })).toBeInTheDocument();
     expect(screen.queryByRole('combobox', { name: /filter by category/i })).not.toBeInTheDocument();
 
     // 5. Fill in Name, Email, Address, Card fields and submit
@@ -98,7 +106,16 @@ describe('App Complete Integration Checkout Flow', () => {
     const checkoutBtn = screen.getByRole('button', { name: /proceed to checkout/i });
     fireEvent.click(checkoutBtn);
 
-    // Try to complete order with invalid card and invalid email
+    // Guest is redirected to Login form
+    expect(screen.getByRole('heading', { name: /log in/i })).toBeInTheDocument();
+    
+    // Fill in customer credentials to log in
+    fireEvent.change(screen.getByLabelText(/email address/i), { target: { value: 'customer@juanfershop.com' } });
+    fireEvent.change(screen.getByLabelText(/password/i), { target: { value: 'customerJFS2026!' } });
+    fireEvent.click(screen.getByRole('button', { name: /log in/i }));
+
+    // Now on checkout view, try to complete order with invalid card and invalid email
+    expect(await screen.findByRole('heading', { name: /checkout details/i })).toBeInTheDocument();
     fireEvent.change(screen.getByLabelText(/full name/i), { target: { value: 'Alex Smith' } });
     fireEvent.change(screen.getByLabelText(/email address/i), { target: { value: 'alex-invalid-email' } });
     fireEvent.change(screen.getByLabelText(/shipping address/i), { target: { value: '100 Orbit Way' } });

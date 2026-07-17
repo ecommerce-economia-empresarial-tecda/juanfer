@@ -1,14 +1,23 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import { CartProvider, useCart } from '../context/CartContext';
+import { ProductsProvider } from '../context/ProductsContext';
 import CheckoutForm from './CheckoutForm';
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 
-// Harness to manage cart addition and wrap the CheckoutForm in a CartProvider
+// Harness to manage cart addition and wrap the CheckoutForm in CartProvider + ProductsProvider.
+// `initialProducts` are added to both the cart buttons AND seeded into ProductsContext as the
+// catalog, so stock validation in CheckoutForm passes for existing tests.
 function CheckoutTestHarness({ initialProducts = [], onCheckoutSuccess = () => {} }) {
+  // Seed localStorage so ProductsProvider initialises with the provided catalog
+  if (initialProducts.length > 0) {
+    window.localStorage.setItem('products_inventory', JSON.stringify(initialProducts));
+  }
   return (
-    <CartProvider>
-      <CartActionsAndCheckout initialProducts={initialProducts} onCheckoutSuccess={onCheckoutSuccess} />
-    </CartProvider>
+    <ProductsProvider>
+      <CartProvider>
+        <CartActionsAndCheckout initialProducts={initialProducts} onCheckoutSuccess={onCheckoutSuccess} />
+      </CartProvider>
+    </ProductsProvider>
   );
 }
 
@@ -17,6 +26,38 @@ function CartActionsAndCheckout({ initialProducts, onCheckoutSuccess }) {
   return (
     <div>
       {initialProducts.map(p => (
+        <button key={p.id} onClick={() => addToCart(p)} data-testid={`add-${p.id}`}>
+          Add {p.title}
+        </button>
+      ))}
+      <div data-testid="cart-count">Items in Cart: {cart.length}</div>
+      <CheckoutForm onCheckoutSuccess={onCheckoutSuccess} />
+    </div>
+  );
+}
+
+/**
+ * Stock-verification harness: wraps in both ProductsProvider and CartProvider.
+ * `catalogProducts` seeds ProductsContext (simulates the live catalog).
+ * `cartProducts` are added to cart via addToCart.
+ */
+function StockCheckHarness({ catalogProducts = [], cartProducts = [], onCheckoutSuccess = () => {} }) {
+  // Seed localStorage so ProductsProvider initialises with controlled catalog
+  window.localStorage.setItem('products_inventory', JSON.stringify(catalogProducts));
+  return (
+    <ProductsProvider>
+      <CartProvider>
+        <StockCheckInner cartProducts={cartProducts} onCheckoutSuccess={onCheckoutSuccess} />
+      </CartProvider>
+    </ProductsProvider>
+  );
+}
+
+function StockCheckInner({ cartProducts, onCheckoutSuccess }) {
+  const { cart, addToCart } = useCart();
+  return (
+    <div>
+      {cartProducts.map(p => (
         <button key={p.id} onClick={() => addToCart(p)} data-testid={`add-${p.id}`}>
           Add {p.title}
         </button>
@@ -165,5 +206,114 @@ describe('CheckoutForm Component', () => {
     const closeBtn = screen.getByRole('button', { name: /close confirmation/i });
     fireEvent.click(closeBtn);
     expect(screen.queryByText(/order placement successful/i)).not.toBeInTheDocument();
+  });
+
+  // ─── 3.2 Stock-verification tests ────────────────────────────────────────────
+
+  it('blocks order and shows error when a cart product has been deleted from catalog', async () => {
+    // catalog has NO product 99 (simulates admin deleted it after user added to cart)
+    const catalogProducts = [];
+    const cartProduct = { id: 99, title: 'Checkout Product', price: 15, stock: 5 };
+
+    render(
+      <StockCheckHarness catalogProducts={catalogProducts} cartProducts={[cartProduct]} />
+    );
+
+    fireEvent.click(screen.getByTestId('add-99'));
+
+    // Fill valid form data
+    fireEvent.change(screen.getByLabelText(/full name/i), { target: { value: 'John Doe' } });
+    fireEvent.change(screen.getByLabelText(/email address/i), { target: { value: 'john@example.com' } });
+    fireEvent.change(screen.getByLabelText(/shipping address/i), { target: { value: '123 Main St' } });
+    fireEvent.change(screen.getByLabelText(/credit card/i), { target: { value: '1234567890123456' } });
+
+    fireEvent.click(screen.getByRole('button', { name: /complete order/i }));
+
+    // Should display "no longer available" error for the deleted product
+    expect(
+      await screen.findByText(/product 'checkout product' is no longer available/i)
+    ).toBeInTheDocument();
+
+    // Order must NOT be placed
+    expect(screen.queryByText(/order placement successful/i)).not.toBeInTheDocument();
+  });
+
+  it('blocks order and shows error when cart quantity exceeds available stock', async () => {
+    // catalog has product 99 with only 2 in stock
+    const catalogProducts = [
+      { id: 99, title: 'Checkout Product', price: 15, stock: 2 },
+    ];
+    // cart product has stock: 5 so addToCart won't be blocked at cart level,
+    // but catalog only has 2 → validation at checkout should catch mismatch.
+    // We add 3 times (each click increments quantity by 1)
+    const cartProduct = { id: 99, title: 'Checkout Product', price: 15, stock: 5 };
+
+    render(
+      <StockCheckHarness catalogProducts={catalogProducts} cartProducts={[cartProduct]} />
+    );
+
+    // Add 3 units to cart
+    fireEvent.click(screen.getByTestId('add-99'));
+    fireEvent.click(screen.getByTestId('add-99'));
+    fireEvent.click(screen.getByTestId('add-99'));
+
+    // Fill valid form data
+    fireEvent.change(screen.getByLabelText(/full name/i), { target: { value: 'John Doe' } });
+    fireEvent.change(screen.getByLabelText(/email address/i), { target: { value: 'john@example.com' } });
+    fireEvent.change(screen.getByLabelText(/shipping address/i), { target: { value: '123 Main St' } });
+    fireEvent.change(screen.getByLabelText(/credit card/i), { target: { value: '1234567890123456' } });
+
+    fireEvent.click(screen.getByRole('button', { name: /complete order/i }));
+
+    // Should display "only N units available" error
+    expect(
+      await screen.findByText(/only 2 units of 'checkout product' are available/i)
+    ).toBeInTheDocument();
+
+    // Order must NOT be placed
+    expect(screen.queryByText(/order placement successful/i)).not.toBeInTheDocument();
+  });
+
+  it('calls decrementStock for each cart item and clears cart on valid checkout', async () => {
+    const catalogProducts = [
+      { id: 99, title: 'Checkout Product', price: 15, stock: 10 },
+    ];
+    const cartProduct = { id: 99, title: 'Checkout Product', price: 15, stock: 10 };
+    const handleSuccess = vi.fn();
+
+    render(
+      <StockCheckHarness
+        catalogProducts={catalogProducts}
+        cartProducts={[cartProduct]}
+        onCheckoutSuccess={handleSuccess}
+      />
+    );
+
+    // Add 2 units to cart
+    fireEvent.click(screen.getByTestId('add-99'));
+    fireEvent.click(screen.getByTestId('add-99'));
+    expect(screen.getByTestId('cart-count')).toHaveTextContent('Items in Cart: 1');
+
+    // Fill valid form data
+    fireEvent.change(screen.getByLabelText(/full name/i), { target: { value: 'Jane Doe' } });
+    fireEvent.change(screen.getByLabelText(/email address/i), { target: { value: 'jane@example.com' } });
+    fireEvent.change(screen.getByLabelText(/shipping address/i), { target: { value: '456 Oak Ave' } });
+    fireEvent.change(screen.getByLabelText(/credit card/i), { target: { value: '9876543210987654' } });
+
+    fireEvent.click(screen.getByRole('button', { name: /complete order/i }));
+
+    // Order confirmation must appear
+    expect(await screen.findByText(/order placement successful/i)).toBeInTheDocument();
+    expect(screen.getByText(/order id:/i)).toBeInTheDocument();
+
+    // Cart must be cleared
+    expect(screen.getByTestId('cart-count')).toHaveTextContent('Items in Cart: 0');
+
+    // Callback must have been fired
+    expect(handleSuccess).toHaveBeenCalledTimes(1);
+
+    // localStorage inventory should reflect decremented stock (10 - 2 = 8)
+    const stored = JSON.parse(window.localStorage.getItem('products_inventory'));
+    expect(stored.find(p => p.id === 99).stock).toBe(8);
   });
 });

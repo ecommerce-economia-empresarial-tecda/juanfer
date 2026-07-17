@@ -1,17 +1,22 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import ProductCard from './ProductCard';
-import { products as defaultProducts } from '../mockData';
+import { useProducts } from '../context/ProductsContext';
 
-export default function ProductCatalog({ products = defaultProducts }) {
+export default function ProductCatalog() {
+  const { products } = useProducts();
   const [selectedCategory, setSelectedCategory] = useState('All');
 
   // Derive unique categories from products
-  const categories = ['All', ...new Set(products.map((p) => p.category))];
+  const categories = useMemo(() => {
+    return ['All', ...new Set(products.map((p) => p.category))];
+  }, [products]);
 
-  const filteredProducts =
-    selectedCategory === 'All'
+  const filteredProducts = useMemo(() => {
+    return selectedCategory === 'All'
       ? products
       : products.filter((p) => p.category === selectedCategory);
+  }, [products, selectedCategory]);
+
 
   return (
     <div className="product-catalog">

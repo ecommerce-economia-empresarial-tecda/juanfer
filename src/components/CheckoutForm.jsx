@@ -1,9 +1,17 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import { useCart } from '../context/CartContext';
+import { useProducts } from '../context/ProductsContext';
 import OrderConfirmationModal from './OrderConfirmationModal';
+import { validateCartStock } from './checkoutStockValidator';
+import { NotificationContext } from '../context/NotificationContext';
+
 
 export default function CheckoutForm({ onCheckoutSuccess, onCloseConfirmation }) {
   const { cart, clearCart } = useCart();
+  const { products, decrementStock } = useProducts();
+  const notificationCtx = useContext(NotificationContext);
+  const showNotification = notificationCtx ? notificationCtx.showNotification : () => {};
+
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -12,6 +20,7 @@ export default function CheckoutForm({ onCheckoutSuccess, onCloseConfirmation })
   });
   const [errors, setErrors] = useState({});
   const [orderId, setOrderId] = useState(null);
+  const [stockError, setStockError] = useState(null);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -60,7 +69,7 @@ export default function CheckoutForm({ onCheckoutSuccess, onCloseConfirmation })
     return newErrors;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     // Form can only be submitted if cart is not empty
@@ -74,15 +83,43 @@ export default function CheckoutForm({ onCheckoutSuccess, onCloseConfirmation })
       return;
     }
 
+    // Stock verification against live ProductsContext before placing the order
+    const stockValidationError = validateCartStock(cart, products);
+    if (stockValidationError) {
+      setStockError(stockValidationError);
+      return;
+    }
+    setStockError(null);
+
+    // Decrement stock for each cart item in ProductsContext
+    for (const item of cart) {
+      decrementStock(item.id, item.quantity);
+    }
+
     // Success flow
     const generatedOrderId = `ORD-${Date.now()}-${Math.floor(1000 + Math.random() * 9000)}`;
-    
+    showNotification(`Order ${generatedOrderId} placed successfully!`, 'success');
+
+    const isTestEnv = typeof process !== 'undefined' && process.env.NODE_ENV === 'test';
+    if (!isTestEnv) {
+      const { db } = await import('../firebase');
+      const { collection, addDoc } = await import('firebase/firestore');
+      addDoc(collection(db, 'orders'), {
+        orderId: generatedOrderId,
+        customerName: formData.name.trim(),
+        customerEmail: formData.email.trim(),
+        shippingAddress: formData.address.trim(),
+        cartItems: cart.map(item => ({ id: item.id, title: item.title, quantity: item.quantity, price: item.price })),
+        createdAt: new Date().toISOString()
+      }).catch(err => console.error("Error saving order:", err));
+    }
+
     // Clear the cart
     clearCart();
-    
+
     // Set the order ID to show modal
     setOrderId(generatedOrderId);
-    
+
     // Clear form inputs
     setFormData({
       name: '',
@@ -109,7 +146,7 @@ export default function CheckoutForm({ onCheckoutSuccess, onCloseConfirmation })
     <div className="checkout-form-container">
       <form onSubmit={handleSubmit} className="checkout-form" noValidate>
         <h2>Checkout Details</h2>
-        
+
         <div className="form-group">
           <label htmlFor="name-input">Full Name</label>
           <input
@@ -165,6 +202,12 @@ export default function CheckoutForm({ onCheckoutSuccess, onCloseConfirmation })
           />
           {errors.card && <span className="error-message">{errors.card}</span>}
         </div>
+
+        {stockError && (
+          <p className="stock-error-message" role="alert">
+            {stockError}
+          </p>
+        )}
 
         <button
           type="submit"

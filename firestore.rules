@@ -1,0 +1,33 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Products rules
+    match /products/{productId} {
+      allow read: if true; // Anyone can browse catalog
+      allow write: if request.resource.data.title is string
+                   && request.resource.data.price is number
+                   && request.resource.data.price > 0
+                   && request.resource.data.stock is int
+                   && request.resource.data.stock >= 0;
+    }
+    
+    // Users rules
+    match /users/{email} {
+      allow get: if true; // Needed for login query
+      allow list: if true; // Needed for Admin Dashboard list (warn: insecure without Firebase Auth)
+      allow write: if request.resource.data.role in ['admin', 'customer']
+                   && request.resource.data.password is string
+                   && request.resource.data.password.size() >= 6;
+    }
+    
+    // Orders rules
+    match /orders/{orderId} {
+      allow create: if request.resource.data.customerName is string
+                    && request.resource.data.customerEmail is string
+                    && request.resource.data.shippingAddress is string
+                    && request.resource.data.cartItems is list;
+      allow read: if true;
+    }
+  }
+}

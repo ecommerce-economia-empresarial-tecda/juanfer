@@ -1,22 +1,68 @@
-import { useState } from 'react';
-import { CartProvider, useCart } from './context/CartContext';
+import { useState, useEffect, useRef } from 'react';
+import { useCart } from './context/CartContext';
+import { useAuth } from './context/AuthContext';
+import { AuthProvider } from './context/AuthContext';
+import { ProductsProvider } from './context/ProductsContext';
+import { CartProvider } from './context/CartContext';
+import { NotificationProvider, useNotification } from './context/NotificationContext';
 import ProductCatalog from './components/ProductCatalog';
 import CartDrawer from './components/CartDrawer';
 import CheckoutForm from './components/CheckoutForm';
+import LoginForm from './components/LoginForm';
+import AdminDashboard from './components/AdminDashboard';
 import './App.css';
 
 function MainApp() {
   const { cart } = useCart();
+  const { user, currentView, setView, logout } = useAuth();
+  const { notifications } = useNotification();
   const [isCartOpen, setIsCartOpen] = useState(false);
-  const [view, setView] = useState('catalog'); // 'catalog' | 'checkout'
+  // Track whether the user was redirected to login from a checkout attempt (ref avoids setState-in-effect)
+  const pendingCheckout = useRef(false);
 
   const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
 
+  // After a customer logs in, redirect them to checkout if they came from cart
+  useEffect(() => {
+    if (pendingCheckout.current && user?.role === 'customer' && currentView !== 'login') {
+      pendingCheckout.current = false;
+      setView('checkout');
+    }
+  }, [user, currentView, setView]);
+
+  const handleCheckout = () => {
+    setIsCartOpen(false);
+    if (!user) {
+      // Guest: redirect to login first
+      pendingCheckout.current = true;
+      setView('login');
+    } else {
+      setView('checkout');
+    }
+  };
+
+  // Admin-exclusive view
+  if (currentView === 'admin') {
+    return (
+      <>
+        <AdminDashboard />
+        <div className="toast-container">
+          {notifications.map((n) => (
+            <div key={n.id} className={`toast toast-${n.type}`}>
+              {n.message}
+            </div>
+          ))}
+        </div>
+      </>
+    );
+  }
+
+  // Catalog / Checkout / Login view
   return (
     <div className="app-layout">
       <header className="navbar">
-        <div 
-          className="navbar-brand" 
+        <div
+          className="navbar-brand"
           onClick={() => setView('catalog')}
           style={{ cursor: 'pointer' }}
           role="button"
@@ -30,14 +76,36 @@ function MainApp() {
           <h1>Antigravity Shop</h1>
         </div>
         <nav className="navbar-links">
-          <button 
-            onClick={() => setView('catalog')} 
-            className={`nav-link-btn ${view === 'catalog' ? 'active' : ''}`}
+          <button
+            onClick={() => setView('catalog')}
+            className={`nav-link-btn ${currentView === 'catalog' ? 'active' : ''}`}
           >
             Shop
           </button>
-          <button 
-            onClick={() => setIsCartOpen(true)} 
+          
+          {user ? (
+            <>
+              <span className="user-indicator">
+                Logged in as: <strong>{user.email}</strong>
+              </span>
+              <button
+                onClick={logout}
+                className="nav-link-btn logout-btn-nav"
+              >
+                Log Out
+              </button>
+            </>
+          ) : (
+            <button
+              onClick={() => setView('login')}
+              className={`nav-link-btn ${currentView === 'login' ? 'active' : ''}`}
+            >
+              Sign In
+            </button>
+          )}
+
+          <button
+            onClick={() => setIsCartOpen(true)}
             className="cart-toggle-btn"
             aria-label="Open Cart"
           >
@@ -47,7 +115,7 @@ function MainApp() {
       </header>
 
       <main className="main-content">
-        {view === 'catalog' ? (
+        {currentView === 'catalog' && (
           <div className="catalog-view">
             <div className="view-header">
               <h2>Explore Our Collection</h2>
@@ -55,18 +123,20 @@ function MainApp() {
             </div>
             <ProductCatalog />
           </div>
-        ) : (
+        )}
+
+        {currentView === 'checkout' && (
           <div className="checkout-view-container">
             <div className="checkout-navigation">
-              <button 
-                onClick={() => setView('catalog')} 
+              <button
+                onClick={() => setView('catalog')}
                 className="back-to-shop-btn"
                 aria-label="Back to Shop"
               >
                 &larr; Back to Shop
               </button>
             </div>
-            <CheckoutForm 
+            <CheckoutForm
               onCheckoutSuccess={(orderId) => {
                 console.log('Order completed:', orderId);
               }}
@@ -76,24 +146,39 @@ function MainApp() {
             />
           </div>
         )}
+
+        {currentView === 'login' && (
+          <LoginForm />
+        )}
       </main>
 
-      <CartDrawer 
-        isOpen={isCartOpen} 
-        onClose={() => setIsCartOpen(false)} 
-        onCheckout={() => {
-          setIsCartOpen(false);
-          setView('checkout');
-        }} 
+      <CartDrawer
+        isOpen={isCartOpen}
+        onClose={() => setIsCartOpen(false)}
+        onCheckout={handleCheckout}
       />
+
+      <div className="toast-container">
+        {notifications.map((n) => (
+          <div key={n.id} className={`toast toast-${n.type}`}>
+            {n.message}
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
 
 export default function App() {
   return (
-    <CartProvider>
-      <MainApp />
-    </CartProvider>
+    <NotificationProvider>
+      <AuthProvider>
+        <ProductsProvider>
+          <CartProvider>
+            <MainApp />
+          </CartProvider>
+        </ProductsProvider>
+      </AuthProvider>
+    </NotificationProvider>
   );
 }
