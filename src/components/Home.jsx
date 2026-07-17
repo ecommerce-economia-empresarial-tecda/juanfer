@@ -47,21 +47,15 @@ export default function Home({ onProductClick }) {
         });
       },
       { 
-        rootMargin: '0px 0px -20px 0px',
+        rootMargin: '0px 0px -40px 0px',
         threshold: 0.01 
       }
     );
 
     elements.forEach((el) => observer.observe(el));
 
-    // Fallback safety timer: reveal after 1 second if observer didn't trigger
-    const timer = setTimeout(() => {
-      elements.forEach((el) => el.classList.add('revealed'));
-    }, 1000);
-
     return () => {
       elements.forEach((el) => observer.unobserve(el));
-      clearTimeout(timer);
     };
   }, [products]);
 
