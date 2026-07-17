@@ -29,6 +29,28 @@ export default function Home({ onProductClick }) {
     return () => clearInterval(interval);
   }, [offerProducts]);
 
+  useEffect(() => {
+    if (typeof IntersectionObserver === 'undefined') return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('revealed');
+          }
+        });
+      },
+      { threshold: 0.05 }
+    );
+
+    const elements = document.querySelectorAll('.scroll-reveal');
+    elements.forEach((el) => observer.observe(el));
+
+    return () => {
+      elements.forEach((el) => observer.unobserve(el));
+    };
+  }, [products]);
+
   const scrollToOffers = () => {
     offersRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
@@ -49,7 +71,7 @@ export default function Home({ onProductClick }) {
     <div className="home-container">
 
       {/* Offers / Promociones Section */}
-      <section ref={offersRef} className="home-section offers-section" id="offers-section">
+      <section ref={offersRef} className="home-section offers-section scroll-reveal" id="offers-section">
         <div className="section-header">
           <h2>Offers & Promociones</h2>
           <p>Grab them before they are gone! Special limited-time discounts.</p>
@@ -84,7 +106,7 @@ export default function Home({ onProductClick }) {
       </section>
 
       {/* New Arrivals / Novedades Section */}
-      <section className="home-section new-arrivals-section">
+      <section className="home-section new-arrivals-section scroll-reveal">
         <div className="section-header">
           <h2>New Arrivals & Novedades</h2>
           <p>Check out our latest premium equipment fresh in stock.</p>
