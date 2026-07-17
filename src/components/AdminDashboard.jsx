@@ -321,368 +321,376 @@ export default function AdminDashboard() {
       <div className="admin-dashboard-content">
         {activeTab === 'products' && (
           <>
-            <section className="product-list-section">
-              <h2>Inventario de productos</h2>
-              <div className="filter-container" style={{ marginBottom: '15px', display: 'flex', alignItems: 'center' }}>
-                <span 
-                  className="out-of-stock-filter-label" 
-                  style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', fontSize: '14px', fontWeight: '500', color: 'var(--text-h)' }}
-                  onClick={() => setShowOutOfStockOnly(prev => !prev)}
-                >
-                  <input
-                    type="checkbox"
-                    checked={showOutOfStockOnly}
-                    onChange={(e) => {
-                      e.stopPropagation();
-                      setShowOutOfStockOnly(e.target.checked);
-                    }}
-                    style={{ width: '16px', height: '16px', cursor: 'pointer' }}
-                  />
-                  Mostrar solo productos sin stock
-                </span>
-              </div>
-              <table className="products-table">
-                <thead>
-                  <tr>
-                    <th>Nombre</th>
-                    <th>Categoría</th>
-                    <th>Precio</th>
-                    <th>Stock</th>
-                    <th>En oferta</th>
-                    <th>Nuevo</th>
-                    <th>Acciones</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {filteredProducts.map((product) => (
-                    <tr key={product.id} className={product.stock === 0 ? 'out-of-stock-row' : ''}>
-                      <td>{product.title}</td>
-                      <td>{product.category}</td>
-                      <td>${Number(product.price).toFixed(2)}</td>
-                      <td className={product.stock === 0 ? 'out-of-stock-cell' : ''}>
-                        {product.stock}
-                        {product.stock === 0 && <span className="out-of-stock-badge" style={{ marginLeft: '8px', padding: '2px 6px', fontSize: '11px', backgroundColor: '#e53e3e', color: '#fff', borderRadius: '4px', fontWeight: 'bold' }}>Agotado</span>}
-                      </td>
-                      <td>{product.onSale ? `Sí (${product.discountPercent}%)` : 'No'}</td>
-                      <td>{product.isNew ? `Sí` : 'No'}</td>
-                      <td>
-                        <button
-                          onClick={() => {
-                            updateProduct(product.id, { stock: product.stock + 10 });
-                            showNotification(`¡Producto ${product.title} actualizado!`, 'success');
-                          }}
-                          className="restock-btn"
-                          style={{ marginRight: '8px' }}
-                        >
-                          +10 Stock
-                        </button>
-                        <button
-                          onClick={() => handleEditClick(product)}
-                          className="edit-btn"
-                        >
-                          Editar
-                        </button>
-                        <button
-                          onClick={() => {
-                            deleteProduct(product.id);
-                            showNotification(`¡Producto ${product.title} eliminado!`, 'success');
-                          }}
-                          className="delete-btn"
-                        >
-                          Eliminar
-                        </button>
-                      </td>
+            <section className="product-list-section double-bezel-outer">
+              <div className="double-bezel-inner" style={{ padding: '32px' }}>
+                <h2>Inventario de productos</h2>
+                <div className="filter-container" style={{ marginBottom: '15px', display: 'flex', alignItems: 'center' }}>
+                  <span 
+                    className="out-of-stock-filter-label" 
+                    style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', fontSize: '14px', fontWeight: '500', color: 'var(--text-h)' }}
+                    onClick={() => setShowOutOfStockOnly(prev => !prev)}
+                  >
+                    <input
+                      type="checkbox"
+                      checked={showOutOfStockOnly}
+                      onChange={(e) => {
+                        e.stopPropagation();
+                        setShowOutOfStockOnly(e.target.checked);
+                      }}
+                      style={{ width: '16px', height: '16px', cursor: 'pointer' }}
+                    />
+                    Mostrar solo productos sin stock
+                  </span>
+                </div>
+                <table className="products-table">
+                  <thead>
+                    <tr>
+                      <th>Nombre</th>
+                      <th>Categoría</th>
+                      <th>Precio</th>
+                      <th>Stock</th>
+                      <th>En oferta</th>
+                      <th>Nuevo</th>
+                      <th>Acciones</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody>
+                    {filteredProducts.map((product) => (
+                      <tr key={product.id} className={product.stock === 0 ? 'out-of-stock-row' : ''}>
+                        <td>{product.title}</td>
+                        <td>{product.category}</td>
+                        <td>${Number(product.price).toFixed(2)}</td>
+                        <td className={product.stock === 0 ? 'out-of-stock-cell' : ''}>
+                          {product.stock}
+                          {product.stock === 0 && <span className="out-of-stock-badge" style={{ marginLeft: '8px', padding: '2px 6px', fontSize: '11px', backgroundColor: '#e53e3e', color: '#fff', borderRadius: '4px', fontWeight: 'bold' }}>Agotado</span>}
+                        </td>
+                        <td>{product.onSale ? `Sí (${product.discountPercent}%)` : 'No'}</td>
+                        <td>{product.isNew ? `Sí` : 'No'}</td>
+                        <td>
+                          <button
+                            onClick={() => {
+                              updateProduct(product.id, { stock: product.stock + 10 });
+                              showNotification(`¡Producto ${product.title} actualizado!`, 'success');
+                            }}
+                            className="restock-btn premium-btn-pill"
+                            style={{ marginRight: '8px' }}
+                          >
+                            +10 Stock
+                          </button>
+                          <button
+                            onClick={() => handleEditClick(product)}
+                            className="edit-btn premium-btn-pill"
+                          >
+                            Editar
+                          </button>
+                          <button
+                            onClick={() => {
+                              deleteProduct(product.id);
+                              showNotification(`¡Producto ${product.title} eliminado!`, 'success');
+                            }}
+                            className="delete-btn premium-btn-pill"
+                          >
+                            Eliminar
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             </section>
 
-            <section className="product-form-section">
-              <h2>{editingProduct ? 'Editar producto' : 'Agregar nuevo producto'}</h2>
-              <form onSubmit={handleSubmit} noValidate className="product-form">
-                <div className="form-group">
-                  <label htmlFor="product-name">Nombre</label>
-                  <input
-                    id="product-name"
-                    type="text"
-                    value={title}
-                    onChange={(e) => {
-                      setTitle(e.target.value);
-                      if (errors.title) {
-                        setErrors((prev) => ({ ...prev, title: '' }));
-                      }
-                    }}
-                    className={errors.title ? 'input-error' : ''}
-                  />
-                  {errors.title && (
-                    <span className="error-message">{errors.title}</span>
-                  )}
-                </div>
+            <section className="product-form-section double-bezel-outer">
+              <div className="double-bezel-inner" style={{ padding: '32px' }}>
+                <h2>{editingProduct ? 'Editar producto' : 'Agregar nuevo producto'}</h2>
+                <form onSubmit={handleSubmit} noValidate className="product-form">
+                  <div className="form-group">
+                    <label htmlFor="product-name" className="micro-eyebrow">Nombre</label>
+                    <input
+                      id="product-name"
+                      type="text"
+                      value={title}
+                      onChange={(e) => {
+                        setTitle(e.target.value);
+                        if (errors.title) {
+                          setErrors((prev) => ({ ...prev, title: '' }));
+                        }
+                      }}
+                      className={errors.title ? 'input-error' : ''}
+                    />
+                    {errors.title && (
+                      <span className="error-message">{errors.title}</span>
+                    )}
+                  </div>
 
-                <div className="form-group">
-                  <label htmlFor="product-category">Categoría</label>
-                  <input
-                    id="product-category"
-                    type="text"
-                    value={category}
-                    onChange={(e) => setCategory(e.target.value)}
-                  />
-                </div>
+                  <div className="form-group">
+                    <label htmlFor="product-category" className="micro-eyebrow">Categoría</label>
+                    <input
+                      id="product-category"
+                      type="text"
+                      value={category}
+                      onChange={(e) => setCategory(e.target.value)}
+                    />
+                  </div>
 
-                <div className="form-group">
-                  <label htmlFor="product-price">Precio</label>
-                  <input
-                    id="product-price"
-                    type="number"
-                    step="0.01"
-                    value={price}
-                    onChange={(e) => {
-                      setPrice(e.target.value);
-                      if (errors.price) {
-                        setErrors((prev) => ({ ...prev, price: '' }));
-                      }
-                    }}
-                    className={errors.price ? 'input-error' : ''}
-                  />
-                  {errors.price && (
-                    <span className="error-message">{errors.price}</span>
-                  )}
-                </div>
+                  <div className="form-group">
+                    <label htmlFor="product-price" className="micro-eyebrow">Precio</label>
+                    <input
+                      id="product-price"
+                      type="number"
+                      step="0.01"
+                      value={price}
+                      onChange={(e) => {
+                        setPrice(e.target.value);
+                        if (errors.price) {
+                          setErrors((prev) => ({ ...prev, price: '' }));
+                        }
+                      }}
+                      className={errors.price ? 'input-error' : ''}
+                    />
+                    {errors.price && (
+                      <span className="error-message">{errors.price}</span>
+                    )}
+                  </div>
 
-                <div className="form-group">
-                  <label htmlFor="product-stock">Stock</label>
-                  <input
-                    id="product-stock"
-                    type="number"
-                    value={stock}
-                    onChange={(e) => {
-                      setStock(e.target.value);
-                      if (errors.stock) {
-                        setErrors((prev) => ({ ...prev, stock: '' }));
-                      }
-                    }}
-                    className={errors.stock ? 'input-error' : ''}
-                  />
-                  {errors.stock && (
-                    <span className="error-message">{errors.stock}</span>
-                  )}
-                </div>
+                  <div className="form-group">
+                    <label htmlFor="product-stock" className="micro-eyebrow">Stock</label>
+                    <input
+                      id="product-stock"
+                      type="number"
+                      value={stock}
+                      onChange={(e) => {
+                        setStock(e.target.value);
+                        if (errors.stock) {
+                          setErrors((prev) => ({ ...prev, stock: '' }));
+                        }
+                      }}
+                      className={errors.stock ? 'input-error' : ''}
+                    />
+                    {errors.stock && (
+                      <span className="error-message">{errors.stock}</span>
+                    )}
+                  </div>
 
-                 <div className="form-group">
-                   <label htmlFor="product-description">Descripción</label>
-                   <textarea
-                     id="product-description"
-                     value={description}
-                     onChange={(e) => setDescription(e.target.value)}
-                   />
-                 </div>
-
-                 <div className="form-group">
-                   <label htmlFor="product-image-url">URL de la imagen</label>
-                   <input
-                     id="product-image-url"
-                     type="text"
-                     value={image}
-                     onChange={(e) => setImage(e.target.value)}
-                     placeholder="https://ejemplo.com/imagen.jpg"
-                   />
-                 </div>
-
-                 <div className="form-group checkbox-group" style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '15px' }}>
-                   <input
-                     type="checkbox"
-                     id="product-on-sale"
-                     checked={onSale}
-                     onChange={(e) => setOnSale(e.target.checked)}
-                     style={{ width: '16px', height: '16px', cursor: 'pointer' }}
-                   />
-                   <label htmlFor="product-on-sale" style={{ cursor: 'pointer', userSelect: 'none' }}>En oferta</label>
-                 </div>
-
-                 {onSale && (
                    <div className="form-group">
-                     <label htmlFor="product-discount-percent">% de descuento</label>
-                     <input
-                       id="product-discount-percent"
-                       type="number"
-                       min="0"
-                       max="100"
-                       value={discountPercent}
-                       onChange={(e) => {
-                         setDiscountPercent(e.target.value);
-                         if (errors.discountPercent) {
-                           setErrors((prev) => ({ ...prev, discountPercent: '' }));
-                         }
-                       }}
-                       className={errors.discountPercent ? 'input-error' : ''}
-                       style={{ width: '100%', padding: '8px', borderRadius: '4px', border: '1px solid #ccc' }}
+                     <label htmlFor="product-description" className="micro-eyebrow">Descripción</label>
+                     <textarea
+                       id="product-description"
+                       value={description}
+                       onChange={(e) => setDescription(e.target.value)}
                      />
-                     {errors.discountPercent && (
-                       <span className="error-message" style={{ color: '#e53e3e', fontSize: '12px' }}>{errors.discountPercent}</span>
-                     )}
                    </div>
-                 )}
 
-                 <div className="form-group checkbox-group" style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '15px' }}>
-                   <input
-                     type="checkbox"
-                     id="product-is-new"
-                     checked={isNew}
-                     onChange={(e) => setIsNew(e.target.checked)}
-                     style={{ width: '16px', height: '16px', cursor: 'pointer' }}
-                   />
-                   <label htmlFor="product-is-new" style={{ cursor: 'pointer', userSelect: 'none' }}>Novedad</label>
-                 </div>
+                   <div className="form-group">
+                     <label htmlFor="product-image-url" className="micro-eyebrow">URL de la imagen</label>
+                     <input
+                       id="product-image-url"
+                       type="text"
+                       value={image}
+                       onChange={(e) => setImage(e.target.value)}
+                       placeholder="https://ejemplo.com/imagen.jpg"
+                     />
+                   </div>
 
-                 <div className="form-actions">
-                  <button type="submit" className="submit-btn">
-                    {editingProduct ? 'Actualizar producto' : 'Agregar producto'}
-                  </button>
-                  {editingProduct && (
-                    <button
-                      type="button"
-                      onClick={handleCancelEdit}
-                      className="cancel-btn"
-                    >
-                      Cancelar
+                   <div className="form-group checkbox-group" style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '15px' }}>
+                     <input
+                       type="checkbox"
+                       id="product-on-sale"
+                       checked={onSale}
+                       onChange={(e) => setOnSale(e.target.checked)}
+                       style={{ width: '16px', height: '16px', cursor: 'pointer' }}
+                     />
+                     <label htmlFor="product-on-sale" style={{ cursor: 'pointer', userSelect: 'none' }}>En oferta</label>
+                   </div>
+
+                   {onSale && (
+                     <div className="form-group">
+                       <label htmlFor="product-discount-percent" className="micro-eyebrow">% de descuento</label>
+                       <input
+                         id="product-discount-percent"
+                         type="number"
+                         min="0"
+                         max="100"
+                         value={discountPercent}
+                         onChange={(e) => {
+                           setDiscountPercent(e.target.value);
+                           if (errors.discountPercent) {
+                             setErrors((prev) => ({ ...prev, discountPercent: '' }));
+                           }
+                         }}
+                         className={errors.discountPercent ? 'input-error' : ''}
+                         style={{ width: '100%', padding: '8px', borderRadius: '4px', border: '1px solid #ccc' }}
+                       />
+                       {errors.discountPercent && (
+                         <span className="error-message" style={{ color: '#e53e3e', fontSize: '12px' }}>{errors.discountPercent}</span>
+                       )}
+                     </div>
+                   )}
+
+                   <div className="form-group checkbox-group" style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '15px' }}>
+                     <input
+                       type="checkbox"
+                       id="product-is-new"
+                       checked={isNew}
+                       onChange={(e) => setIsNew(e.target.checked)}
+                       style={{ width: '16px', height: '16px', cursor: 'pointer' }}
+                     />
+                     <label htmlFor="product-is-new" style={{ cursor: 'pointer', userSelect: 'none' }}>Novedad</label>
+                   </div>
+
+                   <div className="form-actions">
+                    <button type="submit" className="submit-btn premium-btn-pill">
+                      {editingProduct ? 'Actualizar producto' : 'Agregar producto'}
                     </button>
-                  )}
-                </div>
-              </form>
+                    {editingProduct && (
+                      <button
+                        type="button"
+                        onClick={handleCancelEdit}
+                        className="cancel-btn premium-btn-pill"
+                      >
+                        Cancelar
+                      </button>
+                    )}
+                  </div>
+                </form>
+              </div>
             </section>
           </>
         )}
 
         {activeTab === 'users' && (
           <>
-            <section className="user-list-section">
-              <h2>Directorio de usuarios</h2>
-              <table className="users-table">
-                <thead>
-                  <tr>
-                    <th>Correo electrónico</th>
-                    <th>Rol</th>
-                    <th>Acciones</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {users.map((u) => (
-                    <tr key={u.email}>
-                      <td>{u.email}</td>
-                      <td>
-                        <select
-                          aria-label="Selección de rol de usuario"
-                          value={u.role}
-                          onChange={(e) => handleUpdateRole(u.email, e.target.value)}
-                        >
-                          <option value="customer">Cliente</option>
-                          <option value="admin">Administrador</option>
-                        </select>
-                      </td>
-                      <td>
-                        <button
-                          onClick={() => setResetPasswordEmail(u.email)}
-                          className="reset-btn"
-                        >
-                          Restablecer credenciales
-                        </button>
-                        <button
-                          onClick={() => handleDeleteUser(u.email)}
-                          className="delete-btn"
-                          disabled={u.email === user?.email}
-                        >
-                          Eliminar
-                        </button>
-                      </td>
+            <section className="user-list-section double-bezel-outer">
+              <div className="double-bezel-inner" style={{ padding: '32px' }}>
+                <h2>Directorio de usuarios</h2>
+                <table className="users-table">
+                  <thead>
+                    <tr>
+                      <th>Correo electrónico</th>
+                      <th>Rol</th>
+                      <th>Acciones</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody>
+                    {users.map((u) => (
+                      <tr key={u.email}>
+                        <td>{u.email}</td>
+                        <td>
+                          <select
+                            aria-label="Selección de rol de usuario"
+                            value={u.role}
+                            onChange={(e) => handleUpdateRole(u.email, e.target.value)}
+                          >
+                            <option value="customer">Cliente</option>
+                            <option value="admin">Administrador</option>
+                          </select>
+                        </td>
+                        <td>
+                          <button
+                            onClick={() => setResetPasswordEmail(u.email)}
+                            className="reset-btn premium-btn-pill"
+                          >
+                            Restablecer credenciales
+                          </button>
+                          <button
+                            onClick={() => handleDeleteUser(u.email)}
+                            className="delete-btn premium-btn-pill"
+                            disabled={u.email === user?.email}
+                          >
+                            Eliminar
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
 
-              {resetPasswordEmail && (
-                <div className="reset-password-modal">
-                  <h3>Restablecer contraseña para {resetPasswordEmail}</h3>
-                  <form onSubmit={handleResetPassword} noValidate>
-                    <div className="form-group">
-                      <label htmlFor="new-password">Nueva contraseña</label>
-                      <input
-                        id="new-password"
-                        type="password"
-                        value={newPassword}
-                        onChange={(e) => setNewPassword(e.target.value)}
-                      />
-                      {resetError && <span className="error-message">{resetError}</span>}
-                    </div>
-                    <div className="form-actions">
-                      <button type="submit" className="submit-btn">Guardar nueva contraseña</button>
-                      <button type="button" onClick={() => { setResetPasswordEmail(''); setNewPassword(''); setResetError(''); }} className="cancel-btn">Cancelar</button>
-                    </div>
-                  </form>
-                </div>
-              )}
+                {resetPasswordEmail && (
+                  <div className="reset-password-modal">
+                    <h3>Restablecer contraseña para {resetPasswordEmail}</h3>
+                    <form onSubmit={handleResetPassword} noValidate>
+                      <div className="form-group">
+                        <label htmlFor="new-password" className="micro-eyebrow">Nueva contraseña</label>
+                        <input
+                          id="new-password"
+                          type="password"
+                          value={newPassword}
+                          onChange={(e) => setNewPassword(e.target.value)}
+                        />
+                        {resetError && <span className="error-message">{resetError}</span>}
+                      </div>
+                      <div className="form-actions">
+                        <button type="submit" className="submit-btn premium-btn-pill">Guardar nueva contraseña</button>
+                        <button type="button" onClick={() => { setResetPasswordEmail(''); setNewPassword(''); setResetError(''); }} className="cancel-btn premium-btn-pill">Cancelar</button>
+                      </div>
+                    </form>
+                  </div>
+                )}
+              </div>
             </section>
 
-            <section className="user-form-section">
-              <h2>Agregar nuevo usuario</h2>
-              <form onSubmit={handleAddUser} noValidate className="user-form">
-                {userErrors.general && (
-                  <div className="error-message general-error">{userErrors.general}</div>
-                )}
-                <div className="form-group">
-                  <label htmlFor="user-email">Correo electrónico</label>
-                  <input
-                    id="user-email"
-                    type="email"
-                    value={userForm.email}
-                    onChange={(e) => {
-                      setUserForm((prev) => ({ ...prev, email: e.target.value }));
-                      if (userErrors.email) {
-                        setUserErrors((prev) => ({ ...prev, email: '' }));
-                      }
-                    }}
-                    className={userErrors.email ? 'input-error' : ''}
-                  />
-                  {userErrors.email && (
-                    <span className="error-message">{userErrors.email}</span>
+            <section className="user-form-section double-bezel-outer">
+              <div className="double-bezel-inner" style={{ padding: '32px' }}>
+                <h2>Agregar nuevo usuario</h2>
+                <form onSubmit={handleAddUser} noValidate className="user-form">
+                  {userErrors.general && (
+                    <div className="error-message general-error">{userErrors.general}</div>
                   )}
-                </div>
+                  <div className="form-group">
+                    <label htmlFor="user-email" className="micro-eyebrow">Correo electrónico</label>
+                    <input
+                      id="user-email"
+                      type="email"
+                      value={userForm.email}
+                      onChange={(e) => {
+                        setUserForm((prev) => ({ ...prev, email: e.target.value }));
+                        if (userErrors.email) {
+                          setUserErrors((prev) => ({ ...prev, email: '' }));
+                        }
+                      }}
+                      className={userErrors.email ? 'input-error' : ''}
+                    />
+                    {userErrors.email && (
+                      <span className="error-message">{userErrors.email}</span>
+                    )}
+                  </div>
 
-                <div className="form-group">
-                  <label htmlFor="user-password">Contraseña</label>
-                  <input
-                    id="user-password"
-                    type="password"
-                    value={userForm.password}
-                    onChange={(e) => {
-                      setUserForm((prev) => ({ ...prev, password: e.target.value }));
-                      if (userErrors.password) {
-                        setUserErrors((prev) => ({ ...prev, password: '' }));
-                      }
-                    }}
-                    className={userErrors.password ? 'input-error' : ''}
-                  />
-                  {userErrors.password && (
-                    <span className="error-message">{userErrors.password}</span>
-                  )}
-                </div>
+                  <div className="form-group">
+                    <label htmlFor="user-password" className="micro-eyebrow">Contraseña</label>
+                    <input
+                      id="user-password"
+                      type="password"
+                      value={userForm.password}
+                      onChange={(e) => {
+                        setUserForm((prev) => ({ ...prev, password: e.target.value }));
+                        if (userErrors.password) {
+                          setUserErrors((prev) => ({ ...prev, password: '' }));
+                        }
+                      }}
+                      className={userErrors.password ? 'input-error' : ''}
+                    />
+                    {userErrors.password && (
+                      <span className="error-message">{userErrors.password}</span>
+                    )}
+                  </div>
 
-                <div className="form-group">
-                  <label htmlFor="user-role">Rol</label>
-                  <select
-                    id="user-role"
-                    value={userForm.role}
-                    onChange={(e) => setUserForm((prev) => ({ ...prev, role: e.target.value }))}
-                  >
-                    <option value="customer">Cliente</option>
-                    <option value="admin">Administrador</option>
-                  </select>
-                </div>
+                  <div className="form-group">
+                    <label htmlFor="user-role" className="micro-eyebrow">Rol</label>
+                    <select
+                      id="user-role"
+                      value={userForm.role}
+                      onChange={(e) => setUserForm((prev) => ({ ...prev, role: e.target.value }))}
+                    >
+                      <option value="customer">Cliente</option>
+                      <option value="admin">Administrador</option>
+                    </select>
+                  </div>
 
-                <div className="form-actions">
-                  <button type="submit" className="submit-btn">Agregar usuario</button>
-                </div>
-              </form>
+                  <div className="form-actions">
+                    <button type="submit" className="submit-btn premium-btn-pill">Agregar usuario</button>
+                  </div>
+                </form>
+              </div>
             </section>
           </>
         )}

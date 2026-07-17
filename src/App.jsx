@@ -151,6 +151,7 @@ function MainApp() {
         {currentView === 'catalog' && (
           <div className="catalog-view">
             <div className="view-header">
+              <span className="micro-eyebrow">Colección Exclusiva</span>
               <h2>Explore nuestra colección</h2>
               <p>Equipamiento premium de alto rendimiento diseñado para la próxima frontera.</p>
             </div>

@@ -134,6 +134,7 @@ export default function Home({ onProductClick }) {
       {/* Offers / Promociones Section */}
       <section ref={offersRef} className="home-section offers-section" id="offers-section">
         <div className="section-header">
+          <span className="micro-eyebrow">Descuentos Activos</span>
           <h2>Ofertas y Promociones</h2>
           <p>¡Aprovéchalas antes de que se agoten! Descuentos especiales por tiempo limitado.</p>
         </div>
@@ -169,6 +170,7 @@ export default function Home({ onProductClick }) {
       {/* New Arrivals / Novedades Section */}
       <section className="home-section new-arrivals-section">
         <div className="section-header">
+          <span className="micro-eyebrow">Últimos Lanzamientos</span>
           <h2>Novedades y Recién Llegados</h2>
           <p>Eche un vistazo a nuestro último equipamiento premium recién llegado.</p>
         </div>

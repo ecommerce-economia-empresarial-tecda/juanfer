@@ -143,81 +143,83 @@ export default function CheckoutForm({ onCheckoutSuccess, onCloseConfirmation })
   };
 
   return (
-    <div className="checkout-form-container">
-      <form onSubmit={handleSubmit} className="checkout-form" noValidate>
-        <h2>Detalles del pago</h2>
+    <div className="checkout-form-container double-bezel-outer">
+      <div className="double-bezel-inner" style={{ padding: '32px' }}>
+        <form onSubmit={handleSubmit} className="checkout-form" noValidate>
+          <h2>Detalles del pago</h2>
 
-        <div className="form-group">
-          <label htmlFor="name-input">Nombre completo</label>
-          <input
-            id="name-input"
-            type="text"
-            name="name"
-            value={formData.name}
-            onChange={handleChange}
-            placeholder="John Doe"
-            className={errors.name ? 'input-error' : ''}
-          />
-          {errors.name && <span className="error-message">{errors.name}</span>}
-        </div>
+          <div className="form-group">
+            <label htmlFor="name-input" className="micro-eyebrow">Nombre completo</label>
+            <input
+              id="name-input"
+              type="text"
+              name="name"
+              value={formData.name}
+              onChange={handleChange}
+              placeholder="John Doe"
+              className={errors.name ? 'input-error' : ''}
+            />
+            {errors.name && <span className="error-message">{errors.name}</span>}
+          </div>
 
-        <div className="form-group">
-          <label htmlFor="email-input">Correo electrónico</label>
-          <input
-            id="email-input"
-            type="email"
-            name="email"
-            value={formData.email}
-            onChange={handleChange}
-            placeholder="john@example.com"
-            className={errors.email ? 'input-error' : ''}
-          />
-          {errors.email && <span className="error-message">{errors.email}</span>}
-        </div>
+          <div className="form-group">
+            <label htmlFor="email-input" className="micro-eyebrow">Correo electrónico</label>
+            <input
+              id="email-input"
+              type="email"
+              name="email"
+              value={formData.email}
+              onChange={handleChange}
+              placeholder="john@example.com"
+              className={errors.email ? 'input-error' : ''}
+            />
+            {errors.email && <span className="error-message">{errors.email}</span>}
+          </div>
 
-        <div className="form-group">
-          <label htmlFor="address-input">Dirección de envío</label>
-          <textarea
-            id="address-input"
-            name="address"
-            value={formData.address}
-            onChange={handleChange}
-            placeholder="123 Main St, Apt 4B"
-            className={errors.address ? 'input-error' : ''}
-          />
-          {errors.address && <span className="error-message">{errors.address}</span>}
-        </div>
+          <div className="form-group">
+            <label htmlFor="address-input" className="micro-eyebrow">Dirección de envío</label>
+            <textarea
+              id="address-input"
+              name="address"
+              value={formData.address}
+              onChange={handleChange}
+              placeholder="123 Main St, Apt 4B"
+              className={errors.address ? 'input-error' : ''}
+            />
+            {errors.address && <span className="error-message">{errors.address}</span>}
+          </div>
 
-        <div className="form-group">
-          <label htmlFor="card-input">Tarjeta de crédito</label>
-          <input
-            id="card-input"
-            type="text"
-            name="card"
-            value={formData.card}
-            onChange={handleChange}
-            placeholder="1234567890123456"
-            maxLength={16}
-            className={errors.card ? 'input-error' : ''}
-          />
-          {errors.card && <span className="error-message">{errors.card}</span>}
-        </div>
+          <div className="form-group">
+            <label htmlFor="card-input" className="micro-eyebrow">Tarjeta de crédito</label>
+            <input
+              id="card-input"
+              type="text"
+              name="card"
+              value={formData.card}
+              onChange={handleChange}
+              placeholder="1234567890123456"
+              maxLength={16}
+              className={errors.card ? 'input-error' : ''}
+            />
+            {errors.card && <span className="error-message">{errors.card}</span>}
+          </div>
 
-        {stockError && (
-          <p className="stock-error-message" role="alert">
-            {stockError}
-          </p>
-        )}
+          {stockError && (
+            <p className="stock-error-message" role="alert">
+              {stockError}
+            </p>
+          )}
 
-        <button
-          type="submit"
-          disabled={cart.length === 0}
-          className="submit-order-btn"
-          aria-label="Completar pedido"
-        >
-          Completar pedido
-        </button>
-      </form>
+          <button
+            type="submit"
+            disabled={cart.length === 0}
+            className="submit-order-btn premium-btn-pill"
+            aria-label="Completar pedido"
+          >
+            Completar pedido
+          </button>
+        </form>
+      </div>
 
       <OrderConfirmationModal orderId={orderId} onClose={handleCloseModal} />
     </div>
