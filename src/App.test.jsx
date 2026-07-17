@@ -10,7 +10,7 @@ describe('App Integration and Views', () => {
   it('renders the homepage by default when no saved view exists', () => {
     window.localStorage.clear();
     render(<App />);
-    expect(screen.getByText(/Offers & Promociones/i)).toBeInTheDocument();
+    expect(screen.getByText(/Ofertas y Promociones/i)).toBeInTheDocument();
   });
   // ─── Existing Tests ──────────────────────────────────────────────────────────
 
@@ -18,20 +18,20 @@ describe('App Integration and Views', () => {
     render(<App />);
 
     // Catalog view check (should find categories filter dropdown and grid)
-    expect(screen.getByRole('combobox', { name: /filter by category/i })).toBeInTheDocument();
+    expect(screen.getByRole('combobox', { name: /filtrar por categoría/i })).toBeInTheDocument();
     expect(screen.getByText(/Antigravity Shop/i)).toBeInTheDocument();
 
     // Drawer should not be visible initially
     expect(screen.queryByTestId('cart-drawer')).not.toBeInTheDocument();
 
     // Open Cart Drawer
-    const cartToggleBtn = screen.getByRole('button', { name: /open cart/i });
+    const cartToggleBtn = screen.getByRole('button', { name: /abrir carrito/i });
     fireEvent.click(cartToggleBtn);
     expect(screen.getByTestId('cart-drawer')).toBeInTheDocument();
-    expect(screen.getByRole('heading', { name: /your cart/i })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /su carrito/i })).toBeInTheDocument();
 
     // Close Cart Drawer
-    const closeDrawerBtn = screen.getByRole('button', { name: /close cart/i });
+    const closeDrawerBtn = screen.getByRole('button', { name: /cerrar carrito/i });
     fireEvent.click(closeDrawerBtn);
     expect(screen.queryByTestId('cart-drawer')).not.toBeInTheDocument();
   });
@@ -40,17 +40,17 @@ describe('App Integration and Views', () => {
     render(<App />);
 
     // Initially count badge should be 0
-    const cartToggleBtn = screen.getByRole('button', { name: /open cart/i });
-    expect(cartToggleBtn).toHaveTextContent('Cart 0');
+    const cartToggleBtn = screen.getByRole('button', { name: /abrir carrito/i });
+    expect(cartToggleBtn).toHaveTextContent('Carrito 0');
 
     // Add first product
-    const addButtons = screen.getAllByRole('button', { name: /add to cart/i });
+    const addButtons = screen.getAllByRole('button', { name: /agregar.*al carrito/i });
     fireEvent.click(addButtons[0]);
-    expect(cartToggleBtn).toHaveTextContent('Cart 1');
+    expect(cartToggleBtn).toHaveTextContent('Carrito 1');
 
     // Add second product
     fireEvent.click(addButtons[1]);
-    expect(cartToggleBtn).toHaveTextContent('Cart 2');
+    expect(cartToggleBtn).toHaveTextContent('Carrito 2');
   });
 
   // ─── Task 3.1 New Tests ───────────────────────────────────────────────────────
@@ -59,59 +59,59 @@ describe('App Integration and Views', () => {
     render(<App />);
 
     // The catalog filter and shop brand should be visible without authentication
-    expect(screen.getByRole('combobox', { name: /filter by category/i })).toBeInTheDocument();
+    expect(screen.getByRole('combobox', { name: /filtrar por categoría/i })).toBeInTheDocument();
     expect(screen.getByText(/Antigravity Shop/i)).toBeInTheDocument();
     // Login form should NOT be visible for guests on the default catalog view
-    expect(screen.queryByRole('heading', { name: /log in/i })).not.toBeInTheDocument();
+    expect(screen.queryByRole('heading', { name: /iniciar sesión/i })).not.toBeInTheDocument();
   });
 
   it('guest clicking "Proceed to Checkout" is redirected to the login view', () => {
     render(<App />);
 
     // Add a product to cart so the checkout button is enabled
-    const addBtn = screen.getAllByRole('button', { name: /add to cart/i })[0];
+    const addBtn = screen.getAllByRole('button', { name: /agregar.*al carrito/i })[0];
     fireEvent.click(addBtn);
 
     // Open cart drawer
-    const cartToggleBtn = screen.getByRole('button', { name: /open cart/i });
+    const cartToggleBtn = screen.getByRole('button', { name: /abrir carrito/i });
     fireEvent.click(cartToggleBtn);
 
     // Click Proceed to Checkout as a guest
-    const checkoutBtn = screen.getByRole('button', { name: /proceed to checkout/i });
+    const checkoutBtn = screen.getByRole('button', { name: /proceder al pago/i });
     fireEvent.click(checkoutBtn);
 
     // Should be redirected to login, not checkout
-    expect(screen.getByRole('heading', { name: /log in/i })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /iniciar sesión/i })).toBeInTheDocument();
     // Catalog filter should be gone
-    expect(screen.queryByRole('combobox', { name: /filter by category/i })).not.toBeInTheDocument();
+    expect(screen.queryByRole('combobox', { name: /filtrar por categoría/i })).not.toBeInTheDocument();
     // Checkout form should not be visible
-    expect(screen.queryByText(/checkout details/i)).not.toBeInTheDocument();
+    expect(screen.queryByText(/detalles del pago/i)).not.toBeInTheDocument();
   });
 
   it('after logging in as a customer, the user is redirected to checkout view', async () => {
     render(<App />);
 
     // Add item to cart and trigger guest checkout → lands on login
-    const addBtn = screen.getAllByRole('button', { name: /add to cart/i })[0];
+    const addBtn = screen.getAllByRole('button', { name: /agregar.*al carrito/i })[0];
     fireEvent.click(addBtn);
-    const cartToggleBtn = screen.getByRole('button', { name: /open cart/i });
+    const cartToggleBtn = screen.getByRole('button', { name: /abrir carrito/i });
     fireEvent.click(cartToggleBtn);
-    const checkoutBtn = screen.getByRole('button', { name: /proceed to checkout/i });
+    const checkoutBtn = screen.getByRole('button', { name: /proceder al pago/i });
     fireEvent.click(checkoutBtn);
 
     // Now we should be on the login form
-    expect(screen.getByRole('heading', { name: /log in/i })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /iniciar sesión/i })).toBeInTheDocument();
 
     // Fill in customer credentials
-    const emailInput = screen.getByLabelText(/email address/i);
-    const passwordInput = screen.getByLabelText(/password/i);
+    const emailInput = screen.getByLabelText(/correo electrónico/i);
+    const passwordInput = screen.getByLabelText(/contraseña/i);
     fireEvent.change(emailInput, { target: { value: 'customer@juanfershop.com' } });
     fireEvent.change(passwordInput, { target: { value: 'customerJFS2026!' } });
-    fireEvent.click(screen.getByRole('button', { name: /log in/i }));
+    fireEvent.click(screen.getByRole('button', { name: /acceder/i }));
 
     // After login, should be on checkout (not login, not catalog)
-    expect(await screen.findByText(/checkout details/i)).toBeInTheDocument();
-    expect(screen.queryByRole('heading', { name: /log in/i })).not.toBeInTheDocument();
+    expect(await screen.findByText(/detalles del pago/i)).toBeInTheDocument();
+    expect(screen.queryByRole('heading', { name: /iniciar sesión/i })).not.toBeInTheDocument();
   });
 
   it('after logging in as admin, only AdminDashboard is rendered (no catalog or cart)', () => {
@@ -122,20 +122,20 @@ describe('App Integration and Views', () => {
     render(<App />);
 
     // Admin Dashboard heading should be visible
-    expect(screen.getByRole('heading', { name: /admin dashboard/i })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /panel de administración/i })).toBeInTheDocument();
     // Catalog filter dropdown should NOT be visible
-    expect(screen.queryByRole('combobox', { name: /filter by category/i })).not.toBeInTheDocument();
+    expect(screen.queryByRole('combobox', { name: /filtrar por categoría/i })).not.toBeInTheDocument();
     // Cart toggle button should NOT be visible
-    expect(screen.queryByRole('button', { name: /open cart/i })).not.toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: /abrir carrito/i })).not.toBeInTheDocument();
   });
 
   it('triangulate: guest visiting the catalog sees products but no admin dashboard', () => {
     render(<App />);
 
     // Catalog elements should be visible
-    expect(screen.getByRole('combobox', { name: /filter by category/i })).toBeInTheDocument();
+    expect(screen.getByRole('combobox', { name: /filtrar por categoría/i })).toBeInTheDocument();
     // Admin dashboard should not appear
-    expect(screen.queryByRole('heading', { name: /admin dashboard/i })).not.toBeInTheDocument();
+    expect(screen.queryByRole('heading', { name: /panel de administración/i })).not.toBeInTheDocument();
   });
 
   it('app wraps the component tree in AuthProvider, ProductsProvider, and CartProvider', () => {
@@ -144,7 +144,7 @@ describe('App Integration and Views', () => {
     expect(() => render(<App />)).not.toThrow();
 
     // Additionally, the catalog view must render correctly (requires ProductsProvider + CartProvider)
-    expect(screen.getByRole('combobox', { name: /filter by category/i })).toBeInTheDocument();
+    expect(screen.getByRole('combobox', { name: /filtrar por categoría/i })).toBeInTheDocument();
   });
 
   it('navigating to checkout as customer (from catalog) and back to shop works', () => {
@@ -155,13 +155,13 @@ describe('App Integration and Views', () => {
     render(<App />);
 
     // Should be on checkout view
-    expect(screen.getByText(/checkout details/i)).toBeInTheDocument();
+    expect(screen.getByText(/detalles del pago/i)).toBeInTheDocument();
 
     // Go back to catalog
-    const backBtn = screen.getByRole('button', { name: /back to shop/i });
+    const backBtn = screen.getByRole('button', { name: /volver a la tienda/i });
     fireEvent.click(backBtn);
 
-    expect(screen.getByRole('combobox', { name: /filter by category/i })).toBeInTheDocument();
-    expect(screen.queryByText(/checkout details/i)).not.toBeInTheDocument();
+    expect(screen.getByRole('combobox', { name: /filtrar por categoría/i })).toBeInTheDocument();
+    expect(screen.queryByText(/detalles del pago/i)).not.toBeInTheDocument();
   });
 });

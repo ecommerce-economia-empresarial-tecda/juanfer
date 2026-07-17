@@ -13,16 +13,16 @@ export default function LoginForm() {
 
     const newErrors = {};
     if (!email || email.trim() === '') {
-      newErrors.email = 'Email is required';
+      newErrors.email = 'El correo electrónico es obligatorio';
     } else {
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       if (!emailRegex.test(email)) {
-        newErrors.email = 'Invalid email format';
+        newErrors.email = 'Formato de correo electrónico no válido';
       }
     }
 
     if (!password || password.trim() === '') {
-      newErrors.password = 'Password is required';
+      newErrors.password = 'La contraseña es obligatoria';
     }
 
     if (Object.keys(newErrors).length > 0) {
@@ -45,7 +45,7 @@ export default function LoginForm() {
   return (
     <div className="login-form-container">
       <form onSubmit={handleSubmit} className="login-form" noValidate>
-        <h2>Log In</h2>
+        <h2>Iniciar sesión</h2>
 
         {errors.general && (
           <div className="error-container error-message general-error">
@@ -54,16 +54,16 @@ export default function LoginForm() {
         )}
 
         <div className="form-group">
-          <label htmlFor="email-input">Email Address</label>
+          <label htmlFor="email-input">Correo electrónico</label>
           <input
             id="email-input"
             type="email"
             value={email}
             onChange={(e) => {
-              setEmail(e.target.value);
-              if (errors.email) {
-                setErrors(prev => ({ ...prev, email: '' }));
-              }
+               setEmail(e.target.value);
+               if (errors.email) {
+                 setErrors(prev => ({ ...prev, email: '' }));
+               }
             }}
             placeholder="email@example.com"
             className={errors.email ? 'input-error' : ''}
@@ -72,16 +72,16 @@ export default function LoginForm() {
         </div>
 
         <div className="form-group">
-          <label htmlFor="password-input">Password</label>
+          <label htmlFor="password-input">Contraseña</label>
           <input
             id="password-input"
             type="password"
             value={password}
             onChange={(e) => {
-              setPassword(e.target.value);
-              if (errors.password) {
-                setErrors(prev => ({ ...prev, password: '' }));
-              }
+               setPassword(e.target.value);
+               if (errors.password) {
+                 setErrors(prev => ({ ...prev, password: '' }));
+               }
             }}
             placeholder="••••••••"
             className={errors.password ? 'input-error' : ''}
@@ -90,7 +90,7 @@ export default function LoginForm() {
         </div>
 
         <button type="submit" className="login-btn">
-          Log In
+          Acceder
         </button>
       </form>
     </div>

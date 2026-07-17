@@ -13,10 +13,10 @@ describe('App Complete Integration Checkout Flow', () => {
 
     // 1. Verify Catalog is rendered
     expect(screen.getByText(/Antigravity Shop/i)).toBeInTheDocument();
-    expect(screen.getByRole('combobox', { name: /filter by category/i })).toBeInTheDocument();
+    expect(screen.getByRole('combobox', { name: /filtrar por categoría/i })).toBeInTheDocument();
 
     // 2. Add multiple products to the cart
-    const addButtons = screen.getAllByRole('button', { name: /add to cart/i });
+    const addButtons = screen.getAllByRole('button', { name: /agregar.*al carrito/i });
     expect(addButtons.length).toBeGreaterThanOrEqual(2);
 
     // Let's add the first product (Wireless Headphones - price: 99.99, stock: 5)
@@ -25,8 +25,8 @@ describe('App Complete Integration Checkout Flow', () => {
     fireEvent.click(addButtons[1]);
 
     // 3. Open the cart drawer and verify totals
-    const cartToggleBtn = screen.getByRole('button', { name: /open cart/i });
-    expect(cartToggleBtn).toHaveTextContent('Cart 2');
+    const cartToggleBtn = screen.getByRole('button', { name: /abrir carrito/i });
+    expect(cartToggleBtn).toHaveTextContent('Carrito 2');
     fireEvent.click(cartToggleBtn);
 
     const cartDrawer = screen.getByTestId('cart-drawer');
@@ -36,46 +36,46 @@ describe('App Complete Integration Checkout Flow', () => {
     expect(screen.getByText(/\$249\.49/)).toBeInTheDocument();
 
     // 4. Click Proceed to Checkout to navigate to the checkout form
-    const checkoutBtn = screen.getByRole('button', { name: /proceed to checkout/i });
+    const checkoutBtn = screen.getByRole('button', { name: /proceder al pago/i });
     fireEvent.click(checkoutBtn);
 
     // Guest is redirected to Login form
-    expect(screen.getByRole('heading', { name: /log in/i })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /iniciar sesión/i })).toBeInTheDocument();
     
     // Fill in customer credentials to log in
-    fireEvent.change(screen.getByLabelText(/email address/i), { target: { value: 'customer@juanfershop.com' } });
-    fireEvent.change(screen.getByLabelText(/password/i), { target: { value: 'customerJFS2026!' } });
-    fireEvent.click(screen.getByRole('button', { name: /log in/i }));
+    fireEvent.change(screen.getByLabelText(/correo electrónico/i), { target: { value: 'customer@juanfershop.com' } });
+    fireEvent.change(screen.getByLabelText(/contraseña/i), { target: { value: 'customerJFS2026!' } });
+    fireEvent.click(screen.getByRole('button', { name: /acceder/i }));
 
     // Verify we navigated to checkout view
-    expect(await screen.findByRole('heading', { name: /checkout details/i })).toBeInTheDocument();
-    expect(screen.queryByRole('combobox', { name: /filter by category/i })).not.toBeInTheDocument();
+    expect(await screen.findByRole('heading', { name: /detalles del pago/i })).toBeInTheDocument();
+    expect(screen.queryByRole('combobox', { name: /filtrar por categoría/i })).not.toBeInTheDocument();
 
     // 5. Fill in Name, Email, Address, Card fields and submit
-    fireEvent.change(screen.getByLabelText(/full name/i), { target: { value: 'Jane Doe' } });
-    fireEvent.change(screen.getByLabelText(/email address/i), { target: { value: 'jane.doe@example.com' } });
-    fireEvent.change(screen.getByLabelText(/shipping address/i), { target: { value: '789 Space Blvd, Colony 1' } });
-    fireEvent.change(screen.getByLabelText(/credit card/i), { target: { value: '1111222233334444' } });
+    fireEvent.change(screen.getByLabelText(/nombre completo/i), { target: { value: 'Jane Doe' } });
+    fireEvent.change(screen.getByLabelText(/correo electrónico/i), { target: { value: 'jane.doe@example.com' } });
+    fireEvent.change(screen.getByLabelText(/dirección de envío/i), { target: { value: '789 Space Blvd, Colony 1' } });
+    fireEvent.change(screen.getByLabelText(/tarjeta de crédito/i), { target: { value: '1111222233334444' } });
 
     // Mock initial check: set some dummy item in local storage to verify it is cleared
     window.localStorage.setItem('cart_items', JSON.stringify([{ id: 1, quantity: 1 }]));
 
-    const submitBtn = screen.getByRole('button', { name: /complete order/i });
+    const submitBtn = screen.getByRole('button', { name: /completar pedido/i });
     fireEvent.click(submitBtn);
 
     // 6. Verify that the order confirmation modal is displayed with a generated order ID
     const modal = await screen.findByTestId('order-confirmation-modal');
     expect(modal).toBeInTheDocument();
-    expect(screen.getByText(/order placement successful/i)).toBeInTheDocument();
+    expect(screen.getByText(/pedido realizado con éxito/i)).toBeInTheDocument();
 
     // Check that there is an order ID displayed
-    const orderIdText = screen.getByText(/order id:/i);
+    const orderIdText = screen.getByText(/id del pedido:/i);
     expect(orderIdText).toBeInTheDocument();
     expect(orderIdText.parentElement.textContent).toMatch(/ORD-\d+-\d+/);
 
     // Verify that the cart is cleared (badge count should show Cart 0)
-    const cartToggleBtnAfter = screen.getByRole('button', { name: /open cart/i });
-    expect(cartToggleBtnAfter).toHaveTextContent('Cart 0');
+    const cartToggleBtnAfter = screen.getByRole('button', { name: /abrir carrito/i });
+    expect(cartToggleBtnAfter).toHaveTextContent('Carrito 0');
 
     // Verify that local storage is cleared
     await waitFor(() => {
@@ -83,58 +83,58 @@ describe('App Complete Integration Checkout Flow', () => {
     });
 
     // Verify that closing the modal redirects the user back to the product catalog
-    const closeModalBtn = screen.getByRole('button', { name: /close confirmation/i });
+    const closeModalBtn = screen.getByRole('button', { name: /cerrar confirmación/i });
     fireEvent.click(closeModalBtn);
 
     // Assert that we are redirected back to the product catalog (combobox is visible again)
-    expect(screen.getByRole('combobox', { name: /filter by category/i })).toBeInTheDocument();
+    expect(screen.getByRole('combobox', { name: /filtrar por categoría/i })).toBeInTheDocument();
   });
 
   it('verifies checkout flow with form validation errors and recovery', async () => {
     render(<App />);
 
     // Add Denim Jacket (Clothing)
-    const addButtons = screen.getAllByRole('button', { name: /add to cart/i });
+    const addButtons = screen.getAllByRole('button', { name: /agregar.*al carrito/i });
     // First button is Wireless Headphones, third button is Denim Jacket
     fireEvent.click(addButtons[2]);
 
     // Open drawer
-    const cartToggleBtn = screen.getByRole('button', { name: /open cart/i });
-    expect(cartToggleBtn).toHaveTextContent('Cart 1');
+    const cartToggleBtn = screen.getByRole('button', { name: /abrir carrito/i });
+    expect(cartToggleBtn).toHaveTextContent('Carrito 1');
     fireEvent.click(cartToggleBtn);
 
     // Proceed to Checkout
-    const checkoutBtn = screen.getByRole('button', { name: /proceed to checkout/i });
+    const checkoutBtn = screen.getByRole('button', { name: /proceder al pago/i });
     fireEvent.click(checkoutBtn);
 
     // Guest is redirected to Login form
-    expect(screen.getByRole('heading', { name: /log in/i })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /iniciar sesión/i })).toBeInTheDocument();
     
     // Fill in customer credentials to log in
-    fireEvent.change(screen.getByLabelText(/email address/i), { target: { value: 'customer@juanfershop.com' } });
-    fireEvent.change(screen.getByLabelText(/password/i), { target: { value: 'customerJFS2026!' } });
-    fireEvent.click(screen.getByRole('button', { name: /log in/i }));
+    fireEvent.change(screen.getByLabelText(/correo electrónico/i), { target: { value: 'customer@juanfershop.com' } });
+    fireEvent.change(screen.getByLabelText(/contraseña/i), { target: { value: 'customerJFS2026!' } });
+    fireEvent.click(screen.getByRole('button', { name: /acceder/i }));
 
     // Now on checkout view, try to complete order with invalid card and invalid email
-    expect(await screen.findByRole('heading', { name: /checkout details/i })).toBeInTheDocument();
-    fireEvent.change(screen.getByLabelText(/full name/i), { target: { value: 'Alex Smith' } });
-    fireEvent.change(screen.getByLabelText(/email address/i), { target: { value: 'alex-invalid-email' } });
-    fireEvent.change(screen.getByLabelText(/shipping address/i), { target: { value: '100 Orbit Way' } });
-    fireEvent.change(screen.getByLabelText(/credit card/i), { target: { value: '9999' } });
+    expect(await screen.findByRole('heading', { name: /detalles del pago/i })).toBeInTheDocument();
+    fireEvent.change(screen.getByLabelText(/nombre completo/i), { target: { value: 'Alex Smith' } });
+    fireEvent.change(screen.getByLabelText(/correo electrónico/i), { target: { value: 'alex-invalid-email' } });
+    fireEvent.change(screen.getByLabelText(/dirección de envío/i), { target: { value: '100 Orbit Way' } });
+    fireEvent.change(screen.getByLabelText(/tarjeta de crédito/i), { target: { value: '9999' } });
 
-    const submitBtn = screen.getByRole('button', { name: /complete order/i });
+    const submitBtn = screen.getByRole('button', { name: /completar pedido/i });
     fireEvent.click(submitBtn);
 
     // Verify error messages
-    expect(await screen.findByText(/invalid email format/i)).toBeInTheDocument();
-    expect(screen.getByText(/credit card must be exactly 16 digits/i)).toBeInTheDocument();
+    expect(await screen.findByText(/formato de correo electrónico no válido/i)).toBeInTheDocument();
+    expect(screen.getByText(/la tarjeta de crédito debe tener exactamente 16 dígitos/i)).toBeInTheDocument();
 
     // Verify modal does NOT appear
     expect(screen.queryByTestId('order-confirmation-modal')).not.toBeInTheDocument();
 
     // Correct the details
-    fireEvent.change(screen.getByLabelText(/email address/i), { target: { value: 'alex.smith@nasa.gov' } });
-    fireEvent.change(screen.getByLabelText(/credit card/i), { target: { value: '9999888877776666' } });
+    fireEvent.change(screen.getByLabelText(/correo electrónico/i), { target: { value: 'alex.smith@nasa.gov' } });
+    fireEvent.change(screen.getByLabelText(/tarjeta de crédito/i), { target: { value: '9999888877776666' } });
 
     // Submit again
     fireEvent.click(submitBtn);
@@ -144,18 +144,18 @@ describe('App Complete Integration Checkout Flow', () => {
     expect(modal).toBeInTheDocument();
 
     // Verify order ID display
-    const orderIdText = screen.getByText(/order id:/i);
+    const orderIdText = screen.getByText(/id del pedido:/i);
     expect(orderIdText.parentElement.textContent).toMatch(/ORD-\d+-\d+/);
 
     // Verify cart count cleared
-    const cartToggleBtnAfter = screen.getByRole('button', { name: /open cart/i });
-    expect(cartToggleBtnAfter).toHaveTextContent('Cart 0');
+    const cartToggleBtnAfter = screen.getByRole('button', { name: /abrir carrito/i });
+    expect(cartToggleBtnAfter).toHaveTextContent('Carrito 0');
 
     // Close confirmation modal
-    const closeModalBtn = screen.getByRole('button', { name: /close confirmation/i });
+    const closeModalBtn = screen.getByRole('button', { name: /cerrar confirmación/i });
     fireEvent.click(closeModalBtn);
 
     // Assert that we are redirected back to the product catalog
-    expect(screen.getByRole('combobox', { name: /filter by category/i })).toBeInTheDocument();
+    expect(screen.getByRole('combobox', { name: /filtrar por categoría/i })).toBeInTheDocument();
   });
 });

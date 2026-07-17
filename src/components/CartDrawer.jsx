@@ -8,10 +8,10 @@ export default function CartDrawer({ isOpen, onClose, onCheckout }) {
   return (
     <div className="cart-drawer" data-testid="cart-drawer">
       <div className="drawer-header">
-        <h2>Your Cart</h2>
+        <h2>Su carrito</h2>
         <button
           onClick={onClose}
-          aria-label="Close Cart"
+          aria-label="Cerrar carrito"
           className="close-drawer-btn"
         >
           &times;
@@ -20,7 +20,7 @@ export default function CartDrawer({ isOpen, onClose, onCheckout }) {
 
       <div className="drawer-body">
         {cart.length === 0 ? (
-          <p className="empty-cart-message">Your cart is empty</p>
+          <p className="empty-cart-message">Su carrito está vacío</p>
         ) : (
           <ul className="cart-items-list">
             {cart.map((item) => (
@@ -34,7 +34,7 @@ export default function CartDrawer({ isOpen, onClose, onCheckout }) {
                     <button
                       onClick={() => updateQuantity(item.id, item.quantity - 1)}
                       disabled={item.quantity <= 1}
-                      aria-label={`Decrease quantity of ${item.title}`}
+                      aria-label={`Disminuir cantidad de ${item.title}`}
                       className="qty-btn qty-dec"
                     >
                       -
@@ -48,7 +48,7 @@ export default function CartDrawer({ isOpen, onClose, onCheckout }) {
                     <button
                       onClick={() => updateQuantity(item.id, item.quantity + 1)}
                       disabled={item.quantity >= item.stock}
-                      aria-label={`Increase quantity of ${item.title}`}
+                      aria-label={`Aumentar cantidad de ${item.title}`}
                       className="qty-btn qty-inc"
                     >
                       +
@@ -57,10 +57,10 @@ export default function CartDrawer({ isOpen, onClose, onCheckout }) {
                 </div>
                 <button
                   onClick={() => removeFromCart(item.id)}
-                  aria-label={`Remove ${item.title}`}
+                  aria-label={`Eliminar ${item.title}`}
                   className="remove-item-btn"
                 >
-                  Remove
+                  Eliminar
                 </button>
               </li>
             ))}
@@ -76,10 +76,10 @@ export default function CartDrawer({ isOpen, onClose, onCheckout }) {
         <button
           onClick={onCheckout}
           disabled={cart.length === 0}
-          aria-label="Proceed to Checkout"
+          aria-label="Proceder al pago"
           className="checkout-btn"
         >
-          Proceed to Checkout
+          Proceder al pago
         </button>
       </div>
     </div>

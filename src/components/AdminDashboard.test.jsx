@@ -59,14 +59,14 @@ describe('AdminDashboard Component', () => {
 
   it('renders dashboard layout and logout button', () => {
     render(<AdminDashboard />);
-    expect(screen.getByRole('heading', { name: /admin dashboard/i })).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /log out/i })).toBeInTheDocument();
-    expect(screen.getByRole('heading', { name: /add new product/i })).toBeInTheDocument();
-    expect(screen.getByLabelText(/name/i)).toBeInTheDocument();
-    expect(screen.getByLabelText(/category/i)).toBeInTheDocument();
-    expect(screen.getByLabelText(/price/i)).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /panel de administración/i })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /cerrar sesión/i })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /agregar nuevo producto/i })).toBeInTheDocument();
+    expect(screen.getByLabelText(/nombre/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/categoría/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/precio/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/stock/i)).toBeInTheDocument();
-    expect(screen.getByLabelText(/description/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/descripción/i)).toBeInTheDocument();
   });
 
   it('displays list of products with Name, Category, Price, and Stock', () => {
@@ -85,13 +85,13 @@ describe('AdminDashboard Component', () => {
   it('adds a new product successfully with valid details and resets fields', () => {
     render(<AdminDashboard />);
 
-    fireEvent.change(screen.getByLabelText(/name/i), { target: { value: 'Running Shoes' } });
-    fireEvent.change(screen.getByLabelText(/category/i), { target: { value: 'Footwear' } });
-    fireEvent.change(screen.getByLabelText(/price/i), { target: { value: '89.99' } });
+    fireEvent.change(screen.getByLabelText(/nombre/i), { target: { value: 'Running Shoes' } });
+    fireEvent.change(screen.getByLabelText(/categoría/i), { target: { value: 'Footwear' } });
+    fireEvent.change(screen.getByLabelText(/precio/i), { target: { value: '89.99' } });
     fireEvent.change(screen.getByLabelText(/stock/i), { target: { value: '15' } });
-    fireEvent.change(screen.getByLabelText(/description/i), { target: { value: 'Comfortable running shoes' } });
+    fireEvent.change(screen.getByLabelText(/descripción/i), { target: { value: 'Comfortable running shoes' } });
 
-    fireEvent.click(screen.getByRole('button', { name: /add product/i }));
+    fireEvent.click(screen.getByRole('button', { name: /agregar producto/i }));
 
     expect(mockAddProduct).toHaveBeenCalledWith({
       title: 'Running Shoes',
@@ -106,61 +106,61 @@ describe('AdminDashboard Component', () => {
     });
 
     // Inputs should be reset
-    expect(screen.getByLabelText(/name/i).value).toBe('');
-    expect(screen.getByLabelText(/category/i).value).toBe('');
-    expect(screen.getByLabelText(/price/i).value).toBe('');
+    expect(screen.getByLabelText(/nombre/i).value).toBe('');
+    expect(screen.getByLabelText(/categoría/i).value).toBe('');
+    expect(screen.getByLabelText(/precio/i).value).toBe('');
     expect(screen.getByLabelText(/stock/i).value).toBe('');
-    expect(screen.getByLabelText(/description/i).value).toBe('');
+    expect(screen.getByLabelText(/descripción/i).value).toBe('');
   });
 
   it('shows validation errors for empty name, price <= 0, or stock < 0', () => {
     render(<AdminDashboard />);
 
     // Test: Empty name
-    fireEvent.change(screen.getByLabelText(/name/i), { target: { value: ' ' } });
-    fireEvent.change(screen.getByLabelText(/category/i), { target: { value: 'Electronics' } });
-    fireEvent.change(screen.getByLabelText(/price/i), { target: { value: '10' } });
+    fireEvent.change(screen.getByLabelText(/nombre/i), { target: { value: ' ' } });
+    fireEvent.change(screen.getByLabelText(/categoría/i), { target: { value: 'Electronics' } });
+    fireEvent.change(screen.getByLabelText(/precio/i), { target: { value: '10' } });
     fireEvent.change(screen.getByLabelText(/stock/i), { target: { value: '5' } });
-    fireEvent.click(screen.getByRole('button', { name: /add product/i }));
+    fireEvent.click(screen.getByRole('button', { name: /agregar producto/i }));
 
-    expect(screen.getByText(/name is required/i)).toBeInTheDocument();
+    expect(screen.getByText(/el nombre es obligatorio/i)).toBeInTheDocument();
     expect(mockAddProduct).not.toHaveBeenCalled();
 
     // Test: Price <= 0
-    fireEvent.change(screen.getByLabelText(/name/i), { target: { value: 'Valid Name' } });
-    fireEvent.change(screen.getByLabelText(/price/i), { target: { value: '0' } });
-    fireEvent.click(screen.getByRole('button', { name: /add product/i }));
+    fireEvent.change(screen.getByLabelText(/nombre/i), { target: { value: 'Valid Name' } });
+    fireEvent.change(screen.getByLabelText(/precio/i), { target: { value: '0' } });
+    fireEvent.click(screen.getByRole('button', { name: /agregar producto/i }));
 
-    expect(screen.getByText(/price must be greater than 0/i)).toBeInTheDocument();
+    expect(screen.getByText(/el precio debe ser mayor que 0/i)).toBeInTheDocument();
     expect(mockAddProduct).not.toHaveBeenCalled();
 
     // Test: Stock < 0
-    fireEvent.change(screen.getByLabelText(/price/i), { target: { value: '10' } });
+    fireEvent.change(screen.getByLabelText(/precio/i), { target: { value: '10' } });
     fireEvent.change(screen.getByLabelText(/stock/i), { target: { value: '-2' } });
-    fireEvent.click(screen.getByRole('button', { name: /add product/i }));
+    fireEvent.click(screen.getByRole('button', { name: /agregar producto/i }));
 
-    expect(screen.getByText(/stock cannot be negative/i)).toBeInTheDocument();
+    expect(screen.getByText(/el stock no puede ser negativo/i)).toBeInTheDocument();
     expect(mockAddProduct).not.toHaveBeenCalled();
   });
 
   it('populates form on Clicking Edit, allows cancel/clear, and updates product upon submitting', () => {
     render(<AdminDashboard />);
 
-    const editButtons = screen.getAllByRole('button', { name: /edit/i });
+    const editButtons = screen.getAllByRole('button', { name: /editar/i });
     expect(editButtons).toHaveLength(2);
 
     // Edit the first product (id: 1)
     fireEvent.click(editButtons[0]);
 
     // Heading should change to indicate Edit Mode
-    expect(screen.getByRole('heading', { name: /edit product/i })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /editar producto/i })).toBeInTheDocument();
 
     // Form inputs should be populated
-    const nameInput = screen.getByLabelText(/name/i);
-    const categoryInput = screen.getByLabelText(/category/i);
-    const priceInput = screen.getByLabelText(/price/i);
+    const nameInput = screen.getByLabelText(/nombre/i);
+    const categoryInput = screen.getByLabelText(/categoría/i);
+    const priceInput = screen.getByLabelText(/precio/i);
     const stockInput = screen.getByLabelText(/stock/i);
-    const descriptionInput = screen.getByLabelText(/description/i);
+    const descriptionInput = screen.getByLabelText(/descripción/i);
 
     expect(nameInput.value).toBe('Wireless Headphones');
     expect(categoryInput.value).toBe('Electronics');
@@ -169,24 +169,24 @@ describe('AdminDashboard Component', () => {
     expect(descriptionInput.value).toBe('Noise-canceling headphones');
 
     // Test cancel edit selection button
-    const cancelBtn = screen.getByRole('button', { name: /cancel/i });
+    const cancelBtn = screen.getByRole('button', { name: /cancelar/i });
     expect(cancelBtn).toBeInTheDocument();
     fireEvent.click(cancelBtn);
 
     // Heading should change back to Add
-    expect(screen.getByRole('heading', { name: /add new product/i })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /agregar nuevo producto/i })).toBeInTheDocument();
     expect(nameInput.value).toBe('');
 
     // Click edit again
     fireEvent.click(editButtons[0]);
-    expect(screen.getByRole('heading', { name: /edit product/i })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /editar producto/i })).toBeInTheDocument();
 
     // Modify price and stock
     fireEvent.change(priceInput, { target: { value: '89.99' } });
     fireEvent.change(stockInput, { target: { value: '12' } });
 
     // Submit edit
-    fireEvent.click(screen.getByRole('button', { name: /update product/i }));
+    fireEvent.click(screen.getByRole('button', { name: /actualizar producto/i }));
 
     expect(mockUpdateProduct).toHaveBeenCalledWith(1, {
       title: 'Wireless Headphones',
@@ -201,14 +201,14 @@ describe('AdminDashboard Component', () => {
     });
 
     // Heading should reset back to Add
-    expect(screen.getByRole('heading', { name: /add new product/i })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /agregar nuevo producto/i })).toBeInTheDocument();
     expect(nameInput.value).toBe('');
   });
 
   it('deletes a product on clicking Delete', () => {
     render(<AdminDashboard />);
 
-    const deleteButtons = screen.getAllByRole('button', { name: /delete/i });
+    const deleteButtons = screen.getAllByRole('button', { name: /eliminar/i });
     expect(deleteButtons).toHaveLength(2);
 
     // Delete the second product (id: 2)
@@ -220,7 +220,7 @@ describe('AdminDashboard Component', () => {
   it('calls AuthContext.logout on clicking Logout button', () => {
     render(<AdminDashboard />);
 
-    const logoutButton = screen.getByRole('button', { name: /log out/i });
+    const logoutButton = screen.getByRole('button', { name: /cerrar sesión/i });
     fireEvent.click(logoutButton);
 
     expect(mockLogout).toHaveBeenCalled();
@@ -229,12 +229,12 @@ describe('AdminDashboard Component', () => {
   it('triangulates adding a product with different inputs (integer price, different category, no description)', () => {
     render(<AdminDashboard />);
 
-    fireEvent.change(screen.getByLabelText(/name/i), { target: { value: 'Keyboard' } });
-    fireEvent.change(screen.getByLabelText(/category/i), { target: { value: 'Accessories' } });
-    fireEvent.change(screen.getByLabelText(/price/i), { target: { value: '50' } });
+    fireEvent.change(screen.getByLabelText(/nombre/i), { target: { value: 'Keyboard' } });
+    fireEvent.change(screen.getByLabelText(/categoría/i), { target: { value: 'Accessories' } });
+    fireEvent.change(screen.getByLabelText(/precio/i), { target: { value: '50' } });
     fireEvent.change(screen.getByLabelText(/stock/i), { target: { value: '8' } });
 
-    fireEvent.click(screen.getByRole('button', { name: /add product/i }));
+    fireEvent.click(screen.getByRole('button', { name: /agregar producto/i }));
 
     expect(mockAddProduct).toHaveBeenCalledWith({
       title: 'Keyboard',
@@ -259,7 +259,7 @@ describe('AdminDashboard Component', () => {
     render(<AdminDashboard />);
 
     // 1. Switch tab
-    const usersTabBtn = screen.getByRole('button', { name: /manage users/i });
+    const usersTabBtn = screen.getByRole('button', { name: /gestionar usuarios/i });
     fireEvent.click(usersTabBtn);
 
     // 2. Verify user list is displayed
@@ -267,7 +267,7 @@ describe('AdminDashboard Component', () => {
     expect(screen.getByText('customer@juanfershop.com')).toBeInTheDocument();
 
     // 3. Prevent self-deletion: Admin delete button should be disabled
-    const deleteButtons = screen.getAllByRole('button', { name: /delete/i });
+    const deleteButtons = screen.getAllByRole('button', { name: /eliminar/i });
     // First user is admin@juanfershop.com (index 0), second is customer@juanfershop.com (index 1)
     expect(deleteButtons[0]).toBeDisabled();
     expect(deleteButtons[1]).not.toBeDisabled();
@@ -277,29 +277,29 @@ describe('AdminDashboard Component', () => {
     expect(screen.queryByText('customer@juanfershop.com')).not.toBeInTheDocument();
 
     // 4. Add a new user
-    fireEvent.change(screen.getByLabelText(/email/i), { target: { value: 'newuser@juanfershop.com' } });
-    fireEvent.change(screen.getByLabelText(/password/i), { target: { value: 'newpass123' } });
-    fireEvent.click(screen.getByRole('button', { name: /add user/i }));
+    fireEvent.change(screen.getByLabelText(/correo electrónico/i), { target: { value: 'newuser@juanfershop.com' } });
+    fireEvent.change(screen.getByLabelText(/contraseña/i), { target: { value: 'newpass123' } });
+    fireEvent.click(screen.getByRole('button', { name: /agregar usuario/i }));
 
     expect(await screen.findByText('newuser@juanfershop.com')).toBeInTheDocument();
 
     // 5. Update role
-    const newRoleSelects = screen.getAllByLabelText('User Role Selection');
+    const newRoleSelects = screen.getAllByLabelText('Selección de rol de usuario');
     fireEvent.change(newRoleSelects[0], { target: { value: 'customer' } }); // update role for remaining user admin to customer
     expect(newRoleSelects[0].value).toBe('customer');
 
     // 6. Reset password (toggle credentials modal, save password, cancel)
-    const resetButtons = screen.getAllByRole('button', { name: /reset credentials/i });
+    const resetButtons = screen.getAllByRole('button', { name: /restablecer credenciales/i });
     fireEvent.click(resetButtons[0]);
 
-    expect(screen.getByRole('heading', { name: /reset password for/i })).toBeInTheDocument();
-    const newPasswordInput = screen.getByLabelText(/new password/i);
+    expect(screen.getByRole('heading', { name: /restablecer contraseña para/i })).toBeInTheDocument();
+    const newPasswordInput = screen.getByLabelText(/nueva contraseña/i);
     fireEvent.change(newPasswordInput, { target: { value: 'reset123' } });
-    fireEvent.click(screen.getByRole('button', { name: /save new password/i }));
+    fireEvent.click(screen.getByRole('button', { name: /guardar nueva contraseña/i }));
 
     // Modal should disappear after saving
     await waitFor(() => {
-      expect(screen.queryByRole('heading', { name: /reset password for/i })).not.toBeInTheDocument();
+      expect(screen.queryByRole('heading', { name: /restablecer contraseña para/i })).not.toBeInTheDocument();
     });
   });
 });

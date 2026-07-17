@@ -89,14 +89,14 @@ describe('CheckoutForm Component', () => {
     // Add item to cart first
     fireEvent.click(screen.getByTestId('add-99'));
 
-    const submitBtn = screen.getByRole('button', { name: /complete order/i });
+    const submitBtn = screen.getByRole('button', { name: /completar pedido/i });
     fireEvent.click(submitBtn);
 
     // Verify error messages for all mandatory fields are shown
-    expect(await screen.findByText(/name is required/i)).toBeInTheDocument();
-    expect(screen.getByText(/email is required/i)).toBeInTheDocument();
-    expect(screen.getByText(/address is required/i)).toBeInTheDocument();
-    expect(screen.getByText(/credit card number is required/i)).toBeInTheDocument();
+    expect(await screen.findByText(/el nombre es obligatorio/i)).toBeInTheDocument();
+    expect(screen.getByText(/el correo electrónico es obligatorio/i)).toBeInTheDocument();
+    expect(screen.getByText(/la dirección es obligatoria/i)).toBeInTheDocument();
+    expect(screen.getByText(/el número de tarjeta de crédito es obligatorio/i)).toBeInTheDocument();
   });
 
   it('renders validation error for invalid email format', async () => {
@@ -105,27 +105,27 @@ describe('CheckoutForm Component', () => {
     fireEvent.click(screen.getByTestId('add-99'));
 
     // Fill fields
-    fireEvent.change(screen.getByLabelText(/full name/i), { target: { value: 'John Doe' } });
-    fireEvent.change(screen.getByLabelText(/email address/i), { target: { value: 'invalid-email' } });
-    fireEvent.change(screen.getByLabelText(/shipping address/i), { target: { value: '123 Main St' } });
-    fireEvent.change(screen.getByLabelText(/credit card/i), { target: { value: '1234567812345678' } });
+    fireEvent.change(screen.getByLabelText(/nombre completo/i), { target: { value: 'John Doe' } });
+    fireEvent.change(screen.getByLabelText(/correo electrónico/i), { target: { value: 'invalid-email' } });
+    fireEvent.change(screen.getByLabelText(/dirección de envío/i), { target: { value: '123 Main St' } });
+    fireEvent.change(screen.getByLabelText(/tarjeta de crédito/i), { target: { value: '1234567812345678' } });
 
-    const submitBtn = screen.getByRole('button', { name: /complete order/i });
+    const submitBtn = screen.getByRole('button', { name: /completar pedido/i });
     fireEvent.click(submitBtn);
 
-    expect(await screen.findByText(/invalid email format/i)).toBeInTheDocument();
-    expect(screen.queryByText(/name is required/i)).not.toBeInTheDocument();
+    expect(await screen.findByText(/formato de correo electrónico no válido/i)).toBeInTheDocument();
+    expect(screen.queryByText(/el nombre es obligatorio/i)).not.toBeInTheDocument();
   });
 
   it('triangulates email validation with various malformed email inputs', async () => {
     render(<CheckoutTestHarness initialProducts={[testProduct]} />);
     fireEvent.click(screen.getByTestId('add-99'));
 
-    const nameInput = screen.getByLabelText(/full name/i);
-    const emailInput = screen.getByLabelText(/email address/i);
-    const addressInput = screen.getByLabelText(/shipping address/i);
-    const cardInput = screen.getByLabelText(/credit card/i);
-    const submitBtn = screen.getByRole('button', { name: /complete order/i });
+    const nameInput = screen.getByLabelText(/nombre completo/i);
+    const emailInput = screen.getByLabelText(/correo electrónico/i);
+    const addressInput = screen.getByLabelText(/dirección de envío/i);
+    const cardInput = screen.getByLabelText(/tarjeta de crédito/i);
+    const submitBtn = screen.getByRole('button', { name: /completar pedido/i });
 
     const invalidEmails = [
       'plainaddress',
@@ -145,7 +145,7 @@ describe('CheckoutForm Component', () => {
 
       fireEvent.click(submitBtn);
       
-      expect(await screen.findByText(/invalid email format/i)).toBeInTheDocument();
+      expect(await screen.findByText(/formato de correo electrónico no válido/i)).toBeInTheDocument();
     }
   });
 
@@ -156,20 +156,20 @@ describe('CheckoutForm Component', () => {
     fireEvent.click(screen.getByTestId('add-99'));
 
     // Test with less than 16 digits
-    fireEvent.change(screen.getByLabelText(/full name/i), { target: { value: 'John Doe' } });
-    fireEvent.change(screen.getByLabelText(/email address/i), { target: { value: 'john@example.com' } });
-    fireEvent.change(screen.getByLabelText(/shipping address/i), { target: { value: '123 Main St' } });
-    fireEvent.change(screen.getByLabelText(/credit card/i), { target: { value: '1234567890' } });
+    fireEvent.change(screen.getByLabelText(/nombre completo/i), { target: { value: 'John Doe' } });
+    fireEvent.change(screen.getByLabelText(/correo electrónico/i), { target: { value: 'john@example.com' } });
+    fireEvent.change(screen.getByLabelText(/dirección de envío/i), { target: { value: '123 Main St' } });
+    fireEvent.change(screen.getByLabelText(/tarjeta de crédito/i), { target: { value: '1234567890' } });
 
-    const submitBtn = screen.getByRole('button', { name: /complete order/i });
+    const submitBtn = screen.getByRole('button', { name: /completar pedido/i });
     fireEvent.click(submitBtn);
 
-    expect(await screen.findByText(/credit card must be exactly 16 digits/i)).toBeInTheDocument();
+    expect(await screen.findByText(/la tarjeta de crédito debe tener exactamente 16 dígitos/i)).toBeInTheDocument();
 
     // Test with non-numeric characters
-    fireEvent.change(screen.getByLabelText(/credit card/i), { target: { value: '123456789012345a' } });
+    fireEvent.change(screen.getByLabelText(/tarjeta de crédito/i), { target: { value: '123456789012345a' } });
     fireEvent.click(submitBtn);
-    expect(await screen.findByText(/credit card must be exactly 16 digits/i)).toBeInTheDocument();
+    expect(await screen.findByText(/la tarjeta de crédito debe tener exactamente 16 dígitos/i)).toBeInTheDocument();
   });
 
   it('successfully submits when form is valid, clearing the cart and showing success state', async () => {
@@ -181,20 +181,20 @@ describe('CheckoutForm Component', () => {
     expect(screen.getByTestId('cart-count')).toHaveTextContent('Items in Cart: 1');
 
     // Fill valid info
-    fireEvent.change(screen.getByLabelText(/full name/i), { target: { value: 'John Doe' } });
-    fireEvent.change(screen.getByLabelText(/email address/i), { target: { value: 'john@example.com' } });
-    fireEvent.change(screen.getByLabelText(/shipping address/i), { target: { value: '123 Main St, City' } });
-    fireEvent.change(screen.getByLabelText(/credit card/i), { target: { value: '1234567890123456' } });
+    fireEvent.change(screen.getByLabelText(/nombre completo/i), { target: { value: 'John Doe' } });
+    fireEvent.change(screen.getByLabelText(/correo electrónico/i), { target: { value: 'john@example.com' } });
+    fireEvent.change(screen.getByLabelText(/dirección de envío/i), { target: { value: '123 Main St, City' } });
+    fireEvent.change(screen.getByLabelText(/tarjeta de crédito/i), { target: { value: '1234567890123456' } });
 
-    const submitBtn = screen.getByRole('button', { name: /complete order/i });
+    const submitBtn = screen.getByRole('button', { name: /completar pedido/i });
     fireEvent.click(submitBtn);
 
     // Wait for the modal or success state to display
     // Success confirmation modal should be visible
-    expect(await screen.findByText(/order placement successful/i)).toBeInTheDocument();
+    expect(await screen.findByText(/pedido realizado con éxito/i)).toBeInTheDocument();
     
     // Order ID should be displayed (regex matching simulated order ID)
-    expect(screen.getByText(/order id:/i)).toBeInTheDocument();
+    expect(screen.getByText(/id del pedido:/i)).toBeInTheDocument();
     
     // The cart count must be cleared
     expect(screen.getByTestId('cart-count')).toHaveTextContent('Items in Cart: 0');
@@ -203,9 +203,9 @@ describe('CheckoutForm Component', () => {
     expect(handleSuccess).toHaveBeenCalledTimes(1);
 
     // Let's check that we can close the modal, resetting the order confirmation state
-    const closeBtn = screen.getByRole('button', { name: /close confirmation/i });
+    const closeBtn = screen.getByRole('button', { name: /cerrar confirmación/i });
     fireEvent.click(closeBtn);
-    expect(screen.queryByText(/order placement successful/i)).not.toBeInTheDocument();
+    expect(screen.queryByText(/pedido realizado con éxito/i)).not.toBeInTheDocument();
   });
 
   // ─── 3.2 Stock-verification tests ────────────────────────────────────────────
@@ -222,20 +222,20 @@ describe('CheckoutForm Component', () => {
     fireEvent.click(screen.getByTestId('add-99'));
 
     // Fill valid form data
-    fireEvent.change(screen.getByLabelText(/full name/i), { target: { value: 'John Doe' } });
-    fireEvent.change(screen.getByLabelText(/email address/i), { target: { value: 'john@example.com' } });
-    fireEvent.change(screen.getByLabelText(/shipping address/i), { target: { value: '123 Main St' } });
-    fireEvent.change(screen.getByLabelText(/credit card/i), { target: { value: '1234567890123456' } });
+    fireEvent.change(screen.getByLabelText(/nombre completo/i), { target: { value: 'John Doe' } });
+    fireEvent.change(screen.getByLabelText(/correo electrónico/i), { target: { value: 'john@example.com' } });
+    fireEvent.change(screen.getByLabelText(/dirección de envío/i), { target: { value: '123 Main St' } });
+    fireEvent.change(screen.getByLabelText(/tarjeta de crédito/i), { target: { value: '1234567890123456' } });
 
-    fireEvent.click(screen.getByRole('button', { name: /complete order/i }));
+    fireEvent.click(screen.getByRole('button', { name: /completar pedido/i }));
 
     // Should display "no longer available" error for the deleted product
     expect(
-      await screen.findByText(/product 'checkout product' is no longer available/i)
+      await screen.findByText(/el producto 'checkout product' ya no está disponible/i)
     ).toBeInTheDocument();
 
     // Order must NOT be placed
-    expect(screen.queryByText(/order placement successful/i)).not.toBeInTheDocument();
+    expect(screen.queryByText(/pedido realizado con éxito/i)).not.toBeInTheDocument();
   });
 
   it('blocks order and shows error when cart quantity exceeds available stock', async () => {
@@ -258,20 +258,20 @@ describe('CheckoutForm Component', () => {
     fireEvent.click(screen.getByTestId('add-99'));
 
     // Fill valid form data
-    fireEvent.change(screen.getByLabelText(/full name/i), { target: { value: 'John Doe' } });
-    fireEvent.change(screen.getByLabelText(/email address/i), { target: { value: 'john@example.com' } });
-    fireEvent.change(screen.getByLabelText(/shipping address/i), { target: { value: '123 Main St' } });
-    fireEvent.change(screen.getByLabelText(/credit card/i), { target: { value: '1234567890123456' } });
+    fireEvent.change(screen.getByLabelText(/nombre completo/i), { target: { value: 'John Doe' } });
+    fireEvent.change(screen.getByLabelText(/correo electrónico/i), { target: { value: 'john@example.com' } });
+    fireEvent.change(screen.getByLabelText(/dirección de envío/i), { target: { value: '123 Main St' } });
+    fireEvent.change(screen.getByLabelText(/tarjeta de crédito/i), { target: { value: '1234567890123456' } });
 
-    fireEvent.click(screen.getByRole('button', { name: /complete order/i }));
+    fireEvent.click(screen.getByRole('button', { name: /completar pedido/i }));
 
     // Should display "only N units available" error
     expect(
-      await screen.findByText(/only 2 units of 'checkout product' are available/i)
+      await screen.findByText(/solo hay 2 unidades disponibles de 'checkout product'/i)
     ).toBeInTheDocument();
 
     // Order must NOT be placed
-    expect(screen.queryByText(/order placement successful/i)).not.toBeInTheDocument();
+    expect(screen.queryByText(/pedido realizado con éxito/i)).not.toBeInTheDocument();
   });
 
   it('calls decrementStock for each cart item and clears cart on valid checkout', async () => {
@@ -295,16 +295,16 @@ describe('CheckoutForm Component', () => {
     expect(screen.getByTestId('cart-count')).toHaveTextContent('Items in Cart: 1');
 
     // Fill valid form data
-    fireEvent.change(screen.getByLabelText(/full name/i), { target: { value: 'Jane Doe' } });
-    fireEvent.change(screen.getByLabelText(/email address/i), { target: { value: 'jane@example.com' } });
-    fireEvent.change(screen.getByLabelText(/shipping address/i), { target: { value: '456 Oak Ave' } });
-    fireEvent.change(screen.getByLabelText(/credit card/i), { target: { value: '9876543210987654' } });
+    fireEvent.change(screen.getByLabelText(/nombre completo/i), { target: { value: 'Jane Doe' } });
+    fireEvent.change(screen.getByLabelText(/correo electrónico/i), { target: { value: 'jane@example.com' } });
+    fireEvent.change(screen.getByLabelText(/dirección de envío/i), { target: { value: '456 Oak Ave' } });
+    fireEvent.change(screen.getByLabelText(/tarjeta de crédito/i), { target: { value: '9876543210987654' } });
 
-    fireEvent.click(screen.getByRole('button', { name: /complete order/i }));
+    fireEvent.click(screen.getByRole('button', { name: /completar pedido/i }));
 
     // Order confirmation must appear
-    expect(await screen.findByText(/order placement successful/i)).toBeInTheDocument();
-    expect(screen.getByText(/order id:/i)).toBeInTheDocument();
+    expect(await screen.findByText(/pedido realizado con éxito/i)).toBeInTheDocument();
+    expect(screen.getByText(/id del pedido:/i)).toBeInTheDocument();
 
     // Cart must be cleared
     expect(screen.getByTestId('cart-count')).toHaveTextContent('Items in Cart: 0');

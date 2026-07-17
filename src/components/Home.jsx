@@ -134,17 +134,17 @@ export default function Home({ onProductClick }) {
       {/* Offers / Promociones Section */}
       <section ref={offersRef} className="home-section offers-section" id="offers-section">
         <div className="section-header">
-          <h2>Offers & Promociones</h2>
-          <p>Grab them before they are gone! Special limited-time discounts.</p>
+          <h2>Ofertas y Promociones</h2>
+          <p>¡Aprovéchalas antes de que se agoten! Descuentos especiales por tiempo limitado.</p>
         </div>
         {offerProducts.length === 0 ? (
-          <p className="no-products-message">No offers available right now.</p>
+          <p className="no-products-message">No hay ofertas disponibles en este momento.</p>
         ) : (
           <div className="carousel-wrapper">
             <button
               className="carousel-btn prev-btn"
               onClick={scrollLeft}
-              aria-label="Previous Offer"
+              aria-label="Oferta anterior"
             >
               &larr;
             </button>
@@ -158,7 +158,7 @@ export default function Home({ onProductClick }) {
             <button
               className="carousel-btn next-btn"
               onClick={scrollRight}
-              aria-label="Next Offer"
+              aria-label="Siguiente oferta"
             >
               &rarr;
             </button>
@@ -169,11 +169,11 @@ export default function Home({ onProductClick }) {
       {/* New Arrivals / Novedades Section */}
       <section className="home-section new-arrivals-section">
         <div className="section-header">
-          <h2>New Arrivals & Novedades</h2>
-          <p>Check out our latest premium equipment fresh in stock.</p>
+          <h2>Novedades y Recién Llegados</h2>
+          <p>Eche un vistazo a nuestro último equipamiento premium recién llegado.</p>
         </div>
         {newArrivals.length === 0 ? (
-          <p className="no-products-message">No new arrivals available right now.</p>
+          <p className="no-products-message">No hay novedades disponibles en este momento.</p>
         ) : (
           <div className="products-grid scroll-reveal">
             {newArrivals.map((product) => (

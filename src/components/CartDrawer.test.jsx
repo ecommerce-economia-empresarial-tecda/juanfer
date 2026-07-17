@@ -68,7 +68,7 @@ describe('CartDrawer Component', () => {
   it('renders empty state when there are no items in the cart', () => {
     render(<DrawerTestHarness initialProducts={[]} isOpen={true} />);
     
-    expect(screen.getByText(/your cart is empty/i)).toBeInTheDocument();
+    expect(screen.getByText(/su carrito está vacío/i)).toBeInTheDocument();
     expect(screen.getByText('$0.00')).toBeInTheDocument();
   });
 
@@ -111,8 +111,8 @@ describe('CartDrawer Component', () => {
     expect(qtyB).toHaveTextContent('1');
     expect(container.querySelector('.cart-total-price')).toHaveTextContent('$20.00');
 
-    const btnIncrement = screen.getByRole('button', { name: /increase quantity of product b/i });
-    const btnDecrement = screen.getByRole('button', { name: /decrease quantity of product b/i });
+    const btnIncrement = screen.getByRole('button', { name: /aumentar cantidad de product b/i });
+    const btnDecrement = screen.getByRole('button', { name: /disminuir cantidad de product b/i });
 
     // Increment to 2
     fireEvent.click(btnIncrement);
@@ -155,7 +155,7 @@ describe('CartDrawer Component', () => {
     expect(screen.getByText('Product B')).toBeInTheDocument();
     expect(container.querySelector('.cart-total-price')).toHaveTextContent('$30.00');
 
-    const btnRemoveA = screen.getByRole('button', { name: /remove product a/i });
+    const btnRemoveA = screen.getByRole('button', { name: /eliminar product a/i });
     fireEvent.click(btnRemoveA);
 
     expect(screen.queryByText('Product A')).not.toBeInTheDocument();
@@ -168,7 +168,7 @@ describe('CartDrawer Component', () => {
     const handleClose = vi.fn();
     render(<DrawerTestHarness initialProducts={testProducts} isOpen={true} onClose={handleClose} />);
 
-    const closeBtn = screen.getByRole('button', { name: /close cart/i });
+    const closeBtn = screen.getByRole('button', { name: /cerrar carrito/i });
     fireEvent.click(closeBtn);
     expect(handleClose).toHaveBeenCalledTimes(1);
   });
@@ -180,7 +180,7 @@ describe('CartDrawer Component', () => {
     // Add an item so checkout isn't disabled
     fireEvent.click(screen.getByTestId('add-1'));
 
-    const checkoutBtn = screen.getByRole('button', { name: /proceed to checkout/i });
+    const checkoutBtn = screen.getByRole('button', { name: /proceder al pago/i });
     fireEvent.click(checkoutBtn);
     expect(handleCheckout).toHaveBeenCalledTimes(1);
   });

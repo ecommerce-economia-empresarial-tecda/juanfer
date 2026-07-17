@@ -77,15 +77,15 @@ export const AuthProvider = ({ children }) => {
 
   const login = (email, password) => {
     if (!email || email.trim() === '') {
-      throw new Error('Email is required');
+      throw new Error('El correo electrónico es obligatorio');
     }
     if (!password || password.trim() === '') {
-      throw new Error('Password is required');
+      throw new Error('La contraseña es obligatoria');
     }
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
-      throw new Error('Invalid email format');
+      throw new Error('Formato de correo electrónico no válido');
     }
 
     const trimmedEmail = email.trim();
@@ -103,16 +103,16 @@ export const AuthProvider = ({ children }) => {
           transitionView('catalog');
           window.localStorage.setItem('auth_user', JSON.stringify(customerUser));
           window.localStorage.setItem('auth_current_view', 'catalog');
-          showNotification(`Logged in as ${trimmedEmail}!`, 'success');
+          showNotification(`¡Sesión iniciada como ${trimmedEmail}!`, 'success');
         } else if (trimmedEmail === 'admin@juanfershop.com' && hashedPassword === adminHash) {
           const adminUser = { email: trimmedEmail, role: 'admin' };
           setUser(adminUser);
           transitionView('admin');
           window.localStorage.setItem('auth_user', JSON.stringify(adminUser));
           window.localStorage.setItem('auth_current_view', 'admin');
-          showNotification(`Logged in as ${trimmedEmail}!`, 'success');
+          showNotification(`¡Sesión iniciada como ${trimmedEmail}!`, 'success');
         } else {
-          throw new Error('Invalid email or password');
+          throw new Error('Correo electrónico o contraseña no válidos');
         }
         return;
       }
@@ -131,13 +131,13 @@ export const AuthProvider = ({ children }) => {
             transitionView(targetView);
             window.localStorage.setItem('auth_user', JSON.stringify(loggedInUser));
             window.localStorage.setItem('auth_current_view', targetView);
-            showNotification(`Logged in as ${trimmedEmail}!`, 'success');
+            showNotification(`¡Sesión iniciada como ${trimmedEmail}!`, 'success');
             return;
           }
         }
-        throw new Error('Invalid email or password');
+        throw new Error('Correo electrónico o contraseña no válidos');
       } catch (err) {
-        throw new Error(err.message || 'Invalid email or password');
+        throw new Error(err.message || 'Correo electrónico o contraseña no válidos');
       }
     })();
   };
@@ -164,7 +164,7 @@ export const AuthProvider = ({ children }) => {
 export const useAuth = () => {
   const context = useContext(AuthContext);
   if (!context) {
-    throw new Error('useAuth must be used within an AuthProvider');
+    throw new Error('useAuth debe ser utilizado dentro de un AuthProvider');
   }
   return context;
 };

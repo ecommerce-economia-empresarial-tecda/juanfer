@@ -22,18 +22,18 @@ export default function ProductCatalog({ onProductClick }) {
     <div className="product-catalog">
       <div className="catalog-header">
         <label htmlFor="category-select" className="sr-only">
-          Filter by Category
+          Filtrar por categoría
         </label>
         <select
           id="category-select"
-          aria-label="Filter by Category"
+          aria-label="Filtrar por categoría"
           value={selectedCategory}
           onChange={(e) => setSelectedCategory(e.target.value)}
           className="category-select"
         >
           {categories.map((category) => (
             <option key={category} value={category}>
-              {category}
+              {category === 'All' ? 'Todos' : category}
             </option>
           ))}
         </select>

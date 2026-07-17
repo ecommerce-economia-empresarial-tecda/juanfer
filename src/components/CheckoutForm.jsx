@@ -42,27 +42,27 @@ export default function CheckoutForm({ onCheckoutSuccess, onCloseConfirmation })
 
     // Mandatory Field Validation
     if (!formData.name.trim()) {
-      newErrors.name = 'Name is required';
+      newErrors.name = 'El nombre es obligatorio';
     }
     if (!formData.email.trim()) {
-      newErrors.email = 'Email is required';
+      newErrors.email = 'El correo electrónico es obligatorio';
     } else {
       // Email format validation (standard name@domain.com regex)
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       if (!emailRegex.test(formData.email)) {
-        newErrors.email = 'Invalid email format';
+        newErrors.email = 'Formato de correo electrónico no válido';
       }
     }
     if (!formData.address.trim()) {
-      newErrors.address = 'Address is required';
+      newErrors.address = 'La dirección es obligatoria';
     }
     if (!formData.card.trim()) {
-      newErrors.card = 'Credit card number is required';
+      newErrors.card = 'El número de tarjeta de crédito es obligatorio';
     } else {
       // Credit card format validation (exactly 16 digits)
       const cardRegex = /^\d{16}$/;
       if (!cardRegex.test(formData.card)) {
-        newErrors.card = 'Credit card must be exactly 16 digits';
+        newErrors.card = 'La tarjeta de crédito debe tener exactamente 16 dígitos';
       }
     }
 
@@ -98,7 +98,7 @@ export default function CheckoutForm({ onCheckoutSuccess, onCloseConfirmation })
 
     // Success flow
     const generatedOrderId = `ORD-${Date.now()}-${Math.floor(1000 + Math.random() * 9000)}`;
-    showNotification(`Order ${generatedOrderId} placed successfully!`, 'success');
+    showNotification(`¡Pedido ${generatedOrderId} realizado con éxito!`, 'success');
 
     const isTestEnv = typeof process !== 'undefined' && process.env.NODE_ENV === 'test';
     if (!isTestEnv) {
@@ -145,10 +145,10 @@ export default function CheckoutForm({ onCheckoutSuccess, onCloseConfirmation })
   return (
     <div className="checkout-form-container">
       <form onSubmit={handleSubmit} className="checkout-form" noValidate>
-        <h2>Checkout Details</h2>
+        <h2>Detalles del pago</h2>
 
         <div className="form-group">
-          <label htmlFor="name-input">Full Name</label>
+          <label htmlFor="name-input">Nombre completo</label>
           <input
             id="name-input"
             type="text"
@@ -162,7 +162,7 @@ export default function CheckoutForm({ onCheckoutSuccess, onCloseConfirmation })
         </div>
 
         <div className="form-group">
-          <label htmlFor="email-input">Email Address</label>
+          <label htmlFor="email-input">Correo electrónico</label>
           <input
             id="email-input"
             type="email"
@@ -176,7 +176,7 @@ export default function CheckoutForm({ onCheckoutSuccess, onCloseConfirmation })
         </div>
 
         <div className="form-group">
-          <label htmlFor="address-input">Shipping Address</label>
+          <label htmlFor="address-input">Dirección de envío</label>
           <textarea
             id="address-input"
             name="address"
@@ -189,7 +189,7 @@ export default function CheckoutForm({ onCheckoutSuccess, onCloseConfirmation })
         </div>
 
         <div className="form-group">
-          <label htmlFor="card-input">Credit Card</label>
+          <label htmlFor="card-input">Tarjeta de crédito</label>
           <input
             id="card-input"
             type="text"
@@ -213,9 +213,9 @@ export default function CheckoutForm({ onCheckoutSuccess, onCloseConfirmation })
           type="submit"
           disabled={cart.length === 0}
           className="submit-order-btn"
-          aria-label="Complete Order"
+          aria-label="Completar pedido"
         >
-          Complete Order
+          Completar pedido
         </button>
       </form>
 

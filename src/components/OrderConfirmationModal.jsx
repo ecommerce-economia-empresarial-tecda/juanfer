@@ -4,17 +4,17 @@ export default function OrderConfirmationModal({ orderId, onClose }) {
   return (
     <div className="modal-overlay" data-testid="order-confirmation-modal">
       <div className="modal-content">
-        <h2>Order Placement Successful!</h2>
-        <p className="order-success-msg">Thank you for your purchase. Your order has been placed successfully.</p>
+        <h2>¡Pedido realizado con éxito!</h2>
+        <p className="order-success-msg">Gracias por su compra. Su pedido ha sido procesado con éxito.</p>
         <p className="order-id-display">
-          <strong>Order ID:</strong> {orderId}
+          <strong>ID del pedido:</strong> {orderId}
         </p>
         <button
           onClick={onClose}
-          aria-label="Close Confirmation"
+          aria-label="Cerrar confirmación"
           className="close-modal-btn"
         >
-          Close Confirmation
+          Cerrar confirmación
         </button>
       </div>
     </div>

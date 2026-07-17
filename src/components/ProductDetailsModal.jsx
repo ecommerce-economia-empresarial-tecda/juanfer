@@ -22,7 +22,7 @@ export default function ProductDetailsModal({ product, onClose }) {
   const handleAddToCart = () => {
     if (!isAddDisabled) {
       addToCart({ ...product, price: finalPrice });
-      showNotification(`Added ${product.title} to cart!`, 'success');
+      showNotification(`¡${product.title} agregado al carrito!`, 'success');
     }
   };
 
@@ -41,7 +41,7 @@ export default function ProductDetailsModal({ product, onClose }) {
         <button
           className="modal-close-btn"
           onClick={onClose}
-          aria-label="Close details"
+          aria-label="Cerrar detalles"
         >
           &times;
         </button>
@@ -77,15 +77,15 @@ export default function ProductDetailsModal({ product, onClose }) {
               <span className="modal-stock">Stock: {product.stock - cartQuantity}</span>
             </div>
 
-            {isSoldOut && <span className="sold-out-badge">Sold Out</span>}
+            {isSoldOut && <span className="sold-out-badge">Agotado</span>}
 
             <button
               onClick={handleAddToCart}
               disabled={isAddDisabled}
               className="modal-add-to-cart-btn"
-              aria-label={isSoldOut ? 'Sold Out' : `Add to Cart ${product.title}`}
+              aria-label={isSoldOut ? 'Agotado' : `Agregar ${product.title} al carrito`}
             >
-              {isSoldOut ? 'Sold Out' : 'Add to Cart'}
+              {isSoldOut ? 'Agotado' : 'Agregar al carrito'}
             </button>
           </div>
         </div>

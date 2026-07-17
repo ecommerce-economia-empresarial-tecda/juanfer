@@ -77,7 +77,7 @@ describe('AuthContext', () => {
     expect(window.localStorage.getItem('auth_current_view')).toBe('admin');
   });
 
-  it('should throw "Email is required" if email is empty', () => {
+  it('should throw "El correo electrónico es obligatorio" if email is empty', () => {
     const wrapper = ({ children }) => <AuthProvider>{children}</AuthProvider>;
     const { result } = renderHook(() => useAuth(), { wrapper });
 
@@ -85,10 +85,10 @@ describe('AuthContext', () => {
       act(() => {
         result.current.login('', 'customerJFS2026!');
       });
-    }).toThrow('Email is required');
+    }).toThrow('El correo electrónico es obligatorio');
   });
 
-  it('should throw "Password is required" if password is empty', () => {
+  it('should throw "La contraseña es obligatoria" if password is empty', () => {
     const wrapper = ({ children }) => <AuthProvider>{children}</AuthProvider>;
     const { result } = renderHook(() => useAuth(), { wrapper });
 
@@ -96,10 +96,10 @@ describe('AuthContext', () => {
       act(() => {
         result.current.login('customer@juanfershop.com', '');
       });
-    }).toThrow('Password is required');
+    }).toThrow('La contraseña es obligatoria');
   });
 
-  it('should throw "Invalid email format" if email regex fails', () => {
+  it('should throw "Formato de correo electrónico no válido" if email regex fails', () => {
     const wrapper = ({ children }) => <AuthProvider>{children}</AuthProvider>;
     const { result } = renderHook(() => useAuth(), { wrapper });
 
@@ -107,26 +107,26 @@ describe('AuthContext', () => {
       act(() => {
         result.current.login('customer-juanfershop.com', 'customerJFS2026!');
       });
-    }).toThrow('Invalid email format');
+    }).toThrow('Formato de correo electrónico no válido');
 
     expect(() => {
       act(() => {
         result.current.login('customer@', 'customerJFS2026!');
       });
-    }).toThrow('Invalid email format');
+    }).toThrow('Formato de correo electrónico no válido');
   });
 
-  it('should throw "Invalid email or password" for invalid credentials', async () => {
+  it('should throw "Correo electrónico o contraseña no válidos" for invalid credentials', async () => {
     const wrapper = ({ children }) => <AuthProvider>{children}</AuthProvider>;
     const { result } = renderHook(() => useAuth(), { wrapper });
 
     await expect(
       result.current.login('unknown@juanfershop.com', 'customerJFS2026!')
-    ).rejects.toThrow('Invalid email or password');
+    ).rejects.toThrow('Correo electrónico o contraseña no válidos');
 
     await expect(
       result.current.login('customer@juanfershop.com', 'wrongpassword')
-    ).rejects.toThrow('Invalid email or password');
+    ).rejects.toThrow('Correo electrónico o contraseña no válidos');
   });
 
   it('should successfully log out and reset user state and view', async () => {

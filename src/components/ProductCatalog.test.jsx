@@ -84,7 +84,7 @@ describe('ProductCatalog Component', () => {
     renderCatalog();
 
     // The dropdown selector should exist and default to "All"
-    const select = screen.getByRole('combobox', { name: /filter by category/i });
+    const select = screen.getByRole('combobox', { name: /filtrar por categoría/i });
     expect(select).toBeInTheDocument();
     expect(select.value).toBe('All');
 
@@ -124,12 +124,12 @@ describe('ProductCatalog Component', () => {
     expect(productBElement).toBeInTheDocument();
 
     // Should display a "Sold Out" indicator/badge
-    const soldOutBadge = screen.getByText('Sold Out', { selector: '.sold-out-badge' });
+    const soldOutBadge = screen.getByText('Agotado', { selector: '.sold-out-badge' });
     expect(soldOutBadge).toBeInTheDocument();
     expect(productBElement).toContainElement(soldOutBadge);
 
     // The Add to Cart button should be disabled and say "Sold Out"
-    const button = screen.getByRole('button', { name: /sold out/i });
+    const button = screen.getByRole('button', { name: /agotado/i });
     expect(button).toBeDisabled();
   });
 
@@ -137,8 +137,8 @@ describe('ProductCatalog Component', () => {
     // Product C has stock 2
     renderCatalog();
 
-    const addToCartButton = screen.getByRole('button', { name: /add to cart product c/i });
-    expect(addToCartButton).toHaveTextContent(/add to cart/i);
+    const addToCartButton = screen.getByRole('button', { name: /agregar product c al carrito/i });
+    expect(addToCartButton).toHaveTextContent(/agregar al carrito/i);
     expect(addToCartButton).not.toBeDisabled();
 
     // Click twice to add Product C to the cart (exhausting stock level of 2)
@@ -179,7 +179,7 @@ describe('ProductCatalog Component', () => {
     expect(screen.queryByText('Product A')).not.toBeInTheDocument();
 
     // The dropdown selector should now contain "All", "Books", "Toys"
-    const select = screen.getByRole('combobox', { name: /filter by category/i });
+    const select = screen.getByRole('combobox', { name: /filtrar por categoría/i });
     expect(select).toBeInTheDocument();
     
     // Select "Books"
@@ -228,16 +228,16 @@ describe('ProductCatalog Component', () => {
     );
 
     // Verify it is not disabled initially
-    const button = screen.getByRole('button', { name: /add to cart product a/i });
+    const button = screen.getByRole('button', { name: /agregar product a al carrito/i });
     expect(button).not.toBeDisabled();
-    expect(button).toHaveTextContent(/add to cart/i);
+    expect(button).toHaveTextContent(/agregar al carrito/i);
 
     // Click helper button to update stock to 0
     fireEvent.click(screen.getByRole('button', { name: /set product a stock to 0/i }));
 
     // Now it should be sold out
     expect(button).toBeDisabled();
-    expect(button).toHaveTextContent(/sold out/i);
-    expect(screen.getByText('Sold Out', { selector: '.sold-out-badge' })).toBeInTheDocument();
+    expect(button).toHaveTextContent(/agotado/i);
+    expect(screen.getByText('Agotado', { selector: '.sold-out-badge' })).toBeInTheDocument();
   });
 });

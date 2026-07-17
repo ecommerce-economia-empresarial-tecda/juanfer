@@ -35,7 +35,7 @@ describe('ProductDetailsModal', () => {
     expect(screen.getByText('$135.00')).toBeInTheDocument();
     expect(screen.getByText('$150.00')).toBeInTheDocument();
 
-    const closeBtn = screen.getByLabelText('Close details');
+    const closeBtn = screen.getByLabelText('Cerrar detalles');
     fireEvent.click(closeBtn);
     expect(handleClose).toHaveBeenCalled();
   });

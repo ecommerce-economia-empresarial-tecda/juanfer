@@ -108,23 +108,23 @@ export default function AdminDashboard() {
     const newErrors = {};
 
     if (!title || title.trim() === '') {
-      newErrors.title = 'Name is required';
+      newErrors.title = 'El nombre es obligatorio';
     }
 
     const parsedPrice = parseFloat(price);
     if (isNaN(parsedPrice) || parsedPrice <= 0) {
-      newErrors.price = 'Price must be greater than 0';
+      newErrors.price = 'El precio debe ser mayor que 0';
     }
 
     const parsedStock = parseInt(stock, 10);
     if (isNaN(parsedStock) || parsedStock < 0) {
-      newErrors.stock = 'Stock cannot be negative';
+      newErrors.stock = 'El stock no puede ser negativo';
     }
 
     if (onSale) {
       const parsedDiscount = parseFloat(discountPercent);
       if (isNaN(parsedDiscount) || parsedDiscount < 0 || parsedDiscount > 100) {
-        newErrors.discountPercent = 'Discount % must be between 0 and 100';
+        newErrors.discountPercent = 'El % de descuento debe estar entre 0 y 100';
       }
     }
 
@@ -147,10 +147,10 @@ export default function AdminDashboard() {
 
     if (editingProduct) {
       updateProduct(editingProduct.id, productPayload);
-      showNotification(`Product ${productPayload.title} updated!`, 'success');
+      showNotification(`¡Producto ${productPayload.title} actualizado!`, 'success');
     } else {
       addProduct(productPayload);
-      showNotification(`Product ${productPayload.title} added!`, 'success');
+      showNotification(`¡Producto ${productPayload.title} agregado!`, 'success');
     }
 
     resetForm();
@@ -162,16 +162,16 @@ export default function AdminDashboard() {
     const newErrors = {};
 
     if (!userForm.email || userForm.email.trim() === '') {
-      newErrors.email = 'Email is required';
+      newErrors.email = 'El correo electrónico es obligatorio';
     } else {
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       if (!emailRegex.test(userForm.email)) {
-        newErrors.email = 'Invalid email format';
+        newErrors.email = 'Formato de correo electrónico no válido';
       }
     }
 
     if (!userForm.password || userForm.password.trim() === '') {
-      newErrors.password = 'Password is required';
+      newErrors.password = 'La contraseña es obligatoria';
     }
 
     if (Object.keys(newErrors).length > 0) {
@@ -189,31 +189,31 @@ export default function AdminDashboard() {
       if (isTestEnv) {
         setUsers((prev) => [...prev, { email, password: hashedPassword, role }]);
         setUserForm({ email: '', password: '', role: 'customer' });
-        showNotification(`User ${email} added!`, 'success');
+        showNotification(`¡Usuario ${email} agregado!`, 'success');
         return;
       }
 
       await setDoc(doc(db, 'users', email), { email, password: hashedPassword, role });
       setUsers((prev) => [...prev.filter((u) => u.email !== email), { email, password: hashedPassword, role }]);
       setUserForm({ email: '', password: '', role: 'customer' });
-      showNotification(`User ${email} added!`, 'success');
+      showNotification(`¡Usuario ${email} agregado!`, 'success');
     } catch (err) {
       console.error(err);
-      setUserErrors({ general: 'Failed to add user' });
+      setUserErrors({ general: 'Error al agregar usuario' });
     }
   };
 
   const handleUpdateRole = async (email, newRole) => {
     if (isTestEnv) {
       setUsers((prev) => prev.map((u) => (u.email === email ? { ...u, role: newRole } : u)));
-      showNotification(`User ${email} updated!`, 'success');
+      showNotification(`¡Usuario ${email} actualizado!`, 'success');
       return;
     }
 
     try {
       await updateDoc(doc(db, 'users', email), { role: newRole });
       setUsers((prev) => prev.map((u) => (u.email === email ? { ...u, role: newRole } : u)));
-      showNotification(`User ${email} updated!`, 'success');
+      showNotification(`¡Usuario ${email} actualizado!`, 'success');
     } catch (err) {
       console.error(err);
     }
@@ -222,20 +222,20 @@ export default function AdminDashboard() {
   const handleDeleteUser = async (email) => {
     const currentUserEmail = user?.email;
     if (email === currentUserEmail) {
-      alert("You cannot delete yourself.");
+      alert("No puede eliminarse a sí mismo.");
       return;
     }
 
     if (isTestEnv) {
       setUsers((prev) => prev.filter((u) => u.email !== email));
-      showNotification(`User ${email} deleted!`, 'success');
+      showNotification(`¡Usuario ${email} eliminado!`, 'success');
       return;
     }
 
     try {
       await deleteDoc(doc(db, 'users', email));
       setUsers((prev) => prev.filter((u) => u.email !== email));
-      showNotification(`User ${email} deleted!`, 'success');
+      showNotification(`¡Usuario ${email} eliminado!`, 'success');
     } catch (err) {
       console.error(err);
     }
@@ -245,7 +245,7 @@ export default function AdminDashboard() {
     e.preventDefault();
     setResetError('');
     if (!newPassword || newPassword.trim() === '') {
-      setResetError('Password is required');
+      setResetError('La contraseña es obligatoria');
       return;
     }
 
@@ -256,7 +256,7 @@ export default function AdminDashboard() {
 
       if (isTestEnv) {
         setUsers((prev) => prev.map((u) => (u.email === emailToReset ? { ...u, password: hashedPassword } : u)));
-        showNotification(`Password reset for ${emailToReset}!`, 'success');
+        showNotification(`¡Contraseña restablecida para ${emailToReset}!`, 'success');
         setResetPasswordEmail('');
         setNewPassword('');
         return;
@@ -264,12 +264,12 @@ export default function AdminDashboard() {
 
       await updateDoc(doc(db, 'users', emailToReset), { password: hashedPassword });
       setUsers((prev) => prev.map((u) => (u.email === emailToReset ? { ...u, password: hashedPassword } : u)));
-      showNotification(`Password reset for ${emailToReset}!`, 'success');
+      showNotification(`¡Contraseña restablecida para ${emailToReset}!`, 'success');
       setResetPasswordEmail('');
       setNewPassword('');
     } catch (err) {
       console.error(err);
-      setResetError('Failed to reset password');
+      setResetError('Error al restablecer la contraseña');
     }
   };
 
@@ -290,15 +290,15 @@ export default function AdminDashboard() {
   return (
     <div className="admin-dashboard-container">
       <header className="admin-dashboard-header">
-        <h1>Admin Dashboard</h1>
+        <h1>Panel de administración</h1>
         <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
           {user && (
             <span className="user-indicator">
-              Logged in as: <strong>{user.email} (Admin)</strong>
+              Sesión iniciada como: <strong>{user.email} (Admin)</strong>
             </span>
           )}
           <button onClick={logout} className="logout-btn">
-            Log Out
+            Cerrar sesión
           </button>
         </div>
       </header>
@@ -308,13 +308,13 @@ export default function AdminDashboard() {
           onClick={() => handleTabChange('products')}
           className={`tab-btn ${activeTab === 'products' ? 'active' : ''}`}
         >
-          Manage Products
+          Gestionar productos
         </button>
         <button
           onClick={() => handleTabChange('users')}
           className={`tab-btn ${activeTab === 'users' ? 'active' : ''}`}
         >
-          Manage Users
+          Gestionar usuarios
         </button>
       </div>
 
@@ -322,7 +322,7 @@ export default function AdminDashboard() {
         {activeTab === 'products' && (
           <>
             <section className="product-list-section">
-              <h2>Products Inventory</h2>
+              <h2>Inventario de productos</h2>
               <div className="filter-container" style={{ marginBottom: '15px', display: 'flex', alignItems: 'center' }}>
                 <span 
                   className="out-of-stock-filter-label" 
@@ -338,19 +338,19 @@ export default function AdminDashboard() {
                     }}
                     style={{ width: '16px', height: '16px', cursor: 'pointer' }}
                   />
-                  Show Out of Stock Only
+                  Mostrar solo productos sin stock
                 </span>
               </div>
               <table className="products-table">
                 <thead>
                   <tr>
-                    <th>Name</th>
-                    <th>Category</th>
-                    <th>Price</th>
+                    <th>Nombre</th>
+                    <th>Categoría</th>
+                    <th>Precio</th>
                     <th>Stock</th>
-                    <th>On Sale</th>
-                    <th>New</th>
-                    <th>Actions</th>
+                    <th>En oferta</th>
+                    <th>Nuevo</th>
+                    <th>Acciones</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -361,15 +361,15 @@ export default function AdminDashboard() {
                       <td>${Number(product.price).toFixed(2)}</td>
                       <td className={product.stock === 0 ? 'out-of-stock-cell' : ''}>
                         {product.stock}
-                        {product.stock === 0 && <span className="out-of-stock-badge" style={{ marginLeft: '8px', padding: '2px 6px', fontSize: '11px', backgroundColor: '#e53e3e', color: '#fff', borderRadius: '4px', fontWeight: 'bold' }}>Out of Stock</span>}
+                        {product.stock === 0 && <span className="out-of-stock-badge" style={{ marginLeft: '8px', padding: '2px 6px', fontSize: '11px', backgroundColor: '#e53e3e', color: '#fff', borderRadius: '4px', fontWeight: 'bold' }}>Agotado</span>}
                       </td>
-                      <td>{product.onSale ? `Yes (${product.discountPercent}%)` : 'No'}</td>
-                      <td>{product.isNew ? 'Yes' : 'No'}</td>
+                      <td>{product.onSale ? `Sí (${product.discountPercent}%)` : 'No'}</td>
+                      <td>{product.isNew ? `Sí` : 'No'}</td>
                       <td>
                         <button
                           onClick={() => {
                             updateProduct(product.id, { stock: product.stock + 10 });
-                            showNotification(`Product ${product.title} updated!`, 'success');
+                            showNotification(`¡Producto ${product.title} actualizado!`, 'success');
                           }}
                           className="restock-btn"
                           style={{ marginRight: '8px' }}
@@ -380,16 +380,16 @@ export default function AdminDashboard() {
                           onClick={() => handleEditClick(product)}
                           className="edit-btn"
                         >
-                          Edit
+                          Editar
                         </button>
                         <button
                           onClick={() => {
                             deleteProduct(product.id);
-                            showNotification(`Product ${product.title} deleted!`, 'success');
+                            showNotification(`¡Producto ${product.title} eliminado!`, 'success');
                           }}
                           className="delete-btn"
                         >
-                          Delete
+                          Eliminar
                         </button>
                       </td>
                     </tr>
@@ -399,10 +399,10 @@ export default function AdminDashboard() {
             </section>
 
             <section className="product-form-section">
-              <h2>{editingProduct ? 'Edit Product' : 'Add New Product'}</h2>
+              <h2>{editingProduct ? 'Editar producto' : 'Agregar nuevo producto'}</h2>
               <form onSubmit={handleSubmit} noValidate className="product-form">
                 <div className="form-group">
-                  <label htmlFor="product-name">Name</label>
+                  <label htmlFor="product-name">Nombre</label>
                   <input
                     id="product-name"
                     type="text"
@@ -421,7 +421,7 @@ export default function AdminDashboard() {
                 </div>
 
                 <div className="form-group">
-                  <label htmlFor="product-category">Category</label>
+                  <label htmlFor="product-category">Categoría</label>
                   <input
                     id="product-category"
                     type="text"
@@ -431,7 +431,7 @@ export default function AdminDashboard() {
                 </div>
 
                 <div className="form-group">
-                  <label htmlFor="product-price">Price</label>
+                  <label htmlFor="product-price">Precio</label>
                   <input
                     id="product-price"
                     type="number"
@@ -470,7 +470,7 @@ export default function AdminDashboard() {
                 </div>
 
                 <div className="form-group">
-                   <label htmlFor="product-description">Description</label>
+                   <label htmlFor="product-description">Descripción</label>
                    <textarea
                      id="product-description"
                      value={description}
@@ -486,12 +486,12 @@ export default function AdminDashboard() {
                      onChange={(e) => setOnSale(e.target.checked)}
                      style={{ width: '16px', height: '16px', cursor: 'pointer' }}
                    />
-                   <label htmlFor="product-on-sale" style={{ cursor: 'pointer', userSelect: 'none' }}>On Sale</label>
+                   <label htmlFor="product-on-sale" style={{ cursor: 'pointer', userSelect: 'none' }}>En oferta</label>
                  </div>
 
                  {onSale && (
                    <div className="form-group">
-                     <label htmlFor="product-discount-percent">Discount %</label>
+                     <label htmlFor="product-discount-percent">% de descuento</label>
                      <input
                        id="product-discount-percent"
                        type="number"
@@ -521,12 +521,12 @@ export default function AdminDashboard() {
                      onChange={(e) => setIsNew(e.target.checked)}
                      style={{ width: '16px', height: '16px', cursor: 'pointer' }}
                    />
-                   <label htmlFor="product-is-new" style={{ cursor: 'pointer', userSelect: 'none' }}>New Arrival</label>
+                   <label htmlFor="product-is-new" style={{ cursor: 'pointer', userSelect: 'none' }}>Novedad</label>
                  </div>
 
                  <div className="form-actions">
                   <button type="submit" className="submit-btn">
-                    {editingProduct ? 'Update Product' : 'Add Product'}
+                    {editingProduct ? 'Actualizar producto' : 'Agregar producto'}
                   </button>
                   {editingProduct && (
                     <button
@@ -534,7 +534,7 @@ export default function AdminDashboard() {
                       onClick={handleCancelEdit}
                       className="cancel-btn"
                     >
-                      Cancel
+                      Cancelar
                     </button>
                   )}
                 </div>
@@ -546,13 +546,13 @@ export default function AdminDashboard() {
         {activeTab === 'users' && (
           <>
             <section className="user-list-section">
-              <h2>Users Directory</h2>
+              <h2>Directorio de usuarios</h2>
               <table className="users-table">
                 <thead>
                   <tr>
-                    <th>Email</th>
-                    <th>Role</th>
-                    <th>Actions</th>
+                    <th>Correo electrónico</th>
+                    <th>Rol</th>
+                    <th>Acciones</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -561,12 +561,12 @@ export default function AdminDashboard() {
                       <td>{u.email}</td>
                       <td>
                         <select
-                          aria-label="User Role Selection"
+                          aria-label="Selección de rol de usuario"
                           value={u.role}
                           onChange={(e) => handleUpdateRole(u.email, e.target.value)}
                         >
-                          <option value="customer">Customer</option>
-                          <option value="admin">Admin</option>
+                          <option value="customer">Cliente</option>
+                          <option value="admin">Administrador</option>
                         </select>
                       </td>
                       <td>
@@ -574,14 +574,14 @@ export default function AdminDashboard() {
                           onClick={() => setResetPasswordEmail(u.email)}
                           className="reset-btn"
                         >
-                          Reset Credentials
+                          Restablecer credenciales
                         </button>
                         <button
                           onClick={() => handleDeleteUser(u.email)}
                           className="delete-btn"
                           disabled={u.email === user?.email}
                         >
-                          Delete
+                          Eliminar
                         </button>
                       </td>
                     </tr>
@@ -591,10 +591,10 @@ export default function AdminDashboard() {
 
               {resetPasswordEmail && (
                 <div className="reset-password-modal">
-                  <h3>Reset Password for {resetPasswordEmail}</h3>
+                  <h3>Restablecer contraseña para {resetPasswordEmail}</h3>
                   <form onSubmit={handleResetPassword} noValidate>
                     <div className="form-group">
-                      <label htmlFor="new-password">New Password</label>
+                      <label htmlFor="new-password">Nueva contraseña</label>
                       <input
                         id="new-password"
                         type="password"
@@ -604,8 +604,8 @@ export default function AdminDashboard() {
                       {resetError && <span className="error-message">{resetError}</span>}
                     </div>
                     <div className="form-actions">
-                      <button type="submit" className="submit-btn">Save New Password</button>
-                      <button type="button" onClick={() => { setResetPasswordEmail(''); setNewPassword(''); setResetError(''); }} className="cancel-btn">Cancel</button>
+                      <button type="submit" className="submit-btn">Guardar nueva contraseña</button>
+                      <button type="button" onClick={() => { setResetPasswordEmail(''); setNewPassword(''); setResetError(''); }} className="cancel-btn">Cancelar</button>
                     </div>
                   </form>
                 </div>
@@ -613,13 +613,13 @@ export default function AdminDashboard() {
             </section>
 
             <section className="user-form-section">
-              <h2>Add New User</h2>
+              <h2>Agregar nuevo usuario</h2>
               <form onSubmit={handleAddUser} noValidate className="user-form">
                 {userErrors.general && (
                   <div className="error-message general-error">{userErrors.general}</div>
                 )}
                 <div className="form-group">
-                  <label htmlFor="user-email">Email</label>
+                  <label htmlFor="user-email">Correo electrónico</label>
                   <input
                     id="user-email"
                     type="email"
@@ -638,7 +638,7 @@ export default function AdminDashboard() {
                 </div>
 
                 <div className="form-group">
-                  <label htmlFor="user-password">Password</label>
+                  <label htmlFor="user-password">Contraseña</label>
                   <input
                     id="user-password"
                     type="password"
@@ -657,19 +657,19 @@ export default function AdminDashboard() {
                 </div>
 
                 <div className="form-group">
-                  <label htmlFor="user-role">Role</label>
+                  <label htmlFor="user-role">Rol</label>
                   <select
                     id="user-role"
                     value={userForm.role}
                     onChange={(e) => setUserForm((prev) => ({ ...prev, role: e.target.value }))}
                   >
-                    <option value="customer">Customer</option>
-                    <option value="admin">Admin</option>
+                    <option value="customer">Cliente</option>
+                    <option value="admin">Administrador</option>
                   </select>
                 </div>
 
                 <div className="form-actions">
-                  <button type="submit" className="submit-btn">Add User</button>
+                  <button type="submit" className="submit-btn">Agregar usuario</button>
                 </div>
               </form>
             </section>

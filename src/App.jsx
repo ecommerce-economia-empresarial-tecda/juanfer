@@ -103,25 +103,25 @@ function MainApp() {
             onClick={() => setView('home')}
             className={`nav-link-btn ${currentView === 'home' ? 'active' : ''}`}
           >
-            Home
+            Inicio
           </button>
           <button
             onClick={() => setView('catalog')}
             className={`nav-link-btn ${currentView === 'catalog' ? 'active' : ''}`}
           >
-            Shop
+            Tienda
           </button>
           
           {user ? (
             <>
               <span className="user-indicator">
-                Logged in as: <strong>{user.email}</strong>
+                Sesión iniciada como: <strong>{user.email}</strong>
               </span>
               <button
                 onClick={logout}
                 className="nav-link-btn logout-btn-nav"
               >
-                Log Out
+                Cerrar sesión
               </button>
             </>
           ) : (
@@ -129,16 +129,16 @@ function MainApp() {
               onClick={() => setView('login')}
               className={`nav-link-btn ${currentView === 'login' ? 'active' : ''}`}
             >
-              Sign In
+              Iniciar sesión
             </button>
           )}
 
           <button
             onClick={() => setIsCartOpen(true)}
             className="cart-toggle-btn"
-            aria-label="Open Cart"
+            aria-label="Abrir carrito"
           >
-            Cart <span className="cart-count-badge">{totalItems}</span>
+            Carrito <span className="cart-count-badge">{totalItems}</span>
           </button>
         </nav>
       </header>
@@ -151,8 +151,8 @@ function MainApp() {
         {currentView === 'catalog' && (
           <div className="catalog-view">
             <div className="view-header">
-              <h2>Explore Our Collection</h2>
-              <p>Premium, high-performance gear built for the next frontier.</p>
+              <h2>Explore nuestra colección</h2>
+              <p>Equipamiento premium de alto rendimiento diseñado para la próxima frontera.</p>
             </div>
             <ProductCatalog onProductClick={handleSelectProduct} />
           </div>
@@ -164,9 +164,9 @@ function MainApp() {
               <button
                 onClick={() => setView('catalog')}
                 className="back-to-shop-btn"
-                aria-label="Back to Shop"
+                aria-label="Volver a la tienda"
               >
-                &larr; Back to Shop
+                &larr; Volver a la tienda
               </button>
             </div>
             <CheckoutForm

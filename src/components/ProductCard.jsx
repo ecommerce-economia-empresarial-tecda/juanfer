@@ -21,7 +21,7 @@ export default function ProductCard({ product, onCardClick }) {
     e.stopPropagation();
     if (!isAddDisabled) {
       addToCart({ ...product, price: finalPrice });
-      showNotification(`Added ${product.title} to cart!`, 'success');
+      showNotification(`¡${product.title} agregado al carrito!`, 'success');
     }
   };
 
@@ -40,8 +40,8 @@ export default function ProductCard({ product, onCardClick }) {
           style={{ viewTransitionName: `product-img-${product.id}` }}
         />
         <div className="product-badges">
-          {product.onSale && <span className="badge badge-sale">SALE</span>}
-          {product.isNew && <span className="badge badge-new">NEW</span>}
+          {product.onSale && <span className="badge badge-sale">OFERTA</span>}
+          {product.isNew && <span className="badge badge-new">NUEVO</span>}
         </div>
       </div>
       <div className="product-info">
@@ -66,15 +66,15 @@ export default function ProductCard({ product, onCardClick }) {
           <span className="product-stock">Stock: {product.stock - cartQuantity}</span>
         </div>
         
-        {isSoldOut && <span className="sold-out-badge">Sold Out</span>}
+        {isSoldOut && <span className="sold-out-badge">Agotado</span>}
         
         <button
           onClick={handleAddToCart}
           disabled={isAddDisabled}
-          aria-label={isSoldOut ? 'Sold Out' : `Add to Cart ${product.title}`}
+          aria-label={isSoldOut ? 'Agotado' : `Agregar ${product.title} al carrito`}
           className="add-to-cart-btn"
         >
-          {isSoldOut ? 'Sold Out' : 'Add to Cart'}
+          {isSoldOut ? 'Agotado' : 'Agregar al carrito'}
         </button>
       </div>
     </div>

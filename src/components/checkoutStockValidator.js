@@ -10,10 +10,10 @@ export function validateCartStock(cartItems, products) {
   for (const item of cartItems) {
     const product = products.find((p) => p.id === item.id);
     if (!product) {
-      return `Product '${item.title}' is no longer available.`;
+      return `El producto '${item.title}' ya no está disponible.`;
     }
     if (product.stock < item.quantity) {
-      return `Only ${product.stock} units of '${item.title}' are available.`;
+      return `Solo hay ${product.stock} unidades disponibles de '${item.title}'.`;
     }
   }
   return null;
