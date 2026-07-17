@@ -45,12 +45,6 @@ export default function Home({ onProductClick }) {
               >
                 Shop Now
               </button>
-              <button
-                onClick={scrollToOffers}
-                className="hero-btn view-offers-btn"
-              >
-                View Offers
-              </button>
             </div>
           </div>
         </div>
