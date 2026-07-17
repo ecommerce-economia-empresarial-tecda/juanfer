@@ -16,9 +16,10 @@ service cloud.firestore {
     match /users/{email} {
       allow get: if true; // Needed for login query
       allow list: if true; // Needed for Admin Dashboard list (warn: insecure without Firebase Auth)
-      allow write: if request.resource.data.role in ['admin', 'customer']
-                   && request.resource.data.password is string
-                   && request.resource.data.password.size() >= 6;
+      allow delete: if true; // Needed for Admin Dashboard delete action
+      allow create, update: if request.resource.data.role in ['admin', 'customer']
+                            && request.resource.data.password is string
+                            && request.resource.data.password.size() >= 6;
     }
     
     // Orders rules
