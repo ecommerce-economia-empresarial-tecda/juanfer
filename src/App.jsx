@@ -1,122 +1,99 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
-import './App.css'
+import { useState } from 'react';
+import { CartProvider, useCart } from './context/CartContext';
+import ProductCatalog from './components/ProductCatalog';
+import CartDrawer from './components/CartDrawer';
+import CheckoutForm from './components/CheckoutForm';
+import './App.css';
 
-function App() {
-  const [count, setCount] = useState(0)
+function MainApp() {
+  const { cart } = useCart();
+  const [isCartOpen, setIsCartOpen] = useState(false);
+  const [view, setView] = useState('catalog'); // 'catalog' | 'checkout'
+
+  const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
 
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
+    <div className="app-layout">
+      <header className="navbar">
+        <div 
+          className="navbar-brand" 
+          onClick={() => setView('catalog')}
+          style={{ cursor: 'pointer' }}
+          role="button"
+          tabIndex={0}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              setView('catalog');
+            }
+          }}
         >
-          Count is {count}
-        </button>
-      </section>
-
-      <div className="ticks"></div>
-
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
+          <h1>Antigravity Shop</h1>
         </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
+        <nav className="navbar-links">
+          <button 
+            onClick={() => setView('catalog')} 
+            className={`nav-link-btn ${view === 'catalog' ? 'active' : ''}`}
+          >
+            Shop
+          </button>
+          <button 
+            onClick={() => setIsCartOpen(true)} 
+            className="cart-toggle-btn"
+            aria-label="Open Cart"
+          >
+            Cart <span className="cart-count-badge">{totalItems}</span>
+          </button>
+        </nav>
+      </header>
 
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
-  )
+      <main className="main-content">
+        {view === 'catalog' ? (
+          <div className="catalog-view">
+            <div className="view-header">
+              <h2>Explore Our Collection</h2>
+              <p>Premium, high-performance gear built for the next frontier.</p>
+            </div>
+            <ProductCatalog />
+          </div>
+        ) : (
+          <div className="checkout-view-container">
+            <div className="checkout-navigation">
+              <button 
+                onClick={() => setView('catalog')} 
+                className="back-to-shop-btn"
+                aria-label="Back to Shop"
+              >
+                &larr; Back to Shop
+              </button>
+            </div>
+            <CheckoutForm 
+              onCheckoutSuccess={(orderId) => {
+                console.log('Order completed:', orderId);
+              }}
+              onCloseConfirmation={() => {
+                setView('catalog');
+              }}
+            />
+          </div>
+        )}
+      </main>
+
+      <CartDrawer 
+        isOpen={isCartOpen} 
+        onClose={() => setIsCartOpen(false)} 
+        onCheckout={() => {
+          setIsCartOpen(false);
+          setView('checkout');
+        }} 
+      />
+    </div>
+  );
 }
 
-export default App
+export default function App() {
+  return (
+    <CartProvider>
+      <MainApp />
+    </CartProvider>
+  );
+}

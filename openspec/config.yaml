@@ -2,19 +2,19 @@
 schema: spec-driven
 
 context: |
-  Tech stack: React 19 (^19.2.7), Vite 8 (^8.1.1), npm, JavaScript (ES6+, JSX)
+  Tech stack: React 19 (^19.2.7), Vite 8 (^8.1.1), npm, JavaScript (ES6+, JSX), Vitest (^4.1.10), React Testing Library (^16.3.2)
   Architecture: Client-side single-page app (SPA) with entrypoint src/main.jsx and main component src/App.jsx.
-  Testing: None. No test runner is currently installed.
+  Testing: Vitest for unit/component testing with React Testing Library.
   Style: ESLint 10 (^10.6.0) using standard configuration (eslint.config.js).
 
 testing:
-  test_runner: null
-  test_layers: []
-  coverage: null
+  test_runner: "vitest"
+  test_layers: ["unit", "component"]
+  coverage: "vitest"
   linter: "eslint"
   type_checker: null
-  formatter: null
-  strict_tdd: false
+  formatter: "eslint"
+  strict_tdd: true
 
 rules:
   proposal:
@@ -31,10 +31,10 @@ rules:
   apply:
     guidelines:
       - Follow existing code patterns
-    tdd: false
-    test_command: ""
+    tdd: true
+    test_command: "npm run test"
   verify:
-    test_command: ""
+    test_command: "npm run test"
     build_command: "npm run build"
     coverage_threshold: 0
   archive:
