@@ -30,9 +30,21 @@ export const AuthProvider = ({ children }) => {
 
     const seed = async () => {
       try {
-        const { collection, getDocs, doc, setDoc } = await import('firebase/firestore');
+        const { collection, getDocs, doc, setDoc, deleteDoc } = await import('firebase/firestore');
         const querySnapshot = await getDocs(collection(db, 'users'));
-        if (querySnapshot.empty) {
+        
+        let hasOldUsers = false;
+        querySnapshot.forEach(docSnap => {
+          if (docSnap.id.includes('tecdron.com')) {
+            hasOldUsers = true;
+          }
+        });
+
+        if (querySnapshot.empty || hasOldUsers) {
+          for (const docSnap of querySnapshot.docs) {
+            await deleteDoc(doc(db, 'users', docSnap.id));
+          }
+          
           const adminHash = await hashPassword('adminJFS2026!');
           const customerHash = await hashPassword('customerJFS2026!');
           await setDoc(doc(db, 'users', 'admin@juanfershop.com'), {
