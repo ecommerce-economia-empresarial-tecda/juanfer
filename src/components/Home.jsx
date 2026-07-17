@@ -30,24 +30,38 @@ export default function Home({ onProductClick }) {
   }, [offerProducts]);
 
   useEffect(() => {
-    if (typeof IntersectionObserver === 'undefined') return;
+    const elements = document.querySelectorAll('.scroll-reveal');
+
+    if (typeof IntersectionObserver === 'undefined') {
+      elements.forEach((el) => el.classList.add('revealed'));
+      return;
+    }
 
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
             entry.target.classList.add('revealed');
+            observer.unobserve(entry.target);
           }
         });
       },
-      { threshold: 0.05 }
+      { 
+        rootMargin: '0px 0px -20px 0px',
+        threshold: 0.01 
+      }
     );
 
-    const elements = document.querySelectorAll('.scroll-reveal');
     elements.forEach((el) => observer.observe(el));
+
+    // Fallback safety timer: reveal after 1 second if observer didn't trigger
+    const timer = setTimeout(() => {
+      elements.forEach((el) => el.classList.add('revealed'));
+    }, 1000);
 
     return () => {
       elements.forEach((el) => observer.unobserve(el));
+      clearTimeout(timer);
     };
   }, [products]);
 
