@@ -132,7 +132,7 @@ export default function Home({ onProductClick }) {
     <div className="home-container">
 
       {/* Offers / Promociones Section */}
-      <section ref={offersRef} className="home-section offers-section scroll-reveal" id="offers-section">
+      <section ref={offersRef} className="home-section offers-section" id="offers-section">
         <div className="section-header">
           <h2>Offers & Promociones</h2>
           <p>Grab them before they are gone! Special limited-time discounts.</p>
@@ -167,7 +167,7 @@ export default function Home({ onProductClick }) {
       </section>
 
       {/* New Arrivals / Novedades Section */}
-      <section className="home-section new-arrivals-section scroll-reveal">
+      <section className="home-section new-arrivals-section">
         <div className="section-header">
           <h2>New Arrivals & Novedades</h2>
           <p>Check out our latest premium equipment fresh in stock.</p>
@@ -175,7 +175,7 @@ export default function Home({ onProductClick }) {
         {newArrivals.length === 0 ? (
           <p className="no-products-message">No new arrivals available right now.</p>
         ) : (
-          <div className="products-grid">
+          <div className="products-grid scroll-reveal">
             {newArrivals.map((product) => (
               <ProductCard key={product.id} product={product} onCardClick={onProductClick} />
             ))}
