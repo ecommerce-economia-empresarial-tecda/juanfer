@@ -1406,3 +1406,148 @@
   background: var(--input-bg);
 }
 
+/* --- Page View Transitions --- */
+::view-transition-old(root) {
+  animation: 350ms cubic-bezier(0.16, 1, 0.3, 1) both fadeOut,
+             350ms cubic-bezier(0.16, 1, 0.3, 1) both slideLeftOut;
+}
+
+::view-transition-new(root) {
+  animation: 350ms cubic-bezier(0.16, 1, 0.3, 1) both fadeIn,
+             350ms cubic-bezier(0.16, 1, 0.3, 1) both slideLeftIn;
+}
+
+@keyframes slideLeftOut {
+  from { transform: translateX(0); }
+  to { transform: translateX(-30px); }
+}
+
+@keyframes slideLeftIn {
+  from { transform: translateX(30px); }
+  to { transform: translateX(0); }
+}
+
+@keyframes fadeOut {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* --- Element-level Animations & Hover Effects --- */
+
+/* Staggered entry for product cards */
+.product-card {
+  animation: fadeInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.product-card:nth-child(1) { animation-delay: 0.05s; }
+.product-card:nth-child(2) { animation-delay: 0.1s; }
+.product-card:nth-child(3) { animation-delay: 0.15s; }
+.product-card:nth-child(4) { animation-delay: 0.2s; }
+.product-card:nth-child(5) { animation-delay: 0.25s; }
+.product-card:nth-child(6) { animation-delay: 0.3s; }
+.product-card:nth-child(7) { animation-delay: 0.35s; }
+.product-card:nth-child(8) { animation-delay: 0.4s; }
+.product-card:nth-child(n+9) { animation-delay: 0.45s; }
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Smooth scaling and shadow elevation on hover for cards and buttons */
+.product-card:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 20px 38px rgba(31, 38, 135, 0.16);
+  border-color: var(--accent-border);
+}
+
+.add-to-cart-btn, 
+.checkout-btn, 
+.login-btn, 
+.submit-order-btn, 
+.hero-btn, 
+.submit-btn, 
+.reset-btn, 
+.tab-btn,
+.nav-link-btn,
+.cart-toggle-btn,
+.logout-btn {
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), 
+              box-shadow 0.2s ease, 
+              background 0.2s ease, 
+              color 0.2s ease, 
+              border-color 0.2s ease;
+}
+
+.add-to-cart-btn:hover:not(:disabled), 
+.checkout-btn:hover:not(:disabled), 
+.submit-order-btn:hover:not(:disabled), 
+.submit-btn:hover,
+.login-btn:hover, 
+.hero-btn:hover, 
+.reset-btn:hover, 
+.tab-btn:hover,
+.nav-link-btn:hover,
+.cart-toggle-btn:hover,
+.logout-btn:hover {
+  transform: translateY(-2px) scale(1.03);
+  box-shadow: 0 8px 20px rgba(139, 92, 246, 0.25);
+}
+
+.add-to-cart-btn:active:not(:disabled), 
+.checkout-btn:active:not(:disabled), 
+.submit-order-btn:active:not(:disabled), 
+.submit-btn:active,
+.login-btn:active, 
+.hero-btn:active {
+  transform: translateY(0) scale(0.98);
+}
+
+/* Slide-in and reveal transitions for sections and Hero banner contents */
+.home-section, 
+.product-list-section, 
+.product-form-section, 
+.checkout-form-container, 
+.login-form,
+.user-list-section,
+.user-form-section {
+  animation: sectionReveal 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes sectionReveal {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.hero-content-glass {
+  animation: slideInHero 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes slideInHero {
+  from {
+    opacity: 0;
+    transform: translateY(40px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+

@@ -277,6 +277,16 @@ export default function AdminDashboard() {
     ? products.filter((p) => p.stock === 0)
     : products;
 
+  const handleTabChange = (tab) => {
+    if (typeof document !== 'undefined' && document.startViewTransition) {
+      document.startViewTransition(() => {
+        setActiveTab(tab);
+      });
+    } else {
+      setActiveTab(tab);
+    }
+  };
+
   return (
     <div className="admin-dashboard-container">
       <header className="admin-dashboard-header">
@@ -295,13 +305,13 @@ export default function AdminDashboard() {
 
       <div className="admin-tabs">
         <button
-          onClick={() => setActiveTab('products')}
+          onClick={() => handleTabChange('products')}
           className={`tab-btn ${activeTab === 'products' ? 'active' : ''}`}
         >
           Manage Products
         </button>
         <button
-          onClick={() => setActiveTab('users')}
+          onClick={() => handleTabChange('users')}
           className={`tab-btn ${activeTab === 'users' ? 'active' : ''}`}
         >
           Manage Users

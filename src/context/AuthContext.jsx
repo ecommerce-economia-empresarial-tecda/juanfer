@@ -23,6 +23,16 @@ export const AuthProvider = ({ children }) => {
     return savedView || 'home';
   });
 
+  const transitionView = (view) => {
+    if (typeof document !== 'undefined' && document.startViewTransition) {
+      document.startViewTransition(() => {
+        setCurrentView(view);
+      });
+    } else {
+      setCurrentView(view);
+    }
+  };
+
   const isTestEnv = typeof process !== 'undefined' && process.env.NODE_ENV === 'test';
 
   useEffect(() => {
@@ -90,14 +100,14 @@ export const AuthProvider = ({ children }) => {
         if (trimmedEmail === 'customer@juanfershop.com' && hashedPassword === customerHash) {
           const customerUser = { email: trimmedEmail, role: 'customer' };
           setUser(customerUser);
-          setCurrentView('catalog');
+          transitionView('catalog');
           window.localStorage.setItem('auth_user', JSON.stringify(customerUser));
           window.localStorage.setItem('auth_current_view', 'catalog');
           showNotification(`Logged in as ${trimmedEmail}!`, 'success');
         } else if (trimmedEmail === 'admin@juanfershop.com' && hashedPassword === adminHash) {
           const adminUser = { email: trimmedEmail, role: 'admin' };
           setUser(adminUser);
-          setCurrentView('admin');
+          transitionView('admin');
           window.localStorage.setItem('auth_user', JSON.stringify(adminUser));
           window.localStorage.setItem('auth_current_view', 'admin');
           showNotification(`Logged in as ${trimmedEmail}!`, 'success');
@@ -118,7 +128,7 @@ export const AuthProvider = ({ children }) => {
             const loggedInUser = { email: trimmedEmail, role: userData.role || 'customer' };
             setUser(loggedInUser);
             const targetView = loggedInUser.role === 'admin' ? 'admin' : 'catalog';
-            setCurrentView(targetView);
+            transitionView(targetView);
             window.localStorage.setItem('auth_user', JSON.stringify(loggedInUser));
             window.localStorage.setItem('auth_current_view', targetView);
             showNotification(`Logged in as ${trimmedEmail}!`, 'success');
@@ -134,13 +144,13 @@ export const AuthProvider = ({ children }) => {
 
   const logout = () => {
     setUser(null);
-    setCurrentView('home');
+    transitionView('home');
     window.localStorage.removeItem('auth_user');
     window.localStorage.removeItem('auth_current_view');
   };
 
   const setView = (view) => {
-    setCurrentView(view);
+    transitionView(view);
     window.localStorage.setItem('auth_current_view', view);
   };
 

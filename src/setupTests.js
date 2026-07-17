@@ -53,4 +53,9 @@ if (!globalThis.crypto) {
 if (typeof window !== 'undefined' && !window.crypto) {
   window.crypto = webcrypto;
 }
-
+if (typeof document !== 'undefined') {
+  document.startViewTransition = (cb) => {
+    cb();
+    return { finished: Promise.resolve() };
+  };
+}
