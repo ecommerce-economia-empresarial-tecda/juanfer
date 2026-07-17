@@ -13,6 +13,53 @@ export default function Home({ onProductClick }) {
   const newArrivals = products.filter((p) => p.isNew === true);
   const isLoading = products.length === 0;
 
+  useEffect(() => {
+    if (offerProducts.length <= 1) return;
+
+    const interval = setInterval(() => {
+      if (carouselRef.current) {
+        const { scrollLeft, scrollWidth, clientWidth } = carouselRef.current;
+        if (scrollLeft + clientWidth >= scrollWidth - 15) {
+          carouselRef.current.scrollTo({ left: 0, behavior: 'smooth' });
+        } else {
+          carouselRef.current.scrollBy({ left: 320, behavior: 'smooth' });
+        }
+      }
+    }, 3500);
+
+    return () => clearInterval(interval);
+  }, [offerProducts]);
+
+  useEffect(() => {
+    const elements = document.querySelectorAll('.scroll-reveal');
+
+    if (typeof IntersectionObserver === 'undefined') {
+      elements.forEach((el) => el.classList.add('revealed'));
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('revealed');
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { 
+        rootMargin: '0px 0px -150px 0px',
+        threshold: 0.01 
+      }
+    );
+
+    elements.forEach((el) => observer.observe(el));
+
+    return () => {
+      elements.forEach((el) => observer.unobserve(el));
+    };
+  }, [products]);
+
   if (isLoading) {
     return (
       <div className="home-container loading-skeleton">
@@ -64,53 +111,6 @@ export default function Home({ onProductClick }) {
       </div>
     );
   }
-
-  useEffect(() => {
-    if (offerProducts.length <= 1) return;
-
-    const interval = setInterval(() => {
-      if (carouselRef.current) {
-        const { scrollLeft, scrollWidth, clientWidth } = carouselRef.current;
-        if (scrollLeft + clientWidth >= scrollWidth - 15) {
-          carouselRef.current.scrollTo({ left: 0, behavior: 'smooth' });
-        } else {
-          carouselRef.current.scrollBy({ left: 320, behavior: 'smooth' });
-        }
-      }
-    }, 3500);
-
-    return () => clearInterval(interval);
-  }, [offerProducts]);
-
-  useEffect(() => {
-    const elements = document.querySelectorAll('.scroll-reveal');
-
-    if (typeof IntersectionObserver === 'undefined') {
-      elements.forEach((el) => el.classList.add('revealed'));
-      return;
-    }
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('revealed');
-            observer.unobserve(entry.target);
-          }
-        });
-      },
-      { 
-        rootMargin: '0px 0px -150px 0px',
-        threshold: 0.01 
-      }
-    );
-
-    elements.forEach((el) => observer.observe(el));
-
-    return () => {
-      elements.forEach((el) => observer.unobserve(el));
-    };
-  }, [products]);
 
   const scrollToOffers = () => {
     offersRef.current?.scrollIntoView({ behavior: 'smooth' });
