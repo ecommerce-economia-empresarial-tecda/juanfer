@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Informe TP Nº3 - E-Commerce Juanfer Shop</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Inter', Arial, sans-serif;
+    background: #f5f5f5;
+    color: #1a1a2e;
+    padding: 40px 0;
+  }
+  .page {
+    max-width: 210mm;
+    min-height: 297mm;
+    margin: 0 auto 32px;
+    background: #fff;
+    padding: 60px 50px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.1);
+    border-radius: 4px;
+    page-break-after: always;
+  }
+  @media print {
+    body { background: #fff; padding: 0; }
+    .page { box-shadow: none; margin: 0; border-radius: 0; }
+    .screenshot-placeholder { border: 2px dashed #999; }
+  }
+
+  /* Portada */
+  .portada {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: 297mm;
+    text-align: center;
+  }
+  .portada .institution { font-size: 14px; color: #666; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 8px; }
+  .portada .carrera { font-size: 16px; color: #444; margin-bottom: 40px; }
+  .portada h1 { font-size: 36px; font-weight: 700; color: #1a1a2e; margin-bottom: 8px; }
+  .portada .subtitulo { font-size: 20px; color: #6366f1; font-weight: 500; margin-bottom: 40px; }
+  .portada .materia { font-size: 15px; color: #555; margin-bottom: 4px; }
+  .portada .fecha { font-size: 14px; color: #888; margin-top: 40px; }
+
+  /* Contenido */
+  h2 { font-size: 24px; font-weight: 700; color: #1a1a2e; border-bottom: 3px solid #6366f1; padding-bottom: 8px; margin: 40px 0 20px; }
+  h3 { font-size: 18px; font-weight: 600; color: #333; margin: 24px 0 12px; }
+  p { font-size: 14px; line-height: 1.7; color: #444; margin-bottom: 12px; text-align: justify; }
+  ul { margin: 8px 0 16px 20px; }
+  li { font-size: 14px; line-height: 1.7; color: #444; margin-bottom: 4px; }
+  strong { color: #1a1a2e; }
+
+  .screenshot-section { margin: 24px 0; }
+  .screenshot-label { font-size: 12px; color: #888; margin-bottom: 8px; font-style: italic; }
+  .screenshot-placeholder {
+    border: 2px dashed #6366f1;
+    border-radius: 8px;
+    background: #f8f7ff;
+    min-height: 280px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #6366f1;
+    font-weight: 500;
+    font-size: 16px;
+    margin-bottom: 8px;
+    padding: 24px;
+    text-align: center;
+  }
+  .screenshot-placeholder img { max-width: 100%; border-radius: 4px; display: block; }
+
+  table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 14px; }
+  th { background: #6366f1; color: #fff; padding: 10px 14px; text-align: left; font-weight: 600; }
+  td { padding: 10px 14px; border-bottom: 1px solid #e0e0e0; color: #444; }
+  tr:nth-child(even) td { background: #f8f7ff; }
+
+  .info-box {
+    background: #f0f0ff;
+    border-left: 4px solid #6366f1;
+    padding: 16px 20px;
+    border-radius: 4px;
+    margin: 16px 0;
+  }
+  .info-box p { margin: 0; font-size: 13px; }
+
+  .header-table td { border: none; padding: 4px 0; background: transparent; }
+  .header-table tr:nth-child(even) td { background: transparent; }
+</style>
+</head>
+<body>
+
+<!-- ==================== PORTADA ==================== -->
+<div class="page portada">
+  <p class="institution">Instituto Tecnológico de Administración</p>
+  <p class="carrera">Tecnicatura en Desarrollo de Aplicaciones</p>
+  <h1>Juanfer Shop</h1>
+  <p class="subtitulo">E-Commerce Premium</p>
+  <p class="materia"><strong>Materia:</strong> Economía Empresarial</p>
+  <p class="materia"><strong>Trabajo Práctico Nº3:</strong> E-Commerce - Unidad 2</p>
+  <p class="materia"><strong>Tecnología utilizada:</strong> React + Firebase (en lugar de WordPress)</p>
+  <p class="materia"><strong>Repositorio:</strong> github.com/ecommerce-economia-empresarial-tecda/juanfer</p>
+  <p class="materia"><strong>Demo online:</strong> juanfer-shop-2026.web.app</p>
+  <p class="fecha">Julio 2026</p>
+</div>
+
+<!-- ==================== SECCIÓN 1: PRODUCTO ==================== -->
+<div class="page">
+  <h2>1. Producto Ofrecido</h2>
+  <p>
+    <strong>Juanfer Shop</strong> es una tienda virtual de equipamiento premium que ofrece productos 
+    cuidadosamente seleccionados en las categorías de <strong>Electrónica, Indumentaria, Accesorios y Muebles</strong>. 
+    El catálogo incluye auriculares inalámbricos, relojes, mochilas, zapatillas, parlantes, teclados mecánicos, 
+    y más artículos de alta calidad orientados a un público joven-adulto con poder adquisitivo medio-alto.
+  </p>
+
+  <h3>Catálogo de productos</h3>
+  <table>
+    <thead>
+      <tr><th>Producto</th><th>Categoría</th><th>Precio</th><th>Stock</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Wireless Headphones</td><td>Electrónica</td><td>$99.99</td><td>5</td></tr>
+      <tr><td>Minimalist Leather Watch</td><td>Electrónica</td><td>$149.50</td><td>2</td></tr>
+      <tr><td>Classic Denim Jacket</td><td>Indumentaria</td><td>$79.99</td><td>8</td></tr>
+      <tr><td>Running Sneakers</td><td>Indumentaria</td><td>$119.99</td><td>4</td></tr>
+      <tr><td>Smart Fitness Band</td><td>Electrónica</td><td>$49.99</td><td>10</td></tr>
+      <tr><td>Cotton Crewneck T-Shirt</td><td>Indumentaria</td><td>$24.99</td><td>15</td></tr>
+      <tr><td>Ergonomic Office Chair</td><td>Muebles</td><td>$249.99</td><td>7</td></tr>
+      <tr><td>Mechanical Keyboard</td><td>Electrónica</td><td>$129.99</td><td>12</td></tr>
+      <tr><td>Travel Backpack</td><td>Accesorios</td><td>$69.99</td><td>20</td></tr>
+      <tr><td>Stainless Steel Bottle</td><td>Accesorios</td><td>$29.99</td><td>25</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Público objetivo</h3>
+  <p>
+    El sitio apunta a <strong>consumidores digitales</strong> de entre 18 y 45 años, interesados en 
+    tecnología, diseño y productos de alta calidad. El enfoque está en ofrecer una experiencia de 
+    compra moderna, visualmente atractiva y sin fricciones.
+  </p>
+</div>
+
+<!-- ==================== SECCIÓN 2: ESTRATEGIA DE VENTA ==================== -->
+<div class="page">
+  <h2>2. Estrategia de Venta</h2>
+
+  <h3>2.1. Diseño y experiencia de usuario</h3>
+  <p>
+    Se implementó una interfaz <strong>oscura con glassmorphism</strong> (efecto de vidrio esmerilado), 
+    tipografía moderna y animaciones suaves. El objetivo es transmitir una sensación <strong>premium, 
+    tecnológica y exclusiva</strong> que diferencie a Juanfer Shop de tiendas tradicionales.
+  </p>
+
+  <h3>2.2. Ofertas y descuentos</h3>
+  <p>
+    El sistema permite marcar productos <strong>"en oferta"</strong> con un porcentaje de descuento 
+    configurable (ej: 20% off en silla ergonómica, 15% off en auriculares). Estos productos se 
+    muestran en un <strong>carrusel destacado</strong> en la página principal con desplazamiento 
+    automático cada 3.5 segundos, incentivando la compra por impulso.
+  </p>
+
+  <h3>2.3. Sección de novedades</h3>
+  <p>
+    Los productos marcados como <strong>"nuevos"</strong> se muestran en una sección aparte en la 
+    landing page, generando expectativa y FOMO (fear of missing out) en los visitantes.
+  </p>
+
+  <h3>2.4. Proceso de compra guiado</h3>
+  <p>
+    El flujo de compra sigue estos pasos:
+  </p>
+  <ol style="margin: 8px 0 16px 20px;">
+    <li>Exploración del catálogo con filtro por categorías</li>
+    <li>Agregado de productos al carrito (con control de stock en tiempo real)</li>
+    <li>Revisión del carrito en un drawer lateral con modificación de cantidades</li>
+    <li>Inicio de sesión obligatorio antes de finalizar la compra</li>
+    <li>Formulario de checkout con validación de datos y stock</li>
+    <li>Confirmación del pedido con número de orden único</li>
+  </ol>
+
+  <h3>2.5. Panel de administración</h3>
+  <p>
+    Los administradores tienen acceso a un panel completo para <strong>gestionar productos</strong> 
+    (alta, baja, modificación, reposición rápida de stock) y <strong>gestionar usuarios</strong> 
+    (crear, eliminar, cambiar roles y restablecer contraseñas).
+  </p>
+
+  <h3>2.6. Canales de contacto</h3>
+  <p>
+    El sitio incluye un <strong>formulario de contacto</strong> que permite a los clientes enviar 
+    consultas directamente a la tienda. Los mensajes quedan registrados en la base de datos para su 
+    posterior seguimiento.
+  </p>
+</div>
+
+<!-- ==================== SECCIÓN 3: LANDING PAGE ==================== -->
+<div class="page">
+  <h2>3. Landing Page (Inicio)</h2>
+  <p>
+    La página principal cuenta con un <strong>banner hero</strong> con imagen destacada, título 
+    llamativo y botón de llamado a la acción "Explorar tienda". Debajo se ubican las secciones de 
+    <strong>ofertas activas</strong> (con carrusel interactivo) y <strong>novedades</strong> 
+    (en grilla).
+  </p>
+  <div class="screenshot-section">
+    <p class="screenshot-label">Captura de pantalla - Landing Page</p>
+    <div class="screenshot-placeholder" id="screenshot-landing">
+      [Pegar aquí la captura de pantalla de la Landing Page]<br>
+      <small style="font-size:12px;color:#aaa;">Incluir: hero banner + sección de ofertas + novedades</small>
+    </div>
+  </div>
+
+  <h3>Elementos incluidos</h3>
+  <ul>
+    <li>Hero banner con imagen, título y botón CTA</li>
+    <li>Carrusel de productos en oferta con desplazamiento automático</li>
+    <li>Sección de novedades con scroll-reveal</li>
+    <li>Barra de navegación con links a Tienda, Contacto, Login y Carrito</li>
+  </ul>
+</div>
+
+<!-- ==================== SECCIÓN 4: TIENDA ==================== -->
+<div class="page">
+  <h2>4. Tienda con Productos</h2>
+  <p>
+    La sección <strong>Tienda</strong> muestra el catálogo completo de productos en una grilla 
+    responsiva. Incluye un <strong>filtro por categorías</strong> (Todos, Electrónica, Indumentaria, 
+    Accesorios, Muebles) y cada producto se presenta con imagen, nombre, descripción, precio, 
+    indicador de stock y botón "Agregar al carrito".
+  </p>
+  <div class="screenshot-section">
+    <p class="screenshot-label">Captura de pantalla - Tienda (catálogo de productos)</p>
+    <div class="screenshot-placeholder" id="screenshot-tienda">
+      [Pegar aquí la captura de pantalla de la Tienda]<br>
+      <small style="font-size:12px;color:#aaa;">Incluir: grilla de productos + filtro por categoría</small>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== SECCIÓN 5: CONTACTO ==================== -->
+<div class="page">
+  <h2>5. Página de Contacto</h2>
+  <p>
+    El formulario de contacto permite a los usuarios enviar consultas ingresando <strong>nombre, 
+    correo electrónico y mensaje</strong>. Los datos se validan del lado del cliente y se almacenan 
+    en Firestore para su posterior gestión.
+  </p>
+  <div class="screenshot-section">
+    <p class="screenshot-label">Captura de pantalla - Página de Contacto</p>
+    <div class="screenshot-placeholder" id="screenshot-contacto">
+      [Pegar aquí la captura de pantalla del formulario de Contacto]<br>
+      <small style="font-size:12px;color:#aaa;">Incluir: formulario con campos nombre, email y mensaje</small>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== SECCIÓN 6: CARRITO ==================== -->
+<div class="page">
+  <h2>6. Carrito de Compras</h2>
+  <p>
+    El carrito se despliega como un <strong>drawer lateral</strong> desde la derecha, mostrando los 
+    productos agregados con imagen, nombre, precio, controles de cantidad (+/-), botón para eliminar 
+    y el total acumulado. Desde allí se puede proceder al pago o seguir comprando.
+  </p>
+  <div class="screenshot-section">
+    <p class="screenshot-label">Captura de pantalla - Carrito lleno</p>
+    <div class="screenshot-placeholder" id="screenshot-carrito">
+      [Pegar aquí la captura de pantalla del Carrito lleno]<br>
+      <small style="font-size:12px;color:#aaa;">Incluir: drawer con productos, cantidades y total</small>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== SECCIÓN 7: CHECKOUT ==================== -->
+<div class="page">
+  <h2>7. Proceso de Compra (Opcional)</h2>
+  <p>
+    Una vez iniciada sesión, el usuario accede al formulario de pago donde completa: nombre completo, 
+    correo electrónico, dirección de envío y número de tarjeta de crédito. Al confirmar, se valida 
+    el stock en tiempo real, se descuenta del inventario y se genera un número de orden.
+  </p>
+  <div class="screenshot-section">
+    <p class="screenshot-label">Captura de pantalla - Checkout / Finalizar compra</p>
+    <div class="screenshot-placeholder" id="screenshot-checkout">
+      [Pegar aquí la captura de pantalla del Checkout]<br>
+      <small style="font-size:12px;color:#aaa;">Incluir: formulario con datos de pago y envío</small>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== SECCIÓN 8: CONCLUSIÓN ==================== -->
+<div class="page">
+  <h2>8. Conclusión</h2>
+  <p>
+    <strong>Juanfer Shop</strong> cumple con los requisitos funcionales de un sitio de e-commerce 
+    básico: catálogo de productos, carrito de compras, proceso de pago, gestión de usuarios y panel 
+    de administración. Si bien el TP original plantea el uso de <strong>WordPress + WooCommerce</strong>, 
+    se optó por una implementación alternativa con <strong>React 19 + Vite + Firebase</strong> 
+    (JavaScript en lugar de PHP), logrando los mismos objetivos funcionales con una arquitectura 
+    moderna, escalable y de alto rendimiento.
+  </p>
+
+  <div class="info-box">
+    <p><strong>Tecnologías utilizadas:</strong></p>
+    <p>React 19 · Vite 8 · Firebase (Firestore + Hosting) · CSS3 con glassmorphism · Vitest + Testing Library</p>
+  </div>
+
+  <h3>Funcionalidades implementadas</h3>
+  <table>
+    <thead>
+      <tr><th>Función</th><th>Estado</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Landing page con hero banner</td><td>✅ Implementado</td></tr>
+      <tr><td>Catálogo de productos con filtros</td><td>✅ Implementado</td></tr>
+      <tr><td>Carrito de compras</td><td>✅ Implementado</td></tr>
+      <tr><td>Formulario de contacto</td><td>✅ Implementado</td></tr>
+      <tr><td>Proceso de checkout</td><td>✅ Implementado</td></tr>
+      <tr><td>Autenticación de usuarios</td><td>✅ Implementado</td></tr>
+      <tr><td>Panel de administración</td><td>✅ Implementado</td></tr>
+      <tr><td>Base de datos en la nube</td><td>✅ Implementado</td></tr>
+      <tr><td>Deploy automatizado (CI/CD)</td><td>✅ Implementado</td></tr>
+    </tbody>
+  </table>
+
+  <p style="text-align:center;color:#888;margin-top:40px;font-size:12px;">
+    Juanfer Shop — Julio 2026
+  </p>
+</div>
+
+</body>
+</html>
