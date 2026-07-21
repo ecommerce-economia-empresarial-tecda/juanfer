@@ -112,10 +112,6 @@ export default function Home({ onProductClick }) {
     );
   }
 
-  const scrollToOffers = () => {
-    offersRef.current?.scrollIntoView({ behavior: 'smooth' });
-  };
-
   const scrollLeft = () => {
     if (carouselRef.current) {
       carouselRef.current.scrollBy({ left: -320, behavior: 'smooth' });
@@ -130,6 +126,30 @@ export default function Home({ onProductClick }) {
 
   return (
     <div className="home-container">
+
+      {/* Hero Banner */}
+      <section className="home-section hero-banner">
+        <div className="hero-content">
+          <span className="micro-eyebrow">Juanfer Shop</span>
+          <h1 className="hero-title">Equipamiento Premium para el Futuro</h1>
+          <p className="hero-subtitle">
+            Descubrí nuestra colección exclusiva de productos de alto rendimiento diseñados para quienes buscan lo mejor.
+          </p>
+          <button
+            onClick={() => setView('catalog')}
+            className="hero-cta premium-btn-pill"
+          >
+            Explorar tienda
+          </button>
+        </div>
+        <div className="hero-visual">
+          <img
+            src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=800&auto=format&fit=crop&q=80"
+            alt="Juanfer Shop"
+            className="hero-image"
+          />
+        </div>
+      </section>
 
       {/* Offers / Promociones Section */}
       <section ref={offersRef} className="home-section offers-section" id="offers-section">

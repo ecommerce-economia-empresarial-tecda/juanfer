@@ -1050,3 +1050,358 @@ code, .counter {
   background: rgba(255, 255, 255, 0.08);
   animation: skeletonPulse 1.5s infinite ease-in-out;
 }
+
+/* Hero Banner */
+.hero-banner {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 48px;
+  align-items: center;
+  padding: 32px 0 48px;
+}
+
+.hero-content {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  text-align: left;
+}
+
+.hero-title {
+  font-size: 56px;
+  line-height: 1.05;
+  margin: 0;
+}
+
+.hero-subtitle {
+  font-size: 18px;
+  color: var(--text);
+  line-height: 1.6;
+  max-width: 480px;
+}
+
+.hero-cta {
+  align-self: flex-start;
+  padding: 16px 40px;
+  font-size: 16px;
+  margin-top: 8px;
+}
+
+.hero-visual {
+  border-radius: 24px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  box-shadow: var(--glass-shadow);
+}
+
+.hero-image {
+  width: 100%;
+  height: 400px;
+  object-fit: cover;
+  display: block;
+}
+
+@media (max-width: 768px) {
+  .hero-banner {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+  .hero-title {
+    font-size: 32px;
+  }
+  .hero-visual {
+    display: none;
+  }
+}
+
+/* Checkout & Submit Buttons */
+.checkout-btn, .submit-order-btn, .submit-contact-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 14px 28px;
+  border-radius: 9999px;
+  border: none;
+  background: var(--accent-gradient);
+  color: white;
+  font-family: var(--font-primary);
+  font-weight: 600;
+  font-size: 15px;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2);
+}
+
+.checkout-btn:hover:not(:disabled),
+.submit-order-btn:hover:not(:disabled),
+.submit-contact-btn:hover:not(:disabled) {
+  background: var(--accent-hover-gradient);
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 8px 24px rgba(139, 92, 246, 0.4);
+}
+
+.checkout-btn:active:not(:disabled),
+.submit-order-btn:active:not(:disabled),
+.submit-contact-btn:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+.checkout-btn:disabled,
+.submit-order-btn:disabled,
+.submit-contact-btn:disabled {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text-muted);
+  border: 1px solid var(--border);
+  box-shadow: none;
+  cursor: not-allowed;
+}
+
+/* Contact Page */
+.contact-page {
+  max-width: 680px;
+  margin: 0 auto;
+  text-align: left;
+}
+
+.contact-form-container {
+  margin-top: 24px;
+  box-sizing: border-box;
+}
+
+.contact-form {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Admin Dashboard inline style replacements */
+.form-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.submit-btn, .cancel-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 14px 28px;
+  border-radius: 9999px;
+  border: none;
+  font-family: var(--font-primary);
+  font-weight: 600;
+  font-size: 15px;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.submit-btn {
+  background: var(--accent-gradient);
+  color: white;
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2);
+}
+
+.submit-btn:hover {
+  background: var(--accent-hover-gradient);
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 8px 24px rgba(139, 92, 246, 0.4);
+}
+
+.cancel-btn {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text);
+  border: 1px solid var(--border);
+}
+
+.cancel-btn:hover {
+  border-color: var(--accent-color);
+  color: var(--accent-color);
+}
+
+.product-form .checkbox-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 15px;
+}
+
+.product-form .checkbox-group input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+}
+
+.product-form .checkbox-group label {
+  cursor: pointer;
+  user-select: none;
+}
+
+.user-indicator {
+  font-size: 13px;
+  color: var(--text);
+}
+
+.out-of-stock-filter-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-h);
+}
+
+.out-of-stock-filter-label input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+}
+
+.out-of-stock-badge {
+  margin-left: 8px;
+  padding: 2px 6px;
+  font-size: 11px;
+  background-color: #e53e3e;
+  color: #fff;
+  border-radius: 4px;
+  font-weight: bold;
+}
+
+/* Close modal button */
+.close-modal-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 24px;
+  border-radius: 9999px;
+  border: none;
+  background: var(--accent-gradient);
+  color: white;
+  font-family: var(--font-primary);
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2);
+  margin-top: 20px;
+}
+
+.close-modal-btn:hover {
+  background: var(--accent-hover-gradient);
+  transform: translateY(-2px);
+}
+
+/* Reset password modal */
+.reset-password-modal {
+  margin-top: 24px;
+  padding: 24px;
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+}
+
+/* General error container */
+.general-error {
+  padding: 12px 16px;
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.2);
+  border-radius: 12px;
+  text-align: center;
+  margin-bottom: 8px;
+}
+
+/* Back to shop button */
+.back-to-shop-btn {
+  display: inline-flex;
+  align-items: center;
+  padding: 10px 20px;
+  border-radius: 9999px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text);
+  font-family: var(--font-primary);
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.back-to-shop-btn:hover {
+  border-color: var(--accent-color);
+  color: var(--accent-color);
+}
+
+/* Stock error message */
+.stock-error-message {
+  color: #f87171;
+  font-size: 14px;
+  font-weight: 500;
+  padding: 12px 16px;
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.2);
+  border-radius: 12px;
+  margin-bottom: 16px;
+}
+
+/* Modal close button (×) */
+.modal-close-btn {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text-h);
+  font-size: 20px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s;
+  z-index: 10;
+}
+
+.modal-close-btn:hover {
+  background: rgba(255, 255, 255, 0.15);
+  transform: rotate(90deg);
+}
+
+/* No products message */
+.no-products-message {
+  text-align: center;
+  color: var(--text-muted);
+  padding: 48px 24px;
+  font-size: 16px;
+}
+
+/* Order success message */
+.order-success-msg {
+  margin: 16px 0;
+  font-size: 16px;
+}
+
+.order-id-display {
+  margin-bottom: 24px;
+  font-size: 14px;
+  color: var(--text);
+}
+
+.order-id-display strong {
+  color: var(--accent-color);
+}
+
+/* Empty cart message */
+.empty-cart-message {
+  text-align: center;
+  color: var(--text-muted);
+  padding: 48px 24px;
+  font-size: 16px;
+}
+
+/* Login form container */
+.login-form-container {
+  max-width: 480px;
+  margin: 0 auto;
+}

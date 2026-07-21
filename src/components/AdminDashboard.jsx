@@ -324,10 +324,9 @@ export default function AdminDashboard() {
             <section className="product-list-section double-bezel-outer">
               <div className="double-bezel-inner" style={{ padding: '32px' }}>
                 <h2>Inventario de productos</h2>
-                <div className="filter-container" style={{ marginBottom: '15px', display: 'flex', alignItems: 'center' }}>
+                <div className="filter-container">
                   <span 
-                    className="out-of-stock-filter-label" 
-                    style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', fontSize: '14px', fontWeight: '500', color: 'var(--text-h)' }}
+                    className="out-of-stock-filter-label"
                     onClick={() => setShowOutOfStockOnly(prev => !prev)}
                   >
                     <input
@@ -337,7 +336,6 @@ export default function AdminDashboard() {
                         e.stopPropagation();
                         setShowOutOfStockOnly(e.target.checked);
                       }}
-                      style={{ width: '16px', height: '16px', cursor: 'pointer' }}
                     />
                     Mostrar solo productos sin stock
                   </span>
@@ -362,7 +360,7 @@ export default function AdminDashboard() {
                         <td>${Number(product.price).toFixed(2)}</td>
                         <td className={product.stock === 0 ? 'out-of-stock-cell' : ''}>
                           {product.stock}
-                          {product.stock === 0 && <span className="out-of-stock-badge" style={{ marginLeft: '8px', padding: '2px 6px', fontSize: '11px', backgroundColor: '#e53e3e', color: '#fff', borderRadius: '4px', fontWeight: 'bold' }}>Agotado</span>}
+                          {product.stock === 0 && <span className="out-of-stock-badge">Agotado</span>}
                         </td>
                         <td>{product.onSale ? `Sí (${product.discountPercent}%)` : 'No'}</td>
                         <td>{product.isNew ? `Sí` : 'No'}</td>
@@ -492,15 +490,14 @@ export default function AdminDashboard() {
                      />
                    </div>
 
-                   <div className="form-group checkbox-group" style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '15px' }}>
+                   <div className="form-group checkbox-group">
                      <input
                        type="checkbox"
                        id="product-on-sale"
                        checked={onSale}
                        onChange={(e) => setOnSale(e.target.checked)}
-                       style={{ width: '16px', height: '16px', cursor: 'pointer' }}
                      />
-                     <label htmlFor="product-on-sale" style={{ cursor: 'pointer', userSelect: 'none' }}>En oferta</label>
+                     <label htmlFor="product-on-sale">En oferta</label>
                    </div>
 
                    {onSale && (
@@ -518,24 +515,22 @@ export default function AdminDashboard() {
                              setErrors((prev) => ({ ...prev, discountPercent: '' }));
                            }
                          }}
-                         className={errors.discountPercent ? 'input-error' : ''}
-                         style={{ width: '100%', padding: '8px', borderRadius: '4px', border: '1px solid #ccc' }}
-                       />
-                       {errors.discountPercent && (
-                         <span className="error-message" style={{ color: '#e53e3e', fontSize: '12px' }}>{errors.discountPercent}</span>
+                          className={errors.discountPercent ? 'input-error' : ''}
+                        />
+                        {errors.discountPercent && (
+                          <span className="error-message">{errors.discountPercent}</span>
                        )}
                      </div>
                    )}
 
-                   <div className="form-group checkbox-group" style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '15px' }}>
+                   <div className="form-group checkbox-group">
                      <input
                        type="checkbox"
                        id="product-is-new"
                        checked={isNew}
                        onChange={(e) => setIsNew(e.target.checked)}
-                       style={{ width: '16px', height: '16px', cursor: 'pointer' }}
                      />
-                     <label htmlFor="product-is-new" style={{ cursor: 'pointer', userSelect: 'none' }}>Novedad</label>
+                     <label htmlFor="product-is-new">Novedad</label>
                    </div>
 
                    <div className="form-actions">

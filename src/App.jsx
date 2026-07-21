@@ -11,6 +11,7 @@ import CheckoutForm from './components/CheckoutForm';
 import LoginForm from './components/LoginForm';
 import AdminDashboard from './components/AdminDashboard';
 import Home from './components/Home';
+import ContactForm from './components/ContactForm';
 import ProductDetailsModal from './components/ProductDetailsModal';
 import './App.css';
 
@@ -111,6 +112,12 @@ function MainApp() {
           >
             Tienda
           </button>
+          <button
+            onClick={() => setView('contact')}
+            className={`nav-link-btn ${currentView === 'contact' ? 'active' : ''}`}
+          >
+            Contacto
+          </button>
           
           {user ? (
             <>
@@ -179,6 +186,10 @@ function MainApp() {
               }}
             />
           </div>
+        )}
+
+        {currentView === 'contact' && (
+          <ContactForm />
         )}
 
         {currentView === 'login' && (
